@@ -56,4 +56,4 @@ vgcore.*
 *.qmake.stash
 
 *.clangd/
-/cmake-build-debug/
+/cmake-build-*/
