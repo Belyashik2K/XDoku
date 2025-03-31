@@ -15,8 +15,8 @@ add_executable(XDoku
         include/core/IPresenter.h
         include/models/User.h
         include/models/SudokuGrid.h
-        include/core/IDatabase.h
-        include/models/PostgreSQLDatabase.h
+        include/core/database/IDatabase.h
+        include/models/database/PostgreSQL/PostgreSQLDatabase.h
         include/views/MenuView.h
         include/views/AuthView.h
         include/views/GameView.h
@@ -27,8 +27,12 @@ add_executable(XDoku
         include/presenters/LeaderboardPresenter.h
         include/presenters/MenuPresenter.h
         include/presenters/ProfilePresenter.h
-        src/models/PostgreSQLDatabase.cpp
-        include/models/PostgreSQLDatabase.h
+        src/models/database/PostgreSQL/PostgreSQLDatabase.cpp
+        include/models/database/PostgreSQL/PostgreSQLDatabase.h
+        include/core/database/IRepository.h
+        include/models/database/PostgreSQL/repositories/UserRepository.h
+        include/core/database/repositories/IUserRepository.h
+        src/models/database/PostgreSQL/repositories/UserRepository.cpp
 )
 
 target_include_directories(XDoku PRIVATE
