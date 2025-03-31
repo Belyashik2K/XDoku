@@ -10,11 +10,11 @@ find_package(OpenGL REQUIRED)
 
 add_executable(XDoku
         main.cpp
-        deps/glad/src/glad.c
+        deps/glad/glad-4-3/src/glad.c
 )
 
 target_include_directories(XDoku PRIVATE
-        ${PROJECT_SOURCE_DIR}/deps/glad/include
+        deps/glad/glad-4-3/include
 )
 
 target_link_libraries(XDoku PRIVATE
