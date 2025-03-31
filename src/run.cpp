@@ -1,7 +1,7 @@
 #include <iostream>
 
 class XDoku {
-    public:
+public:
     XDoku() {
         std::cout << "XDoku." << std::endl;
     }
@@ -11,6 +11,6 @@ class XDoku {
 };
 
 int main() {
-    XDoku var;
+    XDoku game;
     return 0;
 }
