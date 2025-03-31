@@ -1,3 +1,5 @@
+
+![XDoku](https://github.com/user-attachments/assets/4e521d1b-b0a1-4f5c-becf-3568e9840646)
 # XDoku 🎮  
 **Кроссплатформенное приложение для игры в судоку с онлайн-функционалом**
 
