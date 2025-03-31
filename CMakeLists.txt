@@ -29,7 +29,6 @@ add_executable(XDoku
         include/presenters/ProfilePresenter.h
         src/models/database/PostgreSQL/PostgreSQLDatabase.cpp
         include/models/database/PostgreSQL/PostgreSQLDatabase.h
-        include/core/database/IRepository.h
         include/models/database/PostgreSQL/repositories/UserRepository.h
         include/core/database/repositories/IUserRepository.h
         src/models/database/PostgreSQL/repositories/UserRepository.cpp
