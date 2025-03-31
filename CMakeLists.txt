@@ -11,12 +11,9 @@ find_package(OpenGL REQUIRED)
 add_executable(XDoku
         src/run.cpp
         deps/glad/glad-4-3/src/glad.c
-        include/core/IView.cpp
-        include/core/IPresenter.cpp
         include/core/IView.h
         include/core/IPresenter.h
         include/models/User.h
-        include/models/SudokuGrisd.h
         include/models/SudokuGrid.h
         include/core/IDatabase.h
         include/models/PostgreSQLDatabase.h
@@ -30,6 +27,8 @@ add_executable(XDoku
         include/presenters/LeaderboardPresenter.h
         include/presenters/MenuPresenter.h
         include/presenters/ProfilePresenter.h
+        src/models/PostgreSQLDatabase.cpp
+        include/models/PostgreSQLDatabase.h
 )
 
 target_include_directories(XDoku PRIVATE

@@ -1,16 +1,17 @@
 #include <iostream>
+#include <pqxx/pqxx>
 
-class XDoku {
-public:
-    XDoku() {
-        std::cout << "XDoku." << std::endl;
-    }
-    ~XDoku() {
-        std::cout << "Soon." << std::endl;
-    }
-};
+#include "../include/models/PostgreSQLDatabase.h"
 
 int main() {
-    XDoku game;
+    try {
+        const std::string connectionString = "";
+        PostgreSQLDatabase database(connectionString);
+        database.connect();
+        std::cout << "Connected to database!" << std::endl;
+    } catch (const std::exception &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+
     return 0;
 }
