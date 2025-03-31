@@ -5,7 +5,9 @@
 #ifndef IDATABASE_H
 #define IDATABASE_H
 
-template <typename T>
+#include "iQuery.h"
+
+template <typename T, typename U>
 class IDatabase {
 public:
     virtual ~IDatabase() = default;
@@ -13,7 +15,7 @@ public:
     virtual bool connect() = 0;
     virtual bool disconnect() = 0;
     virtual bool isConnected() const = 0;
-    virtual bool execute(const std::string& query) = 0;
+    virtual bool execute(IQuery<U> &query) = 0;
 };
 
 #endif //IDATABASE_H

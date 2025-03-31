@@ -33,6 +33,10 @@ add_executable(XDoku
         include/models/database/PostgreSQL/repositories/UserRepository.h
         include/core/database/repositories/IUserRepository.h
         src/models/database/PostgreSQL/repositories/UserRepository.cpp
+        include/core/database/iQuery.h
+        include/core/database/iQuery.h
+        src/models/database/PostgreSQL/PostgreSQLQuery.cpp
+        include/models/database/PostgreSQL/PostgreSQLQuery.h
 )
 
 target_include_directories(XDoku PRIVATE

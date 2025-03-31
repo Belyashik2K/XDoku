@@ -1,7 +1,7 @@
-#include <pqxx/pqxx>
 #include "../../../../include/models/database/PostgreSQL/PostgreSQLDatabase.h"
 
-#include <iostream>
+#include <pqxx/pqxx>
+#include <string>
 
 PostgreSQLDatabase::PostgreSQLDatabase(const std::string &connString) {
     connectionString = connString;
@@ -33,10 +33,10 @@ bool PostgreSQLDatabase::isConnected() const {
     return conn && conn->is_open();
 }
 
-bool PostgreSQLDatabase::execute(const std::string &query) {
+bool PostgreSQLDatabase::execute(IQuery<pqxx::params> &query) {
     pqxx::work txn(*conn);
     try {
-        txn.exec(query);
+        txn.exec(query.getQueryString(), query.getQueryParameters());
         txn.commit();
         return true;
     } catch (const std::exception& e) {
@@ -44,3 +44,4 @@ bool PostgreSQLDatabase::execute(const std::string &query) {
         throw std::runtime_error("PostgreSQLDatabase::execute(): " + std::string(e.what()));
     }
 }
+

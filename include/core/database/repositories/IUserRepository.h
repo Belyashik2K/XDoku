@@ -10,15 +10,15 @@
 
 #include "../IDatabase.h"
 
-template <typename T>
+template <typename T, typename U>
 class IUserRepository {
 protected:
-    std::shared_ptr<IDatabase<T>> database;
+    std::shared_ptr<IDatabase<T, U>> database;
 public:
-    explicit IUserRepository(std::shared_ptr<IDatabase<T>> database) : database(std::move(database)) {}
+    explicit IUserRepository(std::shared_ptr<IDatabase<T, U>> database) : database(std::move(database)) {}
     virtual ~IUserRepository() = default;
 
-    virtual bool create(const std::string& username, const std::string& password) = 0;
+    virtual bool create(const std::string& username, const std::string &email, const std::string& password) = 0;
     virtual bool authenticate(const std::string& username, const std::string& password) = 0;
 };
 

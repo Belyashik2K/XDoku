@@ -7,8 +7,9 @@
 
 #include <pqxx/pqxx>
 #include "../../../core/database/IDatabase.h"
+#include "PostgreSQLQuery.h"
 
-class PostgreSQLDatabase : public IDatabase<pqxx::connection> {
+class PostgreSQLDatabase : public IDatabase<pqxx::connection, pqxx::params> {
     std::string connectionString;
     std::unique_ptr<pqxx::connection> conn;
 
@@ -23,7 +24,7 @@ public:
 
     bool isConnected() const override;
 
-    bool execute(const std::string& query) override;
+    bool execute(IQuery<pqxx::params> &query) override;
 };
 
 #endif //POSTGRESQLDATABASE_H
