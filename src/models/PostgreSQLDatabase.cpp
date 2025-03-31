@@ -9,7 +9,6 @@ PostgreSQLDatabase::~PostgreSQLDatabase() {
     PostgreSQLDatabase::disconnect();
 }
 
-
 pqxx::connection PostgreSQLDatabase::connect() {
     pqxx::connection connection(connectionString_);
     return connection;
