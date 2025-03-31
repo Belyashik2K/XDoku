@@ -9,7 +9,7 @@ find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 add_executable(XDoku
-        main.cpp
+        src/run.cpp
         deps/glad/glad-4-3/src/glad.c
 )
 
