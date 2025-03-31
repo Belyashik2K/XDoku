@@ -1,0 +1,1 @@
+DATABASE_URL: str = "postgresql+psycopg2://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku"
