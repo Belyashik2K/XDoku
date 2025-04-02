@@ -7,7 +7,7 @@
 
 #include "iQuery.h"
 
-template <typename T, typename U>
+template <typename T, typename U, typename V>
 class IDatabase {
 public:
     virtual ~IDatabase() = default;
@@ -15,7 +15,7 @@ public:
     virtual bool connect() = 0;
     virtual bool disconnect() = 0;
     virtual bool isConnected() const = 0;
-    virtual bool execute(IQuery<U> &query) = 0;
+    virtual V execute(IQuery<U> &query) = 0;
 };
 
 #endif //IDATABASE_H

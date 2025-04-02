@@ -8,18 +8,20 @@
 #include <memory>
 #include <string>
 
-#include "../IDatabase.h"
+#include "core/database/IDatabase.h"
+#include "models/User.h"
 
-template <typename T, typename U>
+
+template <typename T, typename U, typename V>
 class IUserRepository {
 protected:
-    std::shared_ptr<IDatabase<T, U>> database;
+    std::shared_ptr<IDatabase<T, U, V>> database;
 public:
-    explicit IUserRepository(std::shared_ptr<IDatabase<T, U>> database) : database(std::move(database)) {}
+    explicit IUserRepository(std::shared_ptr<IDatabase<T, U, V>> database) : database(std::move(database)) {}
     virtual ~IUserRepository() = default;
 
     virtual bool create(const std::string& username, const std::string &email, const std::string& password) = 0;
-    virtual bool authenticate(const std::string& username, const std::string& password) = 0;
+    virtual User authenticate(const std::string& username, const std::string& passwordHash) = 0;
 };
 
 #endif //IUSERREPOSITORY_H

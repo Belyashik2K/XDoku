@@ -29,7 +29,6 @@ add_executable(XDoku
         include/presenters/ProfilePresenter.h
         src/models/database/PostgreSQL/PostgreSQLDatabase.cpp
         include/models/database/PostgreSQL/PostgreSQLDatabase.h
-        include/core/database/IRepository.h
         include/models/database/PostgreSQL/repositories/UserRepository.h
         include/core/database/repositories/IUserRepository.h
         src/models/database/PostgreSQL/repositories/UserRepository.cpp
@@ -37,6 +36,13 @@ add_executable(XDoku
         include/core/database/iQuery.h
         src/models/database/PostgreSQL/PostgreSQLQuery.cpp
         include/models/database/PostgreSQL/PostgreSQLQuery.h
+        include/models/custom_types/timestamp.h
+        src/models/custom_types/timestamp.cpp
+        src/models/user.cpp
+)
+
+include_directories(
+        ${PROJECT_SOURCE_DIR}/include
 )
 
 target_include_directories(XDoku PRIVATE
@@ -49,4 +55,5 @@ target_link_libraries(XDoku PRIVATE
         glfw
         OpenGL::GL
         pthread
+        bcrypt
 )

@@ -6,7 +6,8 @@
 #define POSTGRESQLQUERY_H
 
 #include <pqxx/pqxx>
-#include "../../../core/database/iQuery.h"
+
+#include "core/database/iQuery.h"
 
 class PostgreSQLQuery : public IQuery<pqxx::params> {
     std::string queryString;
