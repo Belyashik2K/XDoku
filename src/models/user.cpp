@@ -4,6 +4,7 @@
 
 #include <regex>
 #include <cctype>
+#include <iostream>
 
 #include <models/User.h>
 #include <models/custom_types/Timestamp.h>
@@ -14,11 +15,12 @@ User::User(
     std::string &username,
     std::string &email,
     std::string &password,
-    const std::string &createdAt
+    const std::string &createdAt,
+    const bool needToHash
 ): id(id), createdAt(createdAt) {
     setUsername(std::move(username));
     setEmail(std::move(email));
-    setPasswordHash(std::move(password));
+    setPasswordHash(std::move(password), needToHash);
 }
 
 std::string User::getEmail() const {
@@ -52,9 +54,14 @@ void User::setEmail(std::string email) {
     this->email = std::move(email);
 }
 
-void User::setPasswordHash(std::string password) {
+void User::setPasswordHash(std::string password, const bool needToHash) {
     if (!validatePassword(password)) {
         throw std::invalid_argument("Invalid password");
+    }
+
+    if (!needToHash) {
+        this->passwordHash = std::move(password);
+        return;
     }
     this->passwordHash = hashPassword(std::move(password));
 }

@@ -8,6 +8,7 @@
 #include <pqxx/pqxx>
 
 #include "core/database/repositories/IUserRepository.h"
+#include "models/User.h"
 #include "models/database/PostgreSQL/PostgreSQLDatabase.h"
 
 class PostgreSQLUserRepository : public IUserRepository<pqxx::connection, pqxx::params, pqxx::result> {
@@ -15,7 +16,7 @@ public:
     explicit PostgreSQLUserRepository(std::shared_ptr<PostgreSQLDatabase> database): IUserRepository(std::move(database)) {}
 
     bool create(const std::string &username, const std::string &email, const std::string &password) override;
-    bool authenticate(const std::string &username, const std::string &password) override;
+    User authenticate(const std::string &username, const std::string &passwordHash) override;
 };
 
 #endif //USERREPOSITORY_H

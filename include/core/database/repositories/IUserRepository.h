@@ -9,6 +9,7 @@
 #include <string>
 
 #include "core/database/IDatabase.h"
+#include "models/User.h"
 
 
 template <typename T, typename U, typename V>
@@ -20,7 +21,7 @@ public:
     virtual ~IUserRepository() = default;
 
     virtual bool create(const std::string& username, const std::string &email, const std::string& password) = 0;
-    virtual bool authenticate(const std::string& username, const std::string& password) = 0;
+    virtual User authenticate(const std::string& username, const std::string& passwordHash) = 0;
 };
 
 #endif //IUSERREPOSITORY_H

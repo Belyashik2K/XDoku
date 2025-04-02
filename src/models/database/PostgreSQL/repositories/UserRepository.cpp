@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "models/User.h"
 #include "models/database/PostgreSQL/PostgreSQLQuery.h"
 
 bool PostgreSQLUserRepository::create(
@@ -27,9 +28,31 @@ bool PostgreSQLUserRepository::create(
     }
 }
 
-bool PostgreSQLUserRepository::authenticate(const std::string &username, const std::string &password) {
+User PostgreSQLUserRepository::authenticate(const std::string &username, const std::string &passwordHash) {
     if (!database->isConnected()) {
-        return false;
+        throw std::runtime_error("Database is not connected");
     }
-    return true;
+
+    std::cout << username << " : " << passwordHash << std::endl;
+    PostgreSQLQuery query("SELECT id, username, email, password_hash, created_at FROM users WHERE username = $1");
+    query.addParameter(username);
+    // query.addParameter(passwordHash);
+
+    const pqxx::result result = database->execute(query);
+    if (result.empty()) {
+        throw std::invalid_argument("User not found");
+    }
+    if (result.size() > 1) {
+        throw std::runtime_error("Multiple users found");
+    }
+
+    pqxx::row row = result[0];
+
+    int id = row["id"].as<int>();
+    std::string finalUsername = row["username"].as<std::string>();
+    std::string email = row["email"].as<std::string>();
+    std::string finalPasswordHash = row["password_hash"].as<std::string>();
+    const std::string createdAt = row["created_at"].as<std::string>();
+
+    return User(id, finalUsername, email, finalPasswordHash, createdAt, false);
 }

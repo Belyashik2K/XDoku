@@ -22,13 +22,14 @@ public:
         std::string &username,
         std::string &email,
         std::string &password,
-        const std::string &createdAt
+        const std::string &createdAt,
+        bool needToHash = true
     );
     ~User() = default;
 
     void setUsername(std::string username);
     void setEmail(std::string email);
-    void setPasswordHash(std::string password);
+    void setPasswordHash(std::string password, bool needToHash = true);
 
     int getId() const;
     std::string getUsername() const;
