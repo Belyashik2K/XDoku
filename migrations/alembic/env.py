@@ -23,6 +23,7 @@ from models.user import User
 from models.game import Game
 from models.move import Move
 from models.rating_change import RatingChange
+from models.session import Session
 
 target_metadata = Base.metadata
 

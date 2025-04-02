@@ -11,12 +11,12 @@
 #include "core/database/IDatabase.h"
 
 
-template <typename T, typename U>
+template <typename T, typename U, typename V>
 class IUserRepository {
 protected:
-    std::shared_ptr<IDatabase<T, U>> database;
+    std::shared_ptr<IDatabase<T, U, V>> database;
 public:
-    explicit IUserRepository(std::shared_ptr<IDatabase<T, U>> database) : database(std::move(database)) {}
+    explicit IUserRepository(std::shared_ptr<IDatabase<T, U, V>> database) : database(std::move(database)) {}
     virtual ~IUserRepository() = default;
 
     virtual bool create(const std::string& username, const std::string &email, const std::string& password) = 0;

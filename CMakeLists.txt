@@ -36,6 +36,9 @@ add_executable(XDoku
         include/core/database/iQuery.h
         src/models/database/PostgreSQL/PostgreSQLQuery.cpp
         include/models/database/PostgreSQL/PostgreSQLQuery.h
+        include/models/custom_types/timestamp.h
+        src/models/custom_types/timestamp.cpp
+        src/models/user.cpp
 )
 
 include_directories(
@@ -52,4 +55,5 @@ target_link_libraries(XDoku PRIVATE
         glfw
         OpenGL::GL
         pthread
+        bcrypt
 )

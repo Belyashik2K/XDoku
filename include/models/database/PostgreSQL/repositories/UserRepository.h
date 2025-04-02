@@ -10,7 +10,7 @@
 #include "core/database/repositories/IUserRepository.h"
 #include "models/database/PostgreSQL/PostgreSQLDatabase.h"
 
-class PostgreSQLUserRepository : public IUserRepository<pqxx::connection, pqxx::params> {
+class PostgreSQLUserRepository : public IUserRepository<pqxx::connection, pqxx::params, pqxx::result> {
 public:
     explicit PostgreSQLUserRepository(std::shared_ptr<PostgreSQLDatabase> database): IUserRepository(std::move(database)) {}
 

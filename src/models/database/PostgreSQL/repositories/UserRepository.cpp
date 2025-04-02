@@ -1,5 +1,9 @@
 #include "models/database/PostgreSQL/repositories/UserRepository.h"
 
+#include <iostream>
+
+#include "models/database/PostgreSQL/PostgreSQLQuery.h"
+
 bool PostgreSQLUserRepository::create(
     const std::string &username,
     const std::string &email,
@@ -15,9 +19,10 @@ bool PostgreSQLUserRepository::create(
         query.addParameter(email);
         query.addParameter(password);
 
-        database->execute(query);
-        return true;
+        const pqxx::result result = database->execute(query);
+        return result.affected_rows() > 0;
     } catch (const std::exception &e) {
+        std::cout << "PostgreSQLUserRepository::create(): " << e.what() << std::endl;
         return false;
     }
 }
