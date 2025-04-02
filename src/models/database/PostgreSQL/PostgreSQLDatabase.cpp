@@ -1,7 +1,7 @@
-#include "../../../../include/models/database/PostgreSQL/PostgreSQLDatabase.h"
-
 #include <pqxx/pqxx>
 #include <string>
+
+#include "models/database/PostgreSQL/PostgreSQLDatabase.h"
 
 PostgreSQLDatabase::PostgreSQLDatabase(const std::string &connString) {
     connectionString = connString;

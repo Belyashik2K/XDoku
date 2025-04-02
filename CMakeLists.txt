@@ -38,6 +38,10 @@ add_executable(XDoku
         include/models/database/PostgreSQL/PostgreSQLQuery.h
 )
 
+include_directories(
+        ${PROJECT_SOURCE_DIR}/include
+)
+
 target_include_directories(XDoku PRIVATE
         deps/glad/glad-4-3/include
 )

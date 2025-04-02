@@ -7,8 +7,8 @@
 
 #include <pqxx/pqxx>
 
-#include "../PostgreSQLDatabase.h"
-#include "../../../../core/database/repositories/IUserRepository.h"
+#include "core/database/repositories/IUserRepository.h"
+#include "models/database/PostgreSQL/PostgreSQLDatabase.h"
 
 class PostgreSQLUserRepository : public IUserRepository<pqxx::connection, pqxx::params> {
 public:

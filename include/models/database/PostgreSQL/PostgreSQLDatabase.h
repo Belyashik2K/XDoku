@@ -6,8 +6,7 @@
 #define POSTGRESQLDATABASE_H
 
 #include <pqxx/pqxx>
-#include "../../../core/database/IDatabase.h"
-#include "PostgreSQLQuery.h"
+#include "core/database/IDatabase.h"
 
 class PostgreSQLDatabase : public IDatabase<pqxx::connection, pqxx::params> {
     std::string connectionString;

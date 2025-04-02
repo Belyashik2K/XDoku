@@ -8,7 +8,8 @@
 #include <memory>
 #include <string>
 
-#include "../IDatabase.h"
+#include "core/database/IDatabase.h"
+
 
 template <typename T, typename U>
 class IUserRepository {

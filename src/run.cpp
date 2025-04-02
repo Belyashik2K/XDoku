@@ -1,7 +1,6 @@
 #include <iostream>
 
-#include "../include/models/database/PostgreSQL/PostgreSQLDatabase.h"
-#include "../include/models/database/PostgreSQL/repositories/UserRepository.h"
+#include "models/database/PostgreSQL/repositories/UserRepository.h"
 
 int main() {
     try {
