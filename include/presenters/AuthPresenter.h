@@ -4,15 +4,15 @@
 
 #ifndef AUTHPRESENTER_H
 #define AUTHPRESENTER_H
-#include <iostream>
 #include <memory>
 #include <utility>
 
+#include "core/IPresenter.h"
 #include "core/database/repositories/IUserRepository.h"
 #include "views/auth/IAuthView.h"
 
 template <typename Connection, typename Params, typename Result>
-class AuthPresenter {
+class AuthPresenter : public IPresenter {
     std::shared_ptr<IUserRepository<Connection, Params, Result>> userRepository;
     std::shared_ptr<IAuthView> view;
 public:
