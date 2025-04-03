@@ -43,6 +43,7 @@ add_executable(XDoku
         src/views/console/auth.cpp
         include/views/auth/ConsoleAuthView.h
         include/views/auth/IAuthView.h
+        src/utils.cpp
 )
 
 include_directories(

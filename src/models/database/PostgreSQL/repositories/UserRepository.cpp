@@ -112,3 +112,39 @@ User PostgreSQLUserRepository::get(const std::string &username) const {
 
     return User(id, finalUsername, email, finalPasswordHash, rating, createdAt, false);
 }
+
+bool PostgreSQLUserRepository::createSession(const int &userId, const std::string &sessionId) const {
+    if (!database->isConnected()) {
+        return false;
+    }
+
+    PostgreSQLQuery query("INSERT INTO sessions (user_id, hwid) VALUES ($1, $2)");
+    query.addParameter(std::to_string(userId));
+    query.addParameter(sessionId);
+
+    const pqxx::result result = database->execute(query);
+    return result.affected_rows() > 0;
+}
+
+std::optional<std::string> PostgreSQLUserRepository::getUsernameBySessionId(const std::string &sessionId) const {
+    if (!database->isConnected()) {
+        return std::nullopt;
+    }
+
+    PostgreSQLQuery query(R"(
+        SELECT u.username
+        FROM sessions s
+        JOIN users u ON s.user_id = u.id
+        WHERE s.hwid = $1;
+    )");
+    query.addParameter(sessionId);
+
+    const pqxx::result result = database->execute(query);
+    if (result.empty()) {
+        return std::nullopt;
+    }
+
+    const pqxx::row row = result[0];
+    return row["username"].as<std::string>();
+}
+

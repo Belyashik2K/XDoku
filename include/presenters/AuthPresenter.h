@@ -4,6 +4,7 @@
 
 #ifndef AUTHPRESENTER_H
 #define AUTHPRESENTER_H
+#include <fstream>
 #include <memory>
 #include <utility>
 
@@ -25,6 +26,25 @@ public:
     std::optional<User> authenticateUser() {
         view->showWelcomeMessage();
 
+        std::ifstream file("/etc/machine-id");
+        std::string hwid;
+        if (file.is_open()) {
+            std::getline(file, hwid);
+            file.close();
+        }
+
+        if (hwid.empty()) {
+            view->showAuthenticationResult(false);
+            return std::nullopt;
+        }
+
+        const std::optional<std::string> savedUsername = userRepository->getUsernameBySessionId(hwid);
+        if (savedUsername.has_value()) {
+            User user = userRepository->get(savedUsername.value());
+            view->showAuthenticationResult(true);
+            return user;
+        }
+
         auto [username, password] = view->getLoginCredentials();
 
         std::string hashedPassword = userRepository->getHashedPassword(username);
@@ -34,9 +54,10 @@ public:
             return std::nullopt;
         }
 
-
+        User authenticatedUser = userRepository->get(username);
+        userRepository->createSession(authenticatedUser.getId(), hwid);
         view->showAuthenticationResult(true);
-        return userRepository->get(username);
+        return authenticatedUser;
     }
 };
 

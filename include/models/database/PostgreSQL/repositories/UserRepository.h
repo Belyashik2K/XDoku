@@ -17,7 +17,9 @@ public:
 
     bool create(const std::string &username, const std::string &email, const std::string &password) override;
     User get(const std::string &username) const override;
-    std::string getHashedPassword(const std::string &username) const;
+    std::string getHashedPassword(const std::string &username) const override;
+    bool createSession(const int &userId, const std::string &sessionId) const override;
+    std::optional<std::string> getUsernameBySessionId(const std::string &sessionId) const override;
 };
 
 #endif //USERREPOSITORY_H
