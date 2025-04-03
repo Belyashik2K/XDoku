@@ -16,14 +16,16 @@ int main() {
         }
         std::cout << "Connected to database!" << std::endl;
 
-        const int userId = 1;
         std::string username = "Belyashik4K";
         std::string email = "b4k@belyashik2k.ru";
         std::string password = "a!K`Lg#4@';n*]^(jpfEqv";
-        std::string passwordCopy = password;
-        const std::string createdAt = "2025-03-31 00:00:00";
+        const User user(username, email, password);
 
-        const User user(userId, username, email, password, createdAt);
+        try {
+            std::cout << user.getId() << std::endl;
+        } catch (const std::exception &e) {
+            std::cerr << "Failed to get user ID: " << e.what() << std::endl;
+        }
 
         PostgreSQLUserRepository userRepo(database);
         const bool result = userRepo.create(user.getUsername(), user.getEmail(), user.getPasswordHash());
@@ -34,7 +36,7 @@ int main() {
         try {
             const User authenticatedUser = userRepo.authenticate(user.getUsername(), user.getPasswordHash());
             std::cout << "User found, trying to match passwords..." << std::endl;
-            const bool passwordsMatch = BCrypt::validatePassword(passwordCopy, authenticatedUser.getPasswordHash());
+            const bool passwordsMatch = BCrypt::validatePassword(password, authenticatedUser.getPasswordHash());
             if (!passwordsMatch) {
                 std::cerr << "Passwords do not match!" << std::endl;
                 return 1;

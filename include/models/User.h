@@ -10,20 +10,25 @@
 #include <models/custom_types/Timestamp.h>
 
 class User {
-    const int id;
+    const std::optional<int> id;
     std::string username;
     std::string email;
     std::string passwordHash;
-    Timestamp createdAt;
+    std::optional<Timestamp> createdAt;
 
 public:
     User(
-        int id,
-        std::string &username,
-        std::string &email,
-        std::string &password,
-        const std::string &createdAt,
+        std::optional<int> id,
+        std::string username,
+        std::string email,
+        std::string password,
+        const std::optional<std::string> &createdAt,
         bool needToHash = true
+    );
+    User(
+        std::string username,
+        std::string email,
+        std::string password
     );
     ~User() = default;
 
