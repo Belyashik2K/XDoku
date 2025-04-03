@@ -1,9 +1,8 @@
-#include "models/database/PostgreSQL/repositories/UserRepository.h"
-
 #include <iostream>
 
 #include "models/User.h"
 #include "models/database/PostgreSQL/PostgreSQLQuery.h"
+#include "models/database/PostgreSQL/repositories/UserRepository.h"
 
 bool PostgreSQLUserRepository::create(
     const std::string &username,
@@ -15,7 +14,20 @@ bool PostgreSQLUserRepository::create(
     }
 
     try {
-        PostgreSQLQuery query("INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)");
+        PostgreSQLQuery query(R"(
+            WITH inserted_user AS (
+                INSERT INTO users (username, email, password_hash)
+                VALUES ($1, $2, $3)
+                RETURNING id
+            )
+            INSERT INTO rating_history (user_id, rating_change, new_rating, comment)
+            SELECT
+                id,
+                1000 AS rating_change,
+                1000 AS new_rating,
+                'Start rating after registration' AS comment
+            FROM inserted_user;
+        )");
         query.addParameter(username);
         query.addParameter(email);
         query.addParameter(password);
@@ -50,7 +62,36 @@ User PostgreSQLUserRepository::get(const std::string &username) const {
         throw std::runtime_error("Database is not connected");
     }
 
-    PostgreSQLQuery query("SELECT id, username, email, password_hash, created_at FROM users WHERE username = $1");
+    PostgreSQLQuery query(R"(
+        SELECT
+            u.id,
+            u.username,
+            u.email,
+            u.password_hash,
+            u.created_at,
+            rh.new_rating AS rating
+        FROM
+            users u
+        LEFT JOIN (
+            SELECT
+                user_id,
+                new_rating
+            FROM
+                rating_history
+            WHERE
+                (user_id, timestamp) IN (
+                    SELECT
+                        user_id,
+                        MAX(timestamp)
+                    FROM
+                        rating_history
+                    GROUP BY
+                        user_id
+                )
+        ) rh ON u.id = rh.user_id
+        WHERE
+            u.username = $1;
+    )");
     query.addParameter(username);
 
     const pqxx::result result = database->execute(query);
@@ -65,6 +106,9 @@ User PostgreSQLUserRepository::get(const std::string &username) const {
     auto email = row["email"].as<std::string>();
     auto finalPasswordHash = row["password_hash"].as<std::string>();
     const auto createdAt = row["created_at"].as<std::string>();
+    const std::optional<int> rating = row["rating"].is_null()
+                                          ? std::nullopt
+                                          : std::make_optional(row["rating"].as<int>());
 
-    return User(id, finalUsername, email, finalPasswordHash, createdAt, false);
+    return User(id, finalUsername, email, finalPasswordHash, rating, createdAt, false);
 }

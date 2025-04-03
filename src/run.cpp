@@ -14,13 +14,20 @@ int main() {
         auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
         const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
 
-        // User testUser("Belyashik2K", "admin@belyashik2k.ru", "E)>>n7HE.BTz[@up");
-        // userRepository->create(testUser.getUsername(), testUser.getEmail(), testUser.getPasswordHash());
+        User testUser("TestUser", "test@belyashik2k.ru", "Fb?yd0#StuCTz9a[");
+        userRepository->create(testUser.getUsername(), testUser.getEmail(), testUser.getPasswordHash());
 
         const auto authView = std::make_shared<ConsoleAuthView>();
 
         AuthPresenter<pqxx::connection, pqxx::params, pqxx::result> authPresenter(userRepository, authView);
         std::optional<User> user = authPresenter.authenticateUser();
+
+        if (user) {
+            std::cout << "Authenticated user rating: " << user->getRating() << std::endl;
+        } else {
+            std::cout << "Authentication failed." << std::endl;
+        }
+
     } catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }

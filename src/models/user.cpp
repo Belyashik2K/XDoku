@@ -5,20 +5,21 @@
 #include <regex>
 #include <cctype>
 #include <iostream>
+#include <utility>
+#include <bcrypt/BCrypt.hpp>
 
 #include <models/User.h>
 #include <models/custom_types/Timestamp.h>
-#include <bcrypt/BCrypt.hpp>
-#include <utility>
 
 User::User(
     const std::optional<int> id,
     std::string username,
     std::string email,
     std::string password,
+    const std::optional<int> rating,
     const std::optional<std::string> &createdAt,
     const bool needToHash
-): id(id), createdAt(createdAt) {
+): id(id), rating(rating), createdAt(createdAt) {
     setUsername(std::move(username));
     setEmail(std::move(email));
     setPasswordHash(std::move(password), needToHash);
@@ -28,7 +29,7 @@ User::User(
     std::string username,
     std::string email,
     std::string password
-): User(std::nullopt, std::move(username), std::move(email), std::move(password), std::nullopt) {
+): User(std::nullopt, std::move(username), std::move(email), std::move(password), std::nullopt, std::nullopt) {
 }
 
 std::string User::getEmail() const {
@@ -129,4 +130,18 @@ bool User::validateUsername(const std::string &username) {
 std::string User::hashPassword(const std::string &password) {
     std::string hash = BCrypt::generateHash(password);
     return hash;
+}
+
+void User::setRating(int rating) {
+    if (rating < 0) {
+        throw std::invalid_argument("Rating cannot be negative");
+    }
+    this->rating = rating;
+}
+
+int User::getRating() const {
+    if (!this->rating.has_value()) {
+        throw std::runtime_error("Rating is not set");
+    }
+    return this->rating.value();
 }

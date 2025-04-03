@@ -12,7 +12,8 @@ class RatingChange(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False)
-    game_id: Mapped[int] = mapped_column(ForeignKey('games.id'), nullable=False)
+    game_id: Mapped[int] = mapped_column(ForeignKey('games.id'), nullable=True)
     rating_change: Mapped[int] = mapped_column(nullable=False)
     new_rating: Mapped[int] = mapped_column(nullable=False)
+    comment: Mapped[str] = mapped_column(nullable=False)
     timestamp: Mapped[datetime] = mapped_column(nullable=False, default=datetime.now, server_default=func.now())

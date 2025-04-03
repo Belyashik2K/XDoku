@@ -20,6 +20,7 @@ public:
         std::shared_ptr<IUserRepository<Connection, Params, Result>> userRepository,
         std::shared_ptr<IAuthView> view
     ): userRepository(userRepository), view(std::move(view)) {}
+    ~AuthPresenter() override = default;
 
     std::optional<User> authenticateUser() {
         view->showWelcomeMessage();

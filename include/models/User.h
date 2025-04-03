@@ -14,6 +14,7 @@ class User {
     std::string username;
     std::string email;
     std::string passwordHash;
+    std::optional<int> rating;
     std::optional<Timestamp> createdAt;
 
 public:
@@ -22,6 +23,7 @@ public:
         std::string username,
         std::string email,
         std::string password,
+        std::optional<int> rating,
         const std::optional<std::string> &createdAt,
         bool needToHash = true
     );
@@ -35,11 +37,13 @@ public:
     void setUsername(std::string username);
     void setEmail(std::string email);
     void setPasswordHash(std::string password, bool needToHash = true);
+    void setRating(int rating);
 
     int getId() const;
     std::string getUsername() const;
     std::string getEmail() const;
     std::string getPasswordHash() const;
+    int getRating() const;
     Timestamp getCreatedAt() const;
     std::string getCreatedAtAsString() const;
 private:
