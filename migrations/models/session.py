@@ -16,7 +16,7 @@ class Session(Base):
     __tablename__ = 'sessions'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False, unique=True)
-    hwid: Mapped[str] = mapped_column(nullable=False)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False, unique=False)
+    hwid: Mapped[str] = mapped_column(nullable=False, unique=True)
     created_at: Mapped[datetime] = mapped_column(nullable=False, default=datetime.now, server_default=func.now())
     expires_at: Mapped[datetime] = mapped_column(nullable=False, server_default=text("(NOW() + INTERVAL '7 days')"))

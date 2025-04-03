@@ -23,7 +23,7 @@ int main() {
         std::optional<User> user = authPresenter.authenticateUser();
 
         if (user) {
-            std::cout << "Authenticated user rating: " << user->getRating() << std::endl;
+            std::cout << "Authenticated user: " << user->getUsername() << std::endl;
         } else {
             std::cout << "Authentication failed." << std::endl;
         }
