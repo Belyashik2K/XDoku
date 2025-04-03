@@ -18,7 +18,7 @@ add_executable(XDoku
         include/core/database/IDatabase.h
         include/models/database/PostgreSQL/PostgreSQLDatabase.h
         include/views/MenuView.h
-        include/views/AuthView.h
+        include/views/auth/AuthView.h
         include/views/GameView.h
         include/views/ProfileView.h
         include/views/LeaderboardView.h
@@ -39,6 +39,10 @@ add_executable(XDoku
         include/models/custom_types/timestamp.h
         src/models/custom_types/timestamp.cpp
         src/models/user.cpp
+        src/presenters/auth.cpp
+        src/views/console/auth.cpp
+        include/views/auth/ConsoleAuthView.h
+        include/views/auth/IAuthView.h
 )
 
 include_directories(

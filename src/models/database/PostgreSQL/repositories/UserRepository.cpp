@@ -28,31 +28,43 @@ bool PostgreSQLUserRepository::create(
     }
 }
 
-User PostgreSQLUserRepository::authenticate(const std::string &username, const std::string &passwordHash) {
+std::string PostgreSQLUserRepository::getHashedPassword(const std::string &username) const {
     if (!database->isConnected()) {
         throw std::runtime_error("Database is not connected");
     }
-
-    std::cout << username << " : " << passwordHash << std::endl;
-    PostgreSQLQuery query("SELECT id, username, email, password_hash, created_at FROM users WHERE username = $1");
+    PostgreSQLQuery query("SELECT password_hash FROM users WHERE username = $1");
     query.addParameter(username);
-    // query.addParameter(passwordHash);
 
     const pqxx::result result = database->execute(query);
     if (result.empty()) {
         throw std::invalid_argument("User not found");
     }
-    if (result.size() > 1) {
-        throw std::runtime_error("Multiple users found");
+
+    const pqxx::row row = result[0];
+
+    return row["password_hash"].as<std::string>();
+}
+
+User PostgreSQLUserRepository::get(const std::string &username) const {
+    if (!database->isConnected()) {
+        throw std::runtime_error("Database is not connected");
     }
 
-    pqxx::row row = result[0];
+    PostgreSQLQuery query("SELECT id, username, email, password_hash, created_at FROM users WHERE username = $1");
+    query.addParameter(username);
+
+    const pqxx::result result = database->execute(query);
+    if (result.empty()) {
+        throw std::invalid_argument("User not found");
+    }
+
+    const pqxx::row row = result[0];
 
     int id = row["id"].as<int>();
-    std::string finalUsername = row["username"].as<std::string>();
-    std::string email = row["email"].as<std::string>();
-    std::string finalPasswordHash = row["password_hash"].as<std::string>();
-    const std::string createdAt = row["created_at"].as<std::string>();
+    auto finalUsername = row["username"].as<std::string>();
+    auto email = row["email"].as<std::string>();
+    auto finalPasswordHash = row["password_hash"].as<std::string>();
+    const auto createdAt = row["created_at"].as<std::string>();
 
     return User(id, finalUsername, email, finalPasswordHash, createdAt, false);
 }

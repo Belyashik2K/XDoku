@@ -3,52 +3,24 @@
 
 #include "models/User.h"
 #include "models/database/PostgreSQL/repositories/UserRepository.h"
+#include "presenters/AuthPresenter.h"
+#include "views/auth/ConsoleAuthView.h"
 
 int main() {
+
     try {
         const std::string connectionString = "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku";
 
         auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
-        bool isConnected = database->connect();
-        if (!isConnected) {
-            std::cerr << "Failed to connect to database!" << std::endl;
-            return 1;
-        }
-        std::cout << "Connected to database!" << std::endl;
+        const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
 
-        std::string username = "Belyashik4K";
-        std::string email = "b4k@belyashik2k.ru";
-        std::string password = "a!K`Lg#4@';n*]^(jpfEqv";
-        const User user(username, email, password);
+        // User testUser("Belyashik2K", "admin@belyashik2k.ru", "E)>>n7HE.BTz[@up");
+        // userRepository->create(testUser.getUsername(), testUser.getEmail(), testUser.getPasswordHash());
 
-        try {
-            std::cout << user.getId() << std::endl;
-        } catch (const std::exception &e) {
-            std::cerr << "Failed to get user ID: " << e.what() << std::endl;
-        }
+        const auto authView = std::make_shared<ConsoleAuthView>();
 
-        PostgreSQLUserRepository userRepo(database);
-        const bool result = userRepo.create(user.getUsername(), user.getEmail(), user.getPasswordHash());
-        std::cout << "User with given data" << (result ? " created :)" : " not created :(") << std::endl;
-
-        std::cout << "Trying to authenticate user..." << std::endl;
-
-        try {
-            const User authenticatedUser = userRepo.authenticate(user.getUsername(), user.getPasswordHash());
-            std::cout << "User found, trying to match passwords..." << std::endl;
-            const bool passwordsMatch = BCrypt::validatePassword(password, authenticatedUser.getPasswordHash());
-            if (!passwordsMatch) {
-                std::cerr << "Passwords do not match!" << std::endl;
-                return 1;
-            }
-
-            std::cout << "User authenticated!" << std::endl;
-            std::cout << "User ID: " << authenticatedUser.getId() << std::endl;
-            std::cout << "User created at: " << authenticatedUser.getCreatedAtAsString() << std::endl;
-        } catch (const std::exception &e) {
-            std::cerr << "Failed to authenticate user: " << e.what() << std::endl;
-        }
-
+        AuthPresenter<pqxx::connection, pqxx::params, pqxx::result> authPresenter(userRepository, authView);
+        std::optional<User> user = authPresenter.authenticateUser();
     } catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
