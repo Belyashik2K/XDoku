@@ -12,16 +12,19 @@
 #include "models/User.h"
 
 
-template <typename T, typename U, typename V>
+template <typename Connection, typename Params, typename Result>
 class IUserRepository {
 protected:
-    std::shared_ptr<IDatabase<T, U, V>> database;
+    std::shared_ptr<IDatabase<Connection, Params, Result>> database;
 public:
-    explicit IUserRepository(std::shared_ptr<IDatabase<T, U, V>> database) : database(std::move(database)) {}
+    explicit IUserRepository(std::shared_ptr<IDatabase<Connection, Params, Result>> database) : database(std::move(database)) {}
     virtual ~IUserRepository() = default;
 
     virtual bool create(const std::string& username, const std::string &email, const std::string& password) = 0;
-    virtual User authenticate(const std::string& username, const std::string& passwordHash) = 0;
+    virtual User get(const std::string& username) const = 0;
+    virtual std::string getHashedPassword(const std::string &username) const = 0;
+    virtual bool createSession(const int &userId, const std::string &sessionId) const = 0;
+    virtual std::optional<std::string> getUsernameBySessionId(const std::string &sessionId) const = 0;
 };
 
 #endif //IUSERREPOSITORY_H

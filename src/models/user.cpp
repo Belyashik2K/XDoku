@@ -5,22 +5,31 @@
 #include <regex>
 #include <cctype>
 #include <iostream>
+#include <utility>
+#include <bcrypt/BCrypt.hpp>
 
 #include <models/User.h>
 #include <models/custom_types/Timestamp.h>
-#include <bcrypt/BCrypt.hpp>
 
 User::User(
-    int id,
-    std::string &username,
-    std::string &email,
-    std::string &password,
-    const std::string &createdAt,
+    const std::optional<int> id,
+    std::string username,
+    std::string email,
+    std::string password,
+    const std::optional<int> rating,
+    const std::optional<std::string> &createdAt,
     const bool needToHash
-): id(id), createdAt(createdAt) {
+): id(id), rating(rating), createdAt(createdAt) {
     setUsername(std::move(username));
     setEmail(std::move(email));
     setPasswordHash(std::move(password), needToHash);
+}
+
+User::User(
+    std::string username,
+    std::string email,
+    std::string password
+): User(std::nullopt, std::move(username), std::move(email), std::move(password), std::nullopt, std::nullopt) {
 }
 
 std::string User::getEmail() const {
@@ -28,7 +37,10 @@ std::string User::getEmail() const {
 }
 
 int User::getId() const {
-    return this->id;
+    if (!this->id.has_value()) {
+        throw std::runtime_error("User ID is not set");
+    }
+    return this->id.value();
 }
 
 std::string User::getUsername() const {
@@ -40,11 +52,17 @@ std::string User::getPasswordHash() const {
 }
 
 Timestamp User::getCreatedAt() const {
-    return this->createdAt;
+    if (!this->createdAt.has_value()) {
+        throw std::runtime_error("CreatedAt is not set");
+    }
+    return this->createdAt.value();
 }
 
 std::string User::getCreatedAtAsString() const {
-    return this->createdAt.toString();
+    if (!this->createdAt.has_value()) {
+        throw std::runtime_error("CreatedAt is not set");
+    }
+    return this->createdAt.value().toString();
 }
 
 void User::setEmail(std::string email) {
@@ -63,7 +81,7 @@ void User::setPasswordHash(std::string password, const bool needToHash) {
         this->passwordHash = std::move(password);
         return;
     }
-    this->passwordHash = hashPassword(std::move(password));
+    this->passwordHash = hashPassword(password);
 }
 
 void User::setUsername(std::string username) {
@@ -85,7 +103,7 @@ bool User::validatePassword(const std::string &password) {
     bool hasSpecial = false;
     const bool lenGreaterOrEqual8 = password.length() >= 8;
 
-    for (const char &c : password) {
+    for (const char &c: password) {
         if (std::isdigit(c)) {
             hasDigit = true;
         } else if (std::islower(c)) {
@@ -101,7 +119,7 @@ bool User::validatePassword(const std::string &password) {
 }
 
 bool User::validateUsername(const std::string &username) {
-    for (const char &c : username) {
+    for (const char &c: username) {
         if (!std::isalnum(c) && c != '_') {
             return false;
         }
@@ -112,4 +130,18 @@ bool User::validateUsername(const std::string &username) {
 std::string User::hashPassword(const std::string &password) {
     std::string hash = BCrypt::generateHash(password);
     return hash;
+}
+
+void User::setRating(int rating) {
+    if (rating < 0) {
+        throw std::invalid_argument("Rating cannot be negative");
+    }
+    this->rating = rating;
+}
+
+int User::getRating() const {
+    if (!this->rating.has_value()) {
+        throw std::runtime_error("Rating is not set");
+    }
+    return this->rating.value();
 }

@@ -2,6 +2,7 @@
 #define IPRESENTER_H
 
 class IPresenter {
+public:
     virtual ~IPresenter() = default;
 };
 

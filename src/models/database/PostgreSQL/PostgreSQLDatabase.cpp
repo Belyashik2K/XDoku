@@ -8,6 +8,12 @@
 PostgreSQLDatabase::PostgreSQLDatabase(const std::string &connString) {
     connectionString = connString;
     conn = nullptr;
+    try {
+        PostgreSQLDatabase::connect();
+    } catch (const std::exception &e) {
+        std::cerr << "PostgreSQLDatabase::PostgreSQLDatabase(): " << e.what() << std::endl;
+        throw;
+    }
 }
 
 PostgreSQLDatabase::~PostgreSQLDatabase() {
@@ -40,8 +46,6 @@ pqxx::result PostgreSQLDatabase::execute(IQuery<pqxx::params> &query) {
     try {
         const pqxx::result result = txn.exec(query.getQueryString(), query.getQueryParameters());
         txn.commit();
-        std::cout << "Query executed successfully" << std::endl;
-        std::cout << result.affected_rows() << " rows affected" << std::endl;
         return result;
     } catch (const std::exception& e) {
         txn.abort();

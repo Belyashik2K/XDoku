@@ -3,48 +3,29 @@
 
 #include "models/User.h"
 #include "models/database/PostgreSQL/repositories/UserRepository.h"
+#include "presenters/AuthPresenter.h"
+#include "views/auth/ConsoleAuthView.h"
 
 int main() {
+
     try {
         const std::string connectionString = "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku";
 
         auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
-        bool isConnected = database->connect();
-        if (!isConnected) {
-            std::cerr << "Failed to connect to database!" << std::endl;
-            return 1;
-        }
-        std::cout << "Connected to database!" << std::endl;
+        const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
 
-        const int userId = 1;
-        std::string username = "Belyashik4K";
-        std::string email = "b4k@belyashik2k.ru";
-        std::string password = "a!K`Lg#4@';n*]^(jpfEqv";
-        std::string passwordCopy = password;
-        const std::string createdAt = "2025-03-31 00:00:00";
+        // User testUser("belyashbtw", "btw@belyashik2k.ru", "Fb?yd0#StuCTz9a[");
+        // userRepository->create(testUser.getUsername(), testUser.getEmail(), testUser.getPasswordHash());
 
-        const User user(userId, username, email, password, createdAt);
+        const auto authView = std::make_shared<ConsoleAuthView>();
 
-        PostgreSQLUserRepository userRepo(database);
-        const bool result = userRepo.create(user.getUsername(), user.getEmail(), user.getPasswordHash());
-        std::cout << "User with given data" << (result ? " created :)" : " not created :(") << std::endl;
+        AuthPresenter<pqxx::connection, pqxx::params, pqxx::result> authPresenter(userRepository, authView);
+        std::optional<User> user = authPresenter.authenticateUser();
 
-        std::cout << "Trying to authenticate user..." << std::endl;
-
-        try {
-            const User authenticatedUser = userRepo.authenticate(user.getUsername(), user.getPasswordHash());
-            std::cout << "User found, trying to match passwords..." << std::endl;
-            const bool passwordsMatch = BCrypt::validatePassword(passwordCopy, authenticatedUser.getPasswordHash());
-            if (!passwordsMatch) {
-                std::cerr << "Passwords do not match!" << std::endl;
-                return 1;
-            }
-
-            std::cout << "User authenticated!" << std::endl;
-            std::cout << "User ID: " << authenticatedUser.getId() << std::endl;
-            std::cout << "User created at: " << authenticatedUser.getCreatedAtAsString() << std::endl;
-        } catch (const std::exception &e) {
-            std::cerr << "Failed to authenticate user: " << e.what() << std::endl;
+        if (user) {
+            std::cout << "Authenticated user rating: " << user->getRating() << std::endl;
+        } else {
+            std::cout << "Authentication failed." << std::endl;
         }
 
     } catch (const std::exception &e) {
