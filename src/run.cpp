@@ -14,7 +14,7 @@ int main() {
         auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
         const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
 
-        // User testUser("TestUser", "test@belyashik2k.ru", "Fb?yd0#StuCTz9a[");
+        // User testUser("belyashbtw", "btw@belyashik2k.ru", "Fb?yd0#StuCTz9a[");
         // userRepository->create(testUser.getUsername(), testUser.getEmail(), testUser.getPasswordHash());
 
         const auto authView = std::make_shared<ConsoleAuthView>();
