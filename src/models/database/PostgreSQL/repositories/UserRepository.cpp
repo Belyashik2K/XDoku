@@ -4,6 +4,10 @@
 #include "models/database/PostgreSQL/PostgreSQLQuery.h"
 #include "models/database/PostgreSQL/repositories/UserRepository.h"
 
+PostgreSQLUserRepository::PostgreSQLUserRepository(std::shared_ptr<PostgreSQLDatabase> database) {
+    this->database = database;
+}
+
 bool PostgreSQLUserRepository::create(
     const std::string &username,
     const std::string &email,

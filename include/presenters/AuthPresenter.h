@@ -12,13 +12,12 @@
 #include "core/database/repositories/IUserRepository.h"
 #include "views/auth/IAuthView.h"
 
-template <typename Connection, typename Params, typename Result>
 class AuthPresenter : public IPresenter {
-    std::shared_ptr<IUserRepository<Connection, Params, Result>> userRepository;
+    std::shared_ptr<IUserRepository> userRepository;
     std::shared_ptr<IAuthView> view;
 public:
     AuthPresenter(
-        std::shared_ptr<IUserRepository<Connection, Params, Result>> userRepository,
+        std::shared_ptr<IUserRepository> userRepository,
         std::shared_ptr<IAuthView> view
     ): userRepository(userRepository), view(std::move(view)) {}
     ~AuthPresenter() override = default;
@@ -55,7 +54,12 @@ public:
         }
 
         User authenticatedUser = userRepository->get(username);
-        userRepository->createSession(authenticatedUser.getId(), hwid);
+        const bool result = userRepository->createSession(authenticatedUser.getId(), hwid);
+        if (!result) {
+            view->showAuthenticationResult(false);
+            return std::nullopt;
+        }
+
         view->showAuthenticationResult(true);
         return authenticatedUser;
     }

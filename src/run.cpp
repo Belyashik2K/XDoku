@@ -19,7 +19,7 @@ int main() {
 
         const auto authView = std::make_shared<ConsoleAuthView>();
 
-        AuthPresenter<pqxx::connection, pqxx::params, pqxx::result> authPresenter(userRepository, authView);
+        AuthPresenter authPresenter(userRepository, authView);
         std::optional<User> user = authPresenter.authenticateUser();
 
         if (user) {
