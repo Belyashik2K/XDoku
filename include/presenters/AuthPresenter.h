@@ -12,53 +12,19 @@
 #include "core/database/repositories/IUserRepository.h"
 #include "views/auth/IAuthView.h"
 
-template <typename Connection, typename Params, typename Result>
 class AuthPresenter : public IPresenter {
-    std::shared_ptr<IUserRepository<Connection, Params, Result>> userRepository;
+    std::shared_ptr<IUserRepository> userRepository;
     std::shared_ptr<IAuthView> view;
 public:
     AuthPresenter(
-        std::shared_ptr<IUserRepository<Connection, Params, Result>> userRepository,
+        std::shared_ptr<IUserRepository> userRepository,
         std::shared_ptr<IAuthView> view
-    ): userRepository(userRepository), view(std::move(view)) {}
+    ): userRepository(std::move(userRepository)), view(std::move(view)) {}
     ~AuthPresenter() override = default;
 
-    std::optional<User> authenticateUser() {
-        view->showWelcomeMessage();
-
-        std::ifstream file("/etc/machine-id");
-        std::string hwid;
-        if (file.is_open()) {
-            std::getline(file, hwid);
-            file.close();
-        }
-
-        if (hwid.empty()) {
-            view->showAuthenticationResult(false);
-            return std::nullopt;
-        }
-
-        const std::optional<std::string> savedUsername = userRepository->getUsernameBySessionId(hwid);
-        if (savedUsername.has_value()) {
-            User user = userRepository->get(savedUsername.value());
-            view->showAuthenticationResult(true);
-            return user;
-        }
-
-        auto [username, password] = view->getLoginCredentials();
-
-        std::string hashedPassword = userRepository->getHashedPassword(username);
-        const bool isPasswordValid = BCrypt::validatePassword(password, hashedPassword);
-        if (!isPasswordValid) {
-            view->showAuthenticationResult(false);
-            return std::nullopt;
-        }
-
-        User authenticatedUser = userRepository->get(username);
-        userRepository->createSession(authenticatedUser.getId(), hwid);
-        view->showAuthenticationResult(true);
-        return authenticatedUser;
-    }
+    void run() const;
+    std::optional<User> authenticateUser() const;
+    std::optional<User> registerUser() const;
 };
 
 #endif //AUTHPRESENTER_H

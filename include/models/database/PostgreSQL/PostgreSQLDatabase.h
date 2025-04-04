@@ -8,7 +8,7 @@
 #include <pqxx/pqxx>
 #include "core/database/IDatabase.h"
 
-class PostgreSQLDatabase : public IDatabase<pqxx::connection, pqxx::params, pqxx::result> {
+class PostgreSQLDatabase : public IDatabase<pqxx::params, pqxx::result> {
     std::string connectionString;
     std::unique_ptr<pqxx::connection> conn;
 

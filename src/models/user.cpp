@@ -29,7 +29,7 @@ User::User(
     std::string username,
     std::string email,
     std::string password
-): User(std::nullopt, std::move(username), std::move(email), std::move(password), std::nullopt, std::nullopt) {
+): User(std::nullopt, std::move(username), std::move(email), std::move(password), std::nullopt, std::nullopt , true) {
 }
 
 std::string User::getEmail() const {

@@ -7,7 +7,7 @@
 
 #include "iQuery.h"
 
-template <typename Connection, typename Params, typename Result>
+template <typename Params, typename Result>
 class IDatabase {
 public:
     virtual ~IDatabase() = default;
