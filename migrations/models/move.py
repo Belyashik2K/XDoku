@@ -1,5 +1,8 @@
 from datetime import datetime
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import (
+    mapped_column,
+    Mapped,
+)
 from sqlalchemy import (
     func,
     ForeignKey,
@@ -7,11 +10,15 @@ from sqlalchemy import (
 
 from .base import Base
 
+
 class Move(Base):
     __tablename__ = 'moves'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    game_id: Mapped[int] = mapped_column(ForeignKey('games.id'), nullable=False)
+    game_id: Mapped[int] = mapped_column(
+        ForeignKey('games.id', ondelete='CASCADE'),
+        nullable=False
+    )
     row: Mapped[int] = mapped_column(nullable=False)
     col: Mapped[int] = mapped_column(nullable=False)
     value: Mapped[int] = mapped_column(nullable=False)

@@ -1,5 +1,8 @@
 from datetime import datetime
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import (
+    mapped_column,
+    Mapped,
+)
 from sqlalchemy import (
     func,
     ForeignKey,
@@ -7,11 +10,15 @@ from sqlalchemy import (
 
 from .base import Base
 
+
 class Game(Base):
     __tablename__ = 'games'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey('users.id', ondelete='CASCADE'),
+        nullable=False
+    )
     board: Mapped[str] = mapped_column(nullable=False)
     solution: Mapped[str] = mapped_column(nullable=False)
     difficulty: Mapped[int] = mapped_column(nullable=False)

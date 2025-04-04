@@ -11,8 +11,14 @@ class RatingChange(Base):
     __tablename__ = 'rating_history'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False)
-    game_id: Mapped[int] = mapped_column(ForeignKey('games.id'), nullable=True)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey('users.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    game_id: Mapped[int] = mapped_column(
+        ForeignKey('games.id', ondelete='SET NULL'),
+        nullable=True
+    )
     rating_change: Mapped[int] = mapped_column(nullable=False)
     new_rating: Mapped[int] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(nullable=False)
