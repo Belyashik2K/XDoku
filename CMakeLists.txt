@@ -59,4 +59,5 @@ target_link_libraries(XDoku PRIVATE
         OpenGL::GL
         pthread
         bcrypt
+        ncurses
 )

@@ -19,13 +19,13 @@ class User {
 
 public:
     User(
-        std::optional<int> id,
+        const std::optional<int> id,
         std::string username,
         std::string email,
         std::string password,
-        std::optional<int> rating,
+        const std::optional<int> rating,
         const std::optional<std::string> &createdAt,
-        bool needToHash = true
+        const bool needToHash
     );
     User(
         std::string username,
