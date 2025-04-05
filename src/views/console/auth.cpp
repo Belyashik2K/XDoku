@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <ncurses.h>
 
 #include "views/auth/ConsoleAuthView.h"
 
@@ -16,7 +17,7 @@ void ConsoleAuthView::showText(const std::string &text) const {
 
 
 void ConsoleAuthView::clearScreen() const {
-    ;
+    clear();
 }
 
 void ConsoleAuthView::showWelcomeMessage() const {
