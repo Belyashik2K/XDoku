@@ -25,3 +25,4 @@ class Game(Base):
     start_time: Mapped[datetime] = mapped_column(nullable=False, default=func.now(), server_default=func.now())
     end_time: Mapped[datetime] = mapped_column(nullable=True)
     status: Mapped[str] = mapped_column(nullable=False, default='active', server_default='active')
+    exited_while_solved: Mapped[bool] = mapped_column(nullable=False, default=False, server_default='false')
