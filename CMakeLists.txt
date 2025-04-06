@@ -51,6 +51,8 @@ add_executable(XDoku
         include/views/auth/IAuthView.h
         include/utils.h
         src/utils.cpp
+        src/tests/imgui/load.cpp
+        include/tests/imgui/load.h
 )
 
 target_include_directories(XDoku PRIVATE
