@@ -56,6 +56,7 @@ add_executable(XDoku
         include/core/database/repositories/IGameRepository.h
         include/core/database/repositories/IMoveRepository.h
         include/core/database/repositories/ISessionRepository.h
+        include/core/database/repositories/IRatingRepository.h
 )
 
 target_include_directories(XDoku PRIVATE
