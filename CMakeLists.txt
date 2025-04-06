@@ -21,7 +21,6 @@ add_executable(XDoku
         include/core/IView.h
         include/core/IPresenter.h
         include/models/User.h
-        include/models/SudokuGrid.h
         include/core/database/IDatabase.h
         include/models/database/PostgreSQL/PostgreSQLDatabase.h
         include/views/MenuView.h
@@ -57,6 +56,12 @@ add_executable(XDoku
         include/core/database/repositories/IMoveRepository.h
         include/core/database/repositories/ISessionRepository.h
         include/core/database/repositories/IRatingRepository.h
+        include/models/sudoku/SudokuGame.h
+        include/models/sudoku/SudokuGrid.h
+        include/models/sudoku/SudokuCell.h
+        include/models/sudoku/enums/SudokuDifficulty.h
+        include/models/sudoku/utils/SudokuGenerator.h
+        include/models/sudoku/enums/SudokuGameStatus.h
 )
 
 target_include_directories(XDoku PRIVATE
