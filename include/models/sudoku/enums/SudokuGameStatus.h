@@ -4,7 +4,14 @@
 
 #ifndef SUDOKUSTATUS_H
 #define SUDOKUSTATUS_H
+#include <string>
 
-enum class SudokuGameStatusEnum { ACTIVE, FINISHED, PAUSED, EXITED };
+enum class SudokuGameStatusEnum { IN_PROGRESS, FINISHED, SURRENDERED };
+
+class SudokuGameStatus {
+public:
+    static std::string toString(SudokuGameStatusEnum status) ;
+    static SudokuGameStatusEnum fromString(const std::string &status);
+};
 
 #endif //SUDOKUSTATUS_H

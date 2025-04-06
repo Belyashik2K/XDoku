@@ -62,6 +62,8 @@ add_executable(XDoku
         include/models/sudoku/enums/SudokuDifficulty.h
         include/models/sudoku/utils/SudokuGenerator.h
         include/models/sudoku/enums/SudokuGameStatus.h
+        src/models/sudoku/enums/SudokuDifficulty.cpp
+        src/models/sudoku/enums/SudokuGameStatus.cpp
 )
 
 target_include_directories(XDoku PRIVATE
