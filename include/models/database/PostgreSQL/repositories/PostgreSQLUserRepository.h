@@ -2,8 +2,8 @@
 // Created by Belyashik2K on 31.03.2025.
 //
 
-#ifndef USERREPOSITORY_H
-#define USERREPOSITORY_H
+#ifndef POSTGRESQLUSERREPOSITORY_H
+#define POSTGRESQLUSERREPOSITORY_H
 
 #include <pqxx/pqxx>
 
@@ -23,4 +23,4 @@ public:
     std::optional<std::string> getUsernameBySessionId(const std::string &sessionId) const override;
 };
 
-#endif //USERREPOSITORY_H
+#endif //POSTGRESQLUSERREPOSITORY_H

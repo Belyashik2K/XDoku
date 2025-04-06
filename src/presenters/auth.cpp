@@ -3,21 +3,17 @@
 //
 #include <bcrypt/BCrypt.hpp>
 
+#include "utils.h"
 #include "presenters/AuthPresenter.h"
 
 void AuthPresenter::run() const {
     view->clearScreen();
     view->showWelcomeMessage();
 
-    std::ifstream file("/etc/machine-id");
-    std::string hwid;
-    if (file.is_open()) {
-        std::getline(file, hwid);
-        file.close();
-    }
+    std::optional<std::string> hwid = getDeviceHWID();
 
-    if (!hwid.empty()) {
-        const std::optional<std::string> savedUsername = userRepository->getUsernameBySessionId(hwid);
+    if (hwid.has_value()) {
+        const std::optional<std::string> savedUsername = userRepository->getUsernameBySessionId(hwid.value());
         if (savedUsername.has_value()) {
             std::optional<User> user = userRepository->get(savedUsername.value());
             if (user.has_value()) {
@@ -76,18 +72,11 @@ std::optional<User> AuthPresenter::authenticateUser() const {
         return std::nullopt;
     }
 
-    std::ifstream file("/etc/machine-id");
-    std::string hwid;
-    if (file.is_open()) {
-        std::getline(file, hwid);
-        file.close();
-    }
+    const std::optional<User> authenticatedUser = userRepository->get(username);
 
-    std::optional<User> authenticatedUser = userRepository->get(username);
-    const bool result = userRepository->createSession(authenticatedUser.value().getId(), hwid);
-    if (!result) {
-        view->showAuthenticationResult(false);
-        return std::nullopt;
+    std::optional<std::string> hwid = getDeviceHWID();
+    if (hwid.has_value()) {
+        userRepository->createSession(authenticatedUser.value().getId(), hwid.value());
     }
 
     view->showAuthenticationResult(true);

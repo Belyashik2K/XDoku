@@ -11,10 +11,16 @@ find_package(OpenGL REQUIRED)
 add_executable(XDoku
         src/run.cpp
         deps/glad/glad-4-3/src/glad.c
+        deps/imgui/imgui.cpp
+        deps/imgui/imgui_draw.cpp
+        deps/imgui/imgui_widgets.cpp
+        deps/imgui/imgui_tables.cpp
+        deps/imgui/imgui_demo.cpp
+        deps/imgui/backends/imgui_impl_glfw.cpp
+        deps/imgui/backends/imgui_impl_opengl3.cpp
         include/core/IView.h
         include/core/IPresenter.h
         include/models/User.h
-        include/models/SudokuGrid.h
         include/core/database/IDatabase.h
         include/models/database/PostgreSQL/PostgreSQLDatabase.h
         include/views/MenuView.h
@@ -30,7 +36,7 @@ add_executable(XDoku
         include/models/database/PostgreSQL/PostgreSQLDatabase.h
         include/models/database/PostgreSQL/repositories/UserRepository.h
         include/core/database/repositories/IUserRepository.h
-        src/models/database/PostgreSQL/repositories/UserRepository.cpp
+        src/models/database/PostgreSQL/repositories/PostgreSQLUserRepository.cpp
         include/core/database/iQuery.h
         include/core/database/iQuery.h
         src/models/database/PostgreSQL/PostgreSQLQuery.cpp
@@ -42,14 +48,27 @@ add_executable(XDoku
         src/views/console/auth.cpp
         include/views/auth/ConsoleAuthView.h
         include/views/auth/IAuthView.h
-)
-
-include_directories(
-        ${PROJECT_SOURCE_DIR}/include
+        include/utils.h
+        src/utils.cpp
+        src/tests/imgui/load.cpp
+        include/tests/imgui/load.h
+        include/core/database/repositories/IGameRepository.h
+        include/core/database/repositories/IMoveRepository.h
+        include/core/database/repositories/ISessionRepository.h
+        include/core/database/repositories/IRatingRepository.h
+        include/models/sudoku/SudokuGame.h
+        include/models/sudoku/SudokuGrid.h
+        include/models/sudoku/SudokuCell.h
+        include/models/sudoku/enums/SudokuDifficulty.h
+        include/models/sudoku/utils/SudokuGenerator.h
+        include/models/sudoku/enums/SudokuGameStatus.h
 )
 
 target_include_directories(XDoku PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
         deps/glad/glad-4-3/include
+        deps/imgui
+        deps/imgui/backends
 )
 
 target_link_libraries(XDoku PRIVATE

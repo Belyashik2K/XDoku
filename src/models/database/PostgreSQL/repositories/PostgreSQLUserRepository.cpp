@@ -3,7 +3,7 @@
 
 #include "models/User.h"
 #include "models/database/PostgreSQL/PostgreSQLQuery.h"
-#include "models/database/PostgreSQL/repositories/UserRepository.h"
+#include "models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
 
 PostgreSQLUserRepository::PostgreSQLUserRepository(std::shared_ptr<PostgreSQLDatabase> database) {
     this->database = std::move(database);
