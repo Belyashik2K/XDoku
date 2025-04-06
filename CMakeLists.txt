@@ -11,6 +11,13 @@ find_package(OpenGL REQUIRED)
 add_executable(XDoku
         src/run.cpp
         deps/glad/glad-4-3/src/glad.c
+        deps/imgui/imgui.cpp
+        deps/imgui/imgui_draw.cpp
+        deps/imgui/imgui_widgets.cpp
+        deps/imgui/imgui_tables.cpp
+        deps/imgui/imgui_demo.cpp
+        deps/imgui/backends/imgui_impl_glfw.cpp
+        deps/imgui/backends/imgui_impl_opengl3.cpp
         include/core/IView.h
         include/core/IPresenter.h
         include/models/User.h
@@ -46,12 +53,11 @@ add_executable(XDoku
         src/utils.cpp
 )
 
-include_directories(
-        ${PROJECT_SOURCE_DIR}/include
-)
-
 target_include_directories(XDoku PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
         deps/glad/glad-4-3/include
+        deps/imgui
+        deps/imgui/backends
 )
 
 target_link_libraries(XDoku PRIVATE
