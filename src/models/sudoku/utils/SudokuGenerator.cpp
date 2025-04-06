@@ -146,7 +146,6 @@ bool SudokuGenerator::solveByHumanLogic(std::vector<std::vector<SudokuCell>> &bo
     while (progress) {
         progress = false;
 
-        // Проверяем каждую ячейку
         for (int row = 0; row < 9; ++row) {
             for (int col = 0; col < 9; ++col) {
                 if (board[row][col].getValue() != EMPTY) continue;
@@ -207,7 +206,7 @@ void SudokuGenerator::removeNumbers(SudokuGrid &grid, const int countOfOpenCells
 
     shuffle(positions);
 
-    auto& cells = grid.getCells(); // ссылка, чтобы модифицировать
+    auto& cells = grid.getCells();
 
     int removed = 0;
     for (auto&[row, col] : positions) {
@@ -232,7 +231,7 @@ SudokuGrid SudokuGenerator::generateFullGrid() {
     shuffle(nums);
 
     SudokuGrid grid;
-    auto& cells = grid.getCells(); // теперь получаем ссылку
+    auto& cells = grid.getCells();
 
     for (int i = 0; i < 9; ++i) {
         cells[0][i] = SudokuCell(nums[i], true);
