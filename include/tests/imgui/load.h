@@ -5,6 +5,6 @@
 #ifndef LOAD_H
 #define LOAD_H
 
-int loadImgui();
+void testLoadImgui();
 
 #endif //LOAD_H

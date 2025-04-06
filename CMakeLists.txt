@@ -34,7 +34,7 @@ add_executable(XDoku
         include/presenters/ProfilePresenter.h
         src/models/database/PostgreSQL/PostgreSQLDatabase.cpp
         include/models/database/PostgreSQL/PostgreSQLDatabase.h
-        include/models/database/PostgreSQL/repositories/UserRepository.h
+        include/models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h
         include/core/database/repositories/IUserRepository.h
         src/models/database/PostgreSQL/repositories/PostgreSQLUserRepository.cpp
         include/core/database/iQuery.h
@@ -64,6 +64,11 @@ add_executable(XDoku
         include/models/sudoku/enums/SudokuGameStatus.h
         src/models/sudoku/enums/SudokuDifficulty.cpp
         src/models/sudoku/enums/SudokuGameStatus.cpp
+        src/models/sudoku/utils/SudokuGenerator.cpp
+        src/models/sudoku/SudokuCell.cpp
+        src/models/sudoku/SudokuGrid.cpp
+        src/tests/sudoku/generator.cpp
+        include/tests/sudoku/generator.h
 )
 
 target_include_directories(XDoku PRIVATE
