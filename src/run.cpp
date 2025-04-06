@@ -2,7 +2,7 @@
 #include <ncurses.h>
 #include <bcrypt/BCrypt.hpp>
 
-#include "models/database/PostgreSQL/repositories/UserRepository.h"
+#include "models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
 #include "presenters/AuthPresenter.h"
 #include "views/auth/ConsoleAuthView.h"
 

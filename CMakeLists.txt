@@ -37,7 +37,7 @@ add_executable(XDoku
         include/models/database/PostgreSQL/PostgreSQLDatabase.h
         include/models/database/PostgreSQL/repositories/UserRepository.h
         include/core/database/repositories/IUserRepository.h
-        src/models/database/PostgreSQL/repositories/UserRepository.cpp
+        src/models/database/PostgreSQL/repositories/PostgreSQLUserRepository.cpp
         include/core/database/iQuery.h
         include/core/database/iQuery.h
         src/models/database/PostgreSQL/PostgreSQLQuery.cpp
@@ -53,6 +53,9 @@ add_executable(XDoku
         src/utils.cpp
         src/tests/imgui/load.cpp
         include/tests/imgui/load.h
+        include/core/database/repositories/IGameRepository.h
+        include/core/database/repositories/IMoveRepository.h
+        include/core/database/repositories/ISessionRepository.h
 )
 
 target_include_directories(XDoku PRIVATE
