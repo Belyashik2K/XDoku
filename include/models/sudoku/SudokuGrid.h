@@ -10,6 +10,12 @@
 
 class SudokuGrid {
     std::vector<std::vector<SudokuCell>> cells;
+public:
+    SudokuGrid();
+
+    std::vector<std::vector<SudokuCell>> &getCells();
+    std::vector<std::vector<SudokuCell>> getCells() const;
+    void setCells(const std::vector<std::vector<SudokuCell>> &newCells);
 };
 
 #endif //SUDOKUGRID_H

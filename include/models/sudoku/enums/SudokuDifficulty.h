@@ -7,13 +7,15 @@
 
 enum class SudokuDifficultyEnum { Easy, Medium, Hard, Expert };
 
-struct DifficultySettings {
-    int emptyCellsCount;
+struct SudokuDifficultySettings {
+    int openCellsCount;
 };
 
 class SudokuDifficulty {
 public:
-    static DifficultySettings getSettings(SudokuDifficultyEnum level);
+    static SudokuDifficultySettings getSettings(SudokuDifficultyEnum level);
+private:
+    static int getOpenCellsCount(SudokuDifficultyEnum level);
 };
 
 #endif //SUDOKUDIFFICULTY_H

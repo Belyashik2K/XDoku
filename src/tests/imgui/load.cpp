@@ -44,9 +44,9 @@ bool initOpenGL() {
 }
 
 // Главная функция
-int loadImgui() {
+void testLoadImgui() {
     // Инициализация GLFW
-    if (!initGLFW()) return -1;
+    if (!initGLFW()) return;
 
     // Получаем главный монитор и разрешение
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
@@ -57,7 +57,7 @@ int loadImgui() {
     if (!window) {
         std::cerr << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
-        return -1;
+        return;
     }
 
     // Настроим окно так, чтобы оно не растягивалось на оба монитора
@@ -67,7 +67,7 @@ int loadImgui() {
     glfwSwapInterval(1); // Включение вертикальной синхронизации
 
     // Инициализация OpenGL и ImGui
-    if (!initOpenGL()) return -1;
+    if (!initOpenGL()) return;
 
     // Инициализация ImGui для GLFW
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -152,7 +152,5 @@ int loadImgui() {
 
     glfwDestroyWindow(window);
     glfwTerminate();
-
-    return 0;
 }
 
