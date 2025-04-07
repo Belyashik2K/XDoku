@@ -43,7 +43,7 @@ add_executable(XDoku
         include/models/database/PostgreSQL/PostgreSQLQuery.h
         include/models/custom_types/Timestamp.h
         src/models/custom_types/Timestamp.cpp
-        src/models/user.cpp
+        src/models/User.cpp
         src/presenters/auth.cpp
         src/views/console/auth.cpp
         include/views/auth/ConsoleAuthView.h
@@ -69,6 +69,11 @@ add_executable(XDoku
         src/models/sudoku/SudokuGrid.cpp
         src/tests/sudoku/generator.cpp
         include/tests/sudoku/generator.h
+        src/models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.cpp
+        include/models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h
+        src/models/sudoku/SudokuGame.cpp
+        include/models/database/PostgreSQL/repositories/PostgreSQLGameRepository.h
+        src/models/database/PostgreSQL/repositories/PostgreSQLGameRepository.cpp
 )
 
 target_include_directories(XDoku PRIVATE
@@ -76,6 +81,7 @@ target_include_directories(XDoku PRIVATE
         deps/glad/glad-4-3/include
         deps/imgui
         deps/imgui/backends
+        deps/nlohmann_json
 )
 
 target_link_libraries(XDoku PRIVATE

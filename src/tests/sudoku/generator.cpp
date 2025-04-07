@@ -4,16 +4,17 @@
 
 #include <iostream>
 
+#include "models/sudoku/SudokuGame.h"
 #include "models/sudoku/utils/SudokuGenerator.h"
 
 void testSudokuGenerator() {
     SudokuGenerator generator;
 
     std::vector difficulties = {
-        SudokuDifficultyEnum::Easy,
-        SudokuDifficultyEnum::Medium,
-        SudokuDifficultyEnum::Hard,
-        SudokuDifficultyEnum::Expert
+        SudokuDifficultyEnum::EASY,
+        SudokuDifficultyEnum::MEDIUM,
+        SudokuDifficultyEnum::HARD,
+        SudokuDifficultyEnum::EXPERT
     };
 
     for (const auto &difficulty : difficulties) {
@@ -21,5 +22,20 @@ void testSudokuGenerator() {
         SudokuGrid grid = generator.generate(difficulty);
         SudokuGenerator::print(grid);
         std::cout << "==============================" << std::endl;
+    }
+}
+
+void testSudokuGameGenerator() {
+    std::vector difficulties = {
+        SudokuDifficultyEnum::EASY,
+        SudokuDifficultyEnum::MEDIUM,
+        SudokuDifficultyEnum::HARD,
+        SudokuDifficultyEnum::EXPERT
+    };
+
+    for (const auto &difficulty : difficulties) {
+        std::cout << "Difficulty: " << static_cast<int>(difficulty) << std::endl;
+        SudokuGame game = SudokuGame::startNewGame(1, difficulty);
+        game.printInfo();
     }
 }

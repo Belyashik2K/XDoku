@@ -7,27 +7,28 @@
 #include <any>
 #include <optional>
 
+#include "models/sudoku/SudokuGame.h"
+
+
 class IGameRepository {
 public:
     virtual ~IGameRepository() = default;
 
-    virtual std::any createGame(
+    virtual std::optional<SudokuGame> createGame(
         int userId,
-        std::any board,
-        std::any solution,
-        std::any difficulty
+        SudokuGame game
     ) = 0;
-    virtual std::any getGame(int gameId) = 0;
-    virtual std::any getGameWithMoves(int gameId) = 0;
-    virtual std::any updateGame(
-        int gameId,
-        std::optional<std::any> endTime,
-        std::optional<std::any> status,
-        std::optional<std::any> exited_while_solved
-    ) = 0;
-    virtual std::any finishGame(
-        int gameId
-    ) = 0;
+    // virtual SudokuGame getGame(int gameId) = 0;
+    // virtual SudokuGame getGameWithMoves(int gameId) = 0;
+    // virtual bool updateGame(
+    //     int gameId,
+    //     std::optional<std::any> endTime,
+    //     std::optional<std::any> status,
+    //     std::optional<std::any> exited_while_solved
+    // ) = 0;
+    // virtual bool finishGame(
+    //     SudokuGame game
+    // ) = 0;
 };
 
 #endif //IGAMEREPOSITORY_H

@@ -2,6 +2,8 @@
 #include <ncurses.h>
 #include <bcrypt/BCrypt.hpp>
 
+#include "models/database/PostgreSQL/repositories/PostgreSQLGameRepository.h"
+#include "models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
 #include "presenters/AuthPresenter.h"
 #include "views/auth/ConsoleAuthView.h"
@@ -14,17 +16,30 @@ int main() {
     initscr();
 
     // testLoadImgui();
-    // testSudokuGenerator();
+    // testSudokuGameGenerator();
 
     try {
         const std::string connectionString = "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku";
 
         auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
         const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
+        const auto sessionRepository = std::make_shared<PostgreSQLSessionRepository>(database);
         const auto authView = std::make_shared<ConsoleAuthView>();
 
-        const AuthPresenter authPresenter(userRepository, authView);
+        const AuthPresenter authPresenter(userRepository, sessionRepository, authView);
         authPresenter.run();
+
+        // const SudokuGame game = SudokuGame::startNewGame(69, SudokuDifficultyEnum::EASY);
+        // game.printInfo();
+        // std::cout << "Trying to save game..." << std::endl;
+        // PostgreSQLGameRepository gameRepository(database);
+        // auto savedGame = gameRepository.createGame(69, game);
+        // if (savedGame.has_value()) {
+        //     std::cout << "Game saved successfully!" << std::endl;
+        //     savedGame.value().printInfo();
+        // } else {
+        //     std::cout << "Failed to save game." << std::endl;
+        // }
 
     } catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;

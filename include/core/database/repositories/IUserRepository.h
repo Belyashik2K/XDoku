@@ -15,8 +15,6 @@ public:
     virtual std::optional<User> create(User newUser) = 0;
     virtual std::optional<User> get(const std::string& username) const = 0;
     virtual std::string getHashedPassword(const std::string &username) const = 0;
-    virtual bool createSession(const int &userId, const std::string &sessionId) const = 0; // TODO: Move to SessionRepository
-    virtual std::optional<std::string> getUsernameBySessionId(const std::string &sessionId) const = 0; // TODO: Move to SessionRepository
 };
 
 #endif //IUSERREPOSITORY_H

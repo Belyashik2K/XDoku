@@ -6,5 +6,6 @@
 #define GENERATOR_H
 
 void testSudokuGenerator();
+void testSudokuGameGenerator();
 
 #endif //GENERATOR_H
