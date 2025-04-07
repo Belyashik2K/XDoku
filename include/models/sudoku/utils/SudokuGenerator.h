@@ -14,6 +14,7 @@
 class SudokuGenerator {
 public:
     SudokuGrid generate(SudokuDifficultyEnum difficulty);
+    SudokuGrid getSolutionGrid(SudokuGrid grid);
     static void print(SudokuGrid &grid);
 private:
     SudokuGrid generateFullGrid();

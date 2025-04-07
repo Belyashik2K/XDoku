@@ -15,7 +15,7 @@ int main() {
     initscr();
 
     // testLoadImgui();
-    // testSudokuGenerator();
+    testSudokuGameGenerator();
 
     try {
         const std::string connectionString = "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku";

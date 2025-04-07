@@ -252,6 +252,16 @@ SudokuGrid SudokuGenerator::generate(const SudokuDifficultyEnum difficulty) {
     return grid;
 }
 
+SudokuGrid SudokuGenerator::getSolutionGrid(SudokuGrid grid) {
+    if (auto cells = grid.getCells(); solve(cells)) {
+        SudokuGrid solutionGrid;
+        solutionGrid.setCells(cells);
+        return solutionGrid;
+    }
+    throw std::runtime_error("Не удалось найти решение судоку");
+}
+
+
 
 void SudokuGenerator::print(SudokuGrid &grid) {
     for (int i = 0; i < 9; ++i) {

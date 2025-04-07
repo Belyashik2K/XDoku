@@ -11,20 +11,28 @@
 #include "models/custom_types/Timestamp.h"
 
 class SudokuGame {
-    int id;
+public:
+    static SudokuGame startNewGame(int userId, SudokuDifficultyEnum difficulty);
+    // SudokuGame loadGame(int gameId);
+    void printInfo() const;
+private:
+    SudokuGame(
+        int userId,
+        SudokuGrid grid,
+        SudokuGrid solutionGrid,
+        SudokuDifficultyEnum difficulty
+    );
+
+    std::optional<int> id;
     int userId;
     SudokuGrid grid;
     SudokuGrid solutionGrid;
     SudokuDifficultyEnum difficulty;
     int mistakesCount;
-    Timestamp startTime;
-    Timestamp endTime;
+    std::optional<Timestamp> startTime;
+    std::optional<Timestamp> endTime;
     SudokuGameStatusEnum status;
     bool exitedWhilePlaying;
-
-public:
-    SudokuGame();
-    void startNewGame(int userId, SudokuDifficultyEnum difficulty);
 };
 
 #endif //SUDOKUGAME_H
