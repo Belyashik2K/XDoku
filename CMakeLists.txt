@@ -70,6 +70,7 @@ add_executable(XDoku
         src/tests/sudoku/generator.cpp
         include/tests/sudoku/generator.h
         src/models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.cpp
+        include/models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h
 )
 
 target_include_directories(XDoku PRIVATE
