@@ -14,5 +14,6 @@ pqxx::params PostgreSQLQuery::getQueryParameters() {
 }
 
 void PostgreSQLQuery::addParameter(const std::string &parameter) {
-    this->queryParameters.append(parameter);
+    if (parameter.empty()) this->queryParameters.append();
+    else this->queryParameters.append(parameter);
 }
