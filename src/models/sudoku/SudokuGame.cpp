@@ -37,6 +37,7 @@ SudokuGame SudokuGame::startNewGame(
 }
 
 void SudokuGame::printInfo() const {
+    std::cout << "ID: " << (id.has_value() ? std::to_string(id.value()) : "Not set") << std::endl;
     std::cout << "User ID: " << userId << std::endl;
     std::cout << "Difficulty: " << static_cast<int>(difficulty) << std::endl;
     std::cout << "Mistakes Count: " << mistakesCount << std::endl;
