@@ -10,16 +10,19 @@
 
 #include "core/IPresenter.h"
 #include "core/database/repositories/IUserRepository.h"
+#include "core/database/repositories/ISessionRepository.h"
 #include "views/auth/IAuthView.h"
 
 class AuthPresenter : public IPresenter {
     std::shared_ptr<IUserRepository> userRepository;
+    std::shared_ptr<ISessionRepository> sessionRepository;
     std::shared_ptr<IAuthView> view;
 public:
     AuthPresenter(
         std::shared_ptr<IUserRepository> userRepository,
+        std::shared_ptr<ISessionRepository> sessionRepository,
         std::shared_ptr<IAuthView> view
-    ): userRepository(std::move(userRepository)), view(std::move(view)) {}
+    ): userRepository(std::move(userRepository)), sessionRepository(std::move(sessionRepository)), view(std::move(view)) {}
     ~AuthPresenter() override = default;
 
     void run() const;

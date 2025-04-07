@@ -13,7 +13,7 @@ void AuthPresenter::run() const {
     std::optional<std::string> hwid = getDeviceHWID();
 
     if (hwid.has_value()) {
-        const std::optional<std::string> savedUsername = userRepository->getUsernameBySessionId(hwid.value());
+        const std::optional<std::string> savedUsername = sessionRepository->getUsernameBySessionId(hwid.value());
         if (savedUsername.has_value()) {
             std::optional<User> user = userRepository->get(savedUsername.value());
             if (user.has_value()) {
@@ -76,7 +76,7 @@ std::optional<User> AuthPresenter::authenticateUser() const {
 
     std::optional<std::string> hwid = getDeviceHWID();
     if (hwid.has_value()) {
-        userRepository->createSession(authenticatedUser.value().getId(), hwid.value());
+        sessionRepository->createSession(authenticatedUser.value().getId(), hwid.value());
     }
 
     view->showAuthenticationResult(true);

@@ -11,16 +11,14 @@
 #include "models/database/PostgreSQL/PostgreSQLDatabase.h"
 #include "core/database/repositories/IUserRepository.h"
 
-class PostgreSQLUserRepository : public IUserRepository {
+class PostgreSQLUserRepository final : public IUserRepository {
     std::shared_ptr<PostgreSQLDatabase> database;
 public:
-    PostgreSQLUserRepository(std::shared_ptr<PostgreSQLDatabase> database);
+    explicit PostgreSQLUserRepository(std::shared_ptr<PostgreSQLDatabase> database);
 
     std::optional<User> create(User newUser) override;
     std::optional<User> get(const std::string &username) const override;
     std::string getHashedPassword(const std::string &username) const override;
-    bool createSession(const int &userId, const std::string &sessionId) const override;
-    std::optional<std::string> getUsernameBySessionId(const std::string &sessionId) const override;
 };
 
 #endif //POSTGRESQLUSERREPOSITORY_H

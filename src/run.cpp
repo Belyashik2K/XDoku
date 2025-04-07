@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include <bcrypt/BCrypt.hpp>
 
+#include "models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
 #include "presenters/AuthPresenter.h"
 #include "views/auth/ConsoleAuthView.h"
@@ -21,9 +22,10 @@ int main() {
 
         auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
         const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
+        const auto sessionRepository = std::make_shared<PostgreSQLSessionRepository>(database);
         const auto authView = std::make_shared<ConsoleAuthView>();
 
-        const AuthPresenter authPresenter(userRepository, authView);
+        const AuthPresenter authPresenter(userRepository, sessionRepository, authView);
         authPresenter.run();
 
     } catch (const std::exception &e) {
