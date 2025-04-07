@@ -9,18 +9,47 @@
 #include "enums/SudokuDifficulty.h"
 #include "enums/SudokuGameStatus.h"
 #include "models/custom_types/Timestamp.h"
+#include "json.hpp"
 
 class SudokuGame {
 public:
     static SudokuGame startNewGame(int userId, SudokuDifficultyEnum difficulty);
-    // SudokuGame loadGame(int gameId);
+    static SudokuGame loadGame(
+        int id,
+        int userId,
+        const std::string &grid,
+        const std::string &solutionGrid,
+        const std::string &difficulty,
+        int mistakesCount,
+        const std::string &startTime,
+        const std::optional<std::string> &endTime,
+        const std::string &status,
+        bool exitedWhileSolved
+    );
+
     void printInfo() const;
+    std::pair<nlohmann::json, nlohmann::json> getGridsAsJson() const;
+    std::string getDifficultyAsString() const;
+
 private:
     SudokuGame(
         int userId,
         SudokuGrid grid,
         SudokuGrid solutionGrid,
         SudokuDifficultyEnum difficulty
+    );
+
+    SudokuGame(
+        int id,
+        int userId,
+        const std::string &grid,
+        const std::string &solutionGrid,
+        const std::string &difficulty,
+        int mistakesCount,
+        std::string startTime,
+        const std::optional<std::string> &endTime,
+        const std::string &status,
+        bool exitedWhileSolved
     );
 
     std::optional<int> id;
@@ -32,7 +61,16 @@ private:
     std::optional<Timestamp> startTime;
     std::optional<Timestamp> endTime;
     SudokuGameStatusEnum status;
-    bool exitedWhilePlaying;
+    bool exitedWhileSolved;
+
+    void loadGridsFromString(
+        const std::string &grid,
+        const std::string &solutionGrid
+    );
+
+    static SudokuDifficultyEnum loadDifficultyFromString(const std::string &difficulty);
+
+    static SudokuGameStatusEnum loadStatusFromString(const std::string &status);
 };
 
 #endif //SUDOKUGAME_H

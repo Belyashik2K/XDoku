@@ -47,8 +47,6 @@ std::optional<User> PostgreSQLUserRepository::create(
         const pqxx::row row = result[0];
         int id = row["id"].as<int>();
         auto createdAt = row["created_at"].as<std::string>();
-        std::cout << createdAt << std::endl;
-        std::cout << id << std::endl;
         return User(
             id,
             newUser.getUsername(),

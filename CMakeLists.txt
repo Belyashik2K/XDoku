@@ -72,6 +72,8 @@ add_executable(XDoku
         src/models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.cpp
         include/models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h
         src/models/sudoku/SudokuGame.cpp
+        include/models/database/PostgreSQL/repositories/PostgreSQLGameRepository.h
+        src/models/database/PostgreSQL/repositories/PostgreSQLGameRepository.cpp
 )
 
 target_include_directories(XDoku PRIVATE
@@ -79,6 +81,7 @@ target_include_directories(XDoku PRIVATE
         deps/glad/glad-4-3/include
         deps/imgui
         deps/imgui/backends
+        deps/nlohmann_json
 )
 
 target_link_libraries(XDoku PRIVATE

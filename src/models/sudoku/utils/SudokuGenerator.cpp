@@ -247,7 +247,7 @@ SudokuGrid SudokuGenerator::generateFullGrid() {
 
 SudokuGrid SudokuGenerator::generate(const SudokuDifficultyEnum difficulty) {
     SudokuGrid grid = generateFullGrid();
-    const auto [openCellsCount] = SudokuDifficulty::getSettings(difficulty);
+    const auto [openCellsCount, strRepr] = SudokuDifficulty::getSettings(difficulty);
     removeNumbers(grid, openCellsCount);
     return grid;
 }

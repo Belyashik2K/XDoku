@@ -11,10 +11,10 @@ void testSudokuGenerator() {
     SudokuGenerator generator;
 
     std::vector difficulties = {
-        SudokuDifficultyEnum::Easy,
-        SudokuDifficultyEnum::Medium,
-        SudokuDifficultyEnum::Hard,
-        SudokuDifficultyEnum::Expert
+        SudokuDifficultyEnum::EASY,
+        SudokuDifficultyEnum::MEDIUM,
+        SudokuDifficultyEnum::HARD,
+        SudokuDifficultyEnum::EXPERT
     };
 
     for (const auto &difficulty : difficulties) {
@@ -27,10 +27,10 @@ void testSudokuGenerator() {
 
 void testSudokuGameGenerator() {
     std::vector difficulties = {
-        SudokuDifficultyEnum::Easy,
-        SudokuDifficultyEnum::Medium,
-        SudokuDifficultyEnum::Hard,
-        SudokuDifficultyEnum::Expert
+        SudokuDifficultyEnum::EASY,
+        SudokuDifficultyEnum::MEDIUM,
+        SudokuDifficultyEnum::HARD,
+        SudokuDifficultyEnum::EXPERT
     };
 
     for (const auto &difficulty : difficulties) {
