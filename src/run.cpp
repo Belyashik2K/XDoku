@@ -3,6 +3,7 @@
 #include <bcrypt/BCrypt.hpp>
 
 #include "models/database/PostgreSQL/repositories/PostgreSQLGameRepository.h"
+#include "models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLRatingRepository.h"
@@ -25,19 +26,22 @@ int main() {
         auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
         const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
         const auto sessionRepository = std::make_shared<PostgreSQLSessionRepository>(database);
+        const PostgreSQLRatingRepository ratingRepository(database);
+        const PostgreSQLMoveRepository moveRepository(database);
+
         const auto authView = std::make_shared<ConsoleAuthView>();
 
         const AuthPresenter authPresenter(userRepository, sessionRepository, authView);
         authPresenter.run();
 
-        // const PostgreSQLRatingRepository ratingRepository(database);
+
         // constexpr int userId = 61;
         // auto ratingChange = -10;
         // const auto comment = std::format("Testing add rating ({} points)", ratingChange);
         // std::cout << comment << std::endl;
         // ratingRepository.createRatingHistoryRecord(userId, std::nullopt, ratingChange, comment);
         // std::cout << "Rating added successfully!" << std::endl;
-
+        //
         // std::optional<std::vector<LeaderboardPlace>> leaderboard = ratingRepository.getLeaderboard(10);
         // if (leaderboard.has_value()) {
         //     std::cout << "Leaderboard:" << std::endl;

@@ -16,7 +16,8 @@ public:
         : place(place), username(std::move(username)), rating(rating) {
     }
     void printInfo() const {
-        std::cout << "Place: " << place << ", Username: " << username << ", Rating: " << rating << std::endl;
+        const std::string infoString = std::format("{}. @{} - {} points", place, username, rating);
+        std::cout << infoString << std::endl;
     }
 };
 
