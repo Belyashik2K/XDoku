@@ -2,11 +2,11 @@
 #include <ncurses.h>
 #include <bcrypt/BCrypt.hpp>
 
-#include "models/database/PostgreSQL/repositories/PostgreSQLGameRepository.h"
-#include "models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLRatingRepository.h"
+#include "models/database/PostgreSQL/repositories/PostgreSQLGameRepository.h"
+#include "models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h"
 #include "presenters/AuthPresenter.h"
 #include "views/auth/ConsoleAuthView.h"
 
@@ -27,13 +27,13 @@ int main() {
         const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
         const auto sessionRepository = std::make_shared<PostgreSQLSessionRepository>(database);
         const PostgreSQLRatingRepository ratingRepository(database);
-        const PostgreSQLMoveRepository moveRepository(database);
+        PostgreSQLMoveRepository moveRepository(database);
+        PostgreSQLGameRepository gameRepository(database);
 
         const auto authView = std::make_shared<ConsoleAuthView>();
 
         const AuthPresenter authPresenter(userRepository, sessionRepository, authView);
         authPresenter.run();
-
 
         // constexpr int userId = 61;
         // auto ratingChange = -10;
@@ -63,6 +63,28 @@ int main() {
         // } else {
         //     std::cout << "Failed to save game." << std::endl;
         // }
+
+        // std::optional<SudokuGame> loadedGame = gameRepository.getGame(19);
+        // if (loadedGame.has_value()) {
+        //     std::cout << "Game loaded successfully!" << std::endl;
+        //     std::optional<std::vector<SudokuMove>> moves = moveRepository.getMovesByGameId(19);
+        //     std::cout << "Moves loaded successfully!" << std::endl;
+        //
+        //     for (const auto &move: moves.value()) {
+        //         std::cout << "Move: " << move.getValue() << " at (" << move.coords().first << ", " << move.coords().second << ")" << std::endl;
+        //         loadedGame.value().addMove(move);
+        //     }
+        //
+        //     loadedGame.value().printInfo();
+        // } else {
+        //     std::cout << "Failed to load game." << std::endl;
+        // }
+
+        // SudokuMove move(19, 9, 1, 9, true);
+        // bool isMoveCreated = moveRepository.createMove(move);
+        // std::cout << "Move created: " << (isMoveCreated ? "true" : "false") << std::endl;
+
+
 
     } catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;

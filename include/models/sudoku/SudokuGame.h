@@ -10,6 +10,7 @@
 #include "enums/SudokuGameStatus.h"
 #include "models/custom_types/Timestamp.h"
 #include "json.hpp"
+#include "SudokuMove.h"
 
 class SudokuGame {
 public:
@@ -30,7 +31,8 @@ public:
     void printInfo() const;
     std::pair<nlohmann::json, nlohmann::json> getGridsAsJson() const;
     std::string getDifficultyAsString() const;
-
+    bool addMove(const SudokuMove &move);
+    SudokuGrid getCurrentGrid();
 private:
     SudokuGame(
         int userId,
@@ -62,6 +64,8 @@ private:
     std::optional<Timestamp> endTime;
     SudokuGameStatusEnum status;
     bool exitedWhileSolved;
+
+    std::optional<std::vector<SudokuMove>> moves;
 
     void loadGridsFromString(
         const std::string &grid,

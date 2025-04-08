@@ -4,6 +4,8 @@
 
 #ifndef IMOVEREPOSITORY_H
 #define IMOVEREPOSITORY_H
+#include <vector>
+
 #include "models/sudoku/SudokuMove.h"
 
 class IMoveRepository {
@@ -13,6 +15,7 @@ public:
     virtual bool createMove(
         SudokuMove move
     ) = 0;
+    virtual std::optional<std::vector<SudokuMove>> getMovesByGameId(int gameId) = 0;
 };
 
 #endif //IMOVEREPOSITORY_H

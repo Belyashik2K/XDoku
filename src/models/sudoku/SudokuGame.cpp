@@ -15,7 +15,7 @@ SudokuGame::SudokuGame(
     SudokuGrid grid,
     SudokuGrid solutionGrid,
     const SudokuDifficultyEnum difficulty
-): id(std::nullopt), startTime(std::nullopt), endTime(std::nullopt) {
+) {
     this->userId = userId;
     this->grid = std::move(grid);
     this->solutionGrid = std::move(solutionGrid);
@@ -153,4 +153,22 @@ SudokuGame SudokuGame::loadGame(
         status,
         exitedWhileSolved
     );
+}
+
+bool SudokuGame::addMove(const SudokuMove &move) {
+    if (!moves.has_value()) {
+        moves = std::vector<SudokuMove>();
+    }
+    moves.value().push_back(move);
+    return true;
+}
+
+SudokuGrid SudokuGame::getCurrentGrid() {
+    SudokuGrid gridCopy = grid;
+    auto &cells = grid.getCells();
+    for (const auto &move: moves.value()) {
+        cells[move.coords().first][move.coords().second].setValue(move.getValue());
+        cells[move.coords().first][move.coords().second].setValid(move.isValidMove());
+    }
+    return grid;
 }
