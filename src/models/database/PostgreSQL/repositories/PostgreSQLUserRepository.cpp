@@ -5,6 +5,8 @@
 #include "models/database/PostgreSQL/PostgreSQLQuery.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
 
+#define START_RATING 1000
+
 PostgreSQLUserRepository::PostgreSQLUserRepository(std::shared_ptr<PostgreSQLDatabase> database) {
     this->database = std::move(database);
 }
@@ -17,7 +19,7 @@ std::optional<User> PostgreSQLUserRepository::create(
     }
 
     try {
-        PostgreSQLQuery query(R"(
+        PostgreSQLQuery query(std::format(R"(
             WITH inserted_user AS (
                 INSERT INTO users (username, email, password_hash)
                 VALUES ($1, $2, $3)
@@ -27,15 +29,15 @@ std::optional<User> PostgreSQLUserRepository::create(
                 INSERT INTO rating_history (user_id, rating_change, new_rating, comment)
                 SELECT
                     id,
-                    1000 AS rating_change,
-                    1000 AS new_rating,
+                    {} AS rating_change,
+                    {} AS new_rating,
                     'Start rating after registration' AS comment
                 FROM inserted_user
                 RETURNING user_id, rating_change, new_rating, comment
             )
             SELECT id, created_at
             FROM inserted_user;
-        )");
+        )", START_RATING, START_RATING));
         query.addParameter(newUser.getUsername());
         query.addParameter(newUser.getEmail());
         query.addParameter(newUser.getPasswordHash());

@@ -18,7 +18,6 @@ std::optional<std::vector<LeaderboardPlace>> PostgreSQLRatingRepository::getLead
         SELECT
             DENSE_RANK() OVER (ORDER BY lr.current_rating DESC) AS rank,
             u.username,
-            lr.user_id,
             lr.current_rating
         FROM (
             SELECT
