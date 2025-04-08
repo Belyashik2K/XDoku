@@ -79,6 +79,8 @@ add_executable(XDoku
         include/models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h
         src/models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.cpp
         include/models/leaderboard/LeaderboardPlace.h
+        include/models/sudoku/SudokuMove.h
+        src/models/sudoku/SudokuMove.cpp
 )
 
 target_include_directories(XDoku PRIVATE

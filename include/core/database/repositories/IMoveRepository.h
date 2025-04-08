@@ -4,17 +4,14 @@
 
 #ifndef IMOVEREPOSITORY_H
 #define IMOVEREPOSITORY_H
-
-#include "models/sudoku/SudokuCell.h"
+#include "models/sudoku/SudokuMove.h"
 
 class IMoveRepository {
 public:
     virtual ~IMoveRepository() = default;
 
     virtual bool createMove(
-        int gameId,
-        int userId,
-        SudokuCell move
+        SudokuMove move
     ) = 0;
 };
 
