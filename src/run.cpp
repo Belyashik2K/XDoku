@@ -38,6 +38,16 @@ int main() {
         // ratingRepository.createRatingHistoryRecord(userId, std::nullopt, ratingChange, comment);
         // std::cout << "Rating added successfully!" << std::endl;
 
+        // std::optional<std::vector<LeaderboardPlace>> leaderboard = ratingRepository.getLeaderboard(10);
+        // if (leaderboard.has_value()) {
+        //     std::cout << "Leaderboard:" << std::endl;
+        //     for (const auto &place: leaderboard.value()) {
+        //         place.printInfo();
+        //     }
+        // } else {
+        //     std::cout << "Failed to retrieve leaderboard." << std::endl;
+        // }
+
         // const SudokuGame game = SudokuGame::startNewGame(69, SudokuDifficultyEnum::EXPERT);
         // game.printInfo();
         // std::cout << "Trying to save game..." << std::endl;

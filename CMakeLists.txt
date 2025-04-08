@@ -76,6 +76,9 @@ add_executable(XDoku
         src/models/database/PostgreSQL/repositories/PostgreSQLGameRepository.cpp
         include/models/database/PostgreSQL/repositories/PostgreSQLRatingRepository.h
         src/models/database/PostgreSQL/repositories/PostgreSQLRatingRepository.cpp
+        include/models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h
+        src/models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.cpp
+        include/models/leaderboard/LeaderboardPlace.h
 )
 
 target_include_directories(XDoku PRIVATE

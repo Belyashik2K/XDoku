@@ -10,13 +10,44 @@ PostgreSQLRatingRepository::PostgreSQLRatingRepository(std::shared_ptr<PostgreSQ
     this->database = std::move(database);
 }
 
-std::optional<std::any> PostgreSQLRatingRepository::getLeaderboard(int limit) const {
-    return std::nullopt;
+std::optional<std::vector<LeaderboardPlace>> PostgreSQLRatingRepository::getLeaderboard(const int limit) const {
+    if (!database->isConnected()) {
+        return std::nullopt;
+    }
+    PostgreSQLQuery query(R"(
+        SELECT
+            DENSE_RANK() OVER (ORDER BY lr.current_rating DESC) AS rank,
+            u.username,
+            lr.user_id,
+            lr.current_rating
+        FROM (
+            SELECT
+                user_id,
+                new_rating AS current_rating,
+                ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY id DESC) AS rn
+            FROM rating_history
+        ) AS lr
+        JOIN users u ON lr.user_id = u.id
+        WHERE lr.rn = 1
+        ORDER BY rank
+        LIMIT $1;
+    )");
+    query.addParameter(std::to_string(limit));
+
+    const pqxx::result result = database->execute(query);
+    if (result.empty()) {
+        return std::nullopt;
+    }
+    std::vector<LeaderboardPlace> leaderboard;
+    for (const auto &row: result) {
+        const int place = row["rank"].as<int>();
+        const auto username = row["username"].as<std::string>();
+        const int rating = row["current_rating"].as<int>();
+        leaderboard.emplace_back(place, username, rating);
+    }
+    return leaderboard;
 }
 
-std::optional<std::any> PostgreSQLRatingRepository::getRatingHistoryByUserId(int userId, int limit) const {
-    return std::nullopt;
-}
 
 int PostgreSQLRatingRepository::createRatingHistoryRecord(
     const int userId,

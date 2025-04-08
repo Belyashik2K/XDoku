@@ -8,12 +8,14 @@
 #include <any>
 #include <optional>
 #include <string>
+#include <vector>
+
+#include "models/leaderboard/LeaderboardPlace.h"
 
 class IRatingRepository {
 public:
     virtual ~IRatingRepository() = default;
-    virtual std::optional<std::any> getLeaderboard(int limit) const = 0;
-    virtual std::optional<std::any> getRatingHistoryByUserId(int userId, int limit) const = 0;
+    virtual std::optional<std::vector<LeaderboardPlace>> getLeaderboard(int limit) const = 0;
     virtual int createRatingHistoryRecord(
         int userId,
         std::optional<int> gameId,
