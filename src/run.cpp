@@ -41,16 +41,16 @@ int main() {
         // std::cout << comment << std::endl;
         // ratingRepository.createRatingHistoryRecord(userId, std::nullopt, ratingChange, comment);
         // std::cout << "Rating added successfully!" << std::endl;
-        //
-        // std::optional<std::vector<LeaderboardPlace>> leaderboard = ratingRepository.getLeaderboard(10);
-        // if (leaderboard.has_value()) {
-        //     std::cout << "Leaderboard:" << std::endl;
-        //     for (const auto &place: leaderboard.value()) {
-        //         place.printInfo();
-        //     }
-        // } else {
-        //     std::cout << "Failed to retrieve leaderboard." << std::endl;
-        // }
+
+        std::optional<std::vector<LeaderboardPlace>> leaderboard = ratingRepository.getLeaderboard(10);
+        if (leaderboard.has_value()) {
+            std::cout << "Leaderboard:" << std::endl;
+            for (const auto &place: leaderboard.value()) {
+                place.printInfo();
+            }
+        } else {
+            std::cout << "Failed to retrieve leaderboard." << std::endl;
+        }
 
         // const SudokuGame game = SudokuGame::startNewGame(69, SudokuDifficultyEnum::EXPERT);
         // game.printInfo();
@@ -63,7 +63,7 @@ int main() {
         // } else {
         //     std::cout << "Failed to save game." << std::endl;
         // }
-
+        //
         // std::optional<SudokuGame> loadedGame = gameRepository.getGame(19);
         // if (loadedGame.has_value()) {
         //     std::cout << "Game loaded successfully!" << std::endl;
@@ -71,7 +71,7 @@ int main() {
         //     std::cout << "Moves loaded successfully!" << std::endl;
         //
         //     for (const auto &move: moves.value()) {
-        //         std::cout << "Move: " << move.getValue() << " at (" << move.coords().first << ", " << move.coords().second << ")" << std::endl;
+        //         // std::cout << "Move: " << move.getValue() << " at (" << move.coords().first << ", " << move.coords().second << ")" << std::endl;
         //         loadedGame.value().addMove(move);
         //     }
         //
@@ -79,12 +79,10 @@ int main() {
         // } else {
         //     std::cout << "Failed to load game." << std::endl;
         // }
-
-        // SudokuMove move(19, 9, 1, 9, true);
+        //
+        // SudokuMove move(19, 8, 6, 8, true);
         // bool isMoveCreated = moveRepository.createMove(move);
         // std::cout << "Move created: " << (isMoveCreated ? "true" : "false") << std::endl;
-
-
 
     } catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;

@@ -28,11 +28,10 @@ public:
         bool exitedWhileSolved
     );
 
-    void printInfo() const;
+    void printInfo();
     std::pair<nlohmann::json, nlohmann::json> getGridsAsJson() const;
     std::string getDifficultyAsString() const;
     bool addMove(const SudokuMove &move);
-    SudokuGrid getCurrentGrid();
 private:
     SudokuGame(
         int userId,
@@ -57,6 +56,7 @@ private:
     std::optional<int> id;
     int userId;
     SudokuGrid grid;
+    SudokuGrid currentGrid;
     SudokuGrid solutionGrid;
     SudokuDifficultyEnum difficulty;
     int mistakesCount;
@@ -71,6 +71,8 @@ private:
         const std::string &grid,
         const std::string &solutionGrid
     );
+
+    void actualizeCurrentGrid();
 
     static SudokuDifficultyEnum loadDifficultyFromString(const std::string &difficulty);
 

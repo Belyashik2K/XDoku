@@ -3,11 +3,9 @@
 //
 
 #include <utility>
-
-#include "models/sudoku/SudokuGame.h"
-
 #include <iostream>
 
+#include "models/sudoku/SudokuGame.h"
 #include "models/sudoku/utils/SudokuGenerator.h"
 
 SudokuGame::SudokuGame(
@@ -18,6 +16,7 @@ SudokuGame::SudokuGame(
 ) {
     this->userId = userId;
     this->grid = std::move(grid);
+    this->currentGrid = this->grid;
     this->solutionGrid = std::move(solutionGrid);
     this->difficulty = difficulty;
     this->mistakesCount = 0;
@@ -36,7 +35,7 @@ SudokuGame SudokuGame::startNewGame(
     return SudokuGame(userId, grid, solutionGrid, difficulty);
 }
 
-void SudokuGame::printInfo() const {
+void SudokuGame::printInfo() {
     std::cout << "ID: " << (id.has_value() ? std::to_string(id.value()) : "Not set") << std::endl;
     std::cout << "User ID: " << userId << std::endl;
     std::cout << "Difficulty: " << static_cast<int>(difficulty) << std::endl;
@@ -58,6 +57,11 @@ void SudokuGame::printInfo() const {
     std::cout << "Grid:" << std::endl;
     SudokuGrid grid = this->grid;
     SudokuGenerator::print(grid);
+    std::cout << "===============================" << std::endl;
+    std::cout << "Current grid:" << std::endl;
+    actualizeCurrentGrid();
+    SudokuGrid currentGrid = this->currentGrid;
+    SudokuGenerator::print(currentGrid);
     std::cout << "===============================" << std::endl;
     std::cout << "Solution Grid:" << std::endl;
     SudokuGrid solutionGrid = this->solutionGrid;
@@ -99,11 +103,13 @@ void SudokuGame::loadGridsFromString(const std::string &grid, const std::string 
     nlohmann::json solutionGridJson = nlohmann::json::parse(solutionGrid);
 
     auto &gridCells = this->grid.getCells();
+    auto &currentGridCells = this->currentGrid.getCells();
     auto &solutionCells = this->solutionGrid.getCells();
 
     for (int i = 0; i < 9; ++i) {
         for (int j = 0; j < 9; ++j) {
             gridCells[i][j].setValue(gridJson[i][j].get<int>());
+            currentGridCells[i][j].setValue(gridJson[i][j].get<int>());
             solutionCells[i][j].setValue(solutionGridJson[i][j].get<int>());
         }
     }
@@ -124,6 +130,7 @@ SudokuGame::SudokuGame(
    exitedWhileSolved(exitedWhileSolved) {
     this->grid = SudokuGrid();
     this->solutionGrid = SudokuGrid();
+    this->currentGrid = SudokuGrid();
     loadGridsFromString(grid, solutionGrid);
     this->difficulty = loadDifficultyFromString(difficulty);
     this->status = loadStatusFromString(status);
@@ -163,12 +170,11 @@ bool SudokuGame::addMove(const SudokuMove &move) {
     return true;
 }
 
-SudokuGrid SudokuGame::getCurrentGrid() {
-    SudokuGrid gridCopy = grid;
-    auto &cells = grid.getCells();
+void SudokuGame::actualizeCurrentGrid() {
+    auto &cells = this->currentGrid.getCells();
+
     for (const auto &move: moves.value()) {
-        cells[move.coords().first][move.coords().second].setValue(move.getValue());
-        cells[move.coords().first][move.coords().second].setValid(move.isValidMove());
+        const auto [fst, snd] = move.coords();
+        cells[fst][snd].setValue(move.getValue());
     }
-    return grid;
 }
