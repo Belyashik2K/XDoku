@@ -168,9 +168,9 @@ void testLoadImgui() {
         ImGui::BeginChild("CenteredChild", childSize, ImGuiChildFlags_AutoResizeX | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AlwaysAutoResize);
         ImGui::PopStyleVar();
 
-        float textWidth = ImGui::CalcTextSize("Please log in to your account").x;
+        float textWidth = ImGui::CalcTextSize("Sign in to XDoku").x;
         ImGui::SetCursorPosX((childWidth - textWidth) * 0.5f);
-        ImGui::Text("Please log in to your account");
+        ImGui::Text("Sign in to XDoku");
         ImGui::Spacing();
         ImGui::Spacing();
         ImGui::Spacing();
@@ -199,20 +199,20 @@ void testLoadImgui() {
         ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 10.0f);
 
         ImGui::PushID("login_button");
-        ImGui::Button("Log In", buttonSize);
+        ImGui::Button("Sign in", buttonSize);
         ImGui::PopID();
         ImGui::Spacing();
         if (ImGui::IsItemClicked(0)) {
             if (std::string(username) == "admin" && std::string(password) == "admin") {
-                printf("Login successful!\n");
+                printf("Sign in successful!\n");
                 glfwSetWindowShouldClose(window, GLFW_TRUE);
             } else {
-                printf("Login failed!\n");
+                printf("Sign in failed!\n");
             }
         }
 
         ImGui::PushID("exit_button");
-        ImGui::Button("Exit", buttonSize);
+        ImGui::Button("Sign up", buttonSize);
         ImGui::PopID();
         if (ImGui::IsItemClicked(0)) {
             glfwSetWindowShouldClose(window, GLFW_TRUE);
