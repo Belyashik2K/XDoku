@@ -17,7 +17,7 @@ int main() {
 
     initscr();
 
-    // testLoadImgui();
+    testLoadImgui();
     // testSudokuGameGenerator();
 
     try {
@@ -35,13 +35,13 @@ int main() {
         const AuthPresenter authPresenter(userRepository, sessionRepository, authView);
         authPresenter.run();
 
-        // constexpr int userId = 61;
-        // auto ratingChange = -10;
+        // constexpr int userId = 73;
+        // auto ratingChange = 1000000;
         // const auto comment = std::format("Testing add rating ({} points)", ratingChange);
         // std::cout << comment << std::endl;
         // ratingRepository.createRatingHistoryRecord(userId, std::nullopt, ratingChange, comment);
         // std::cout << "Rating added successfully!" << std::endl;
-
+        //
         std::optional<std::vector<LeaderboardPlace>> leaderboard = ratingRepository.getLeaderboard(10);
         if (leaderboard.has_value()) {
             std::cout << "Leaderboard:" << std::endl;

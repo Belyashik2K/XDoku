@@ -89,6 +89,7 @@ target_include_directories(XDoku PRIVATE
         deps/imgui
         deps/imgui/backends
         deps/nlohmann_json
+        deps/stb
 )
 
 target_link_libraries(XDoku PRIVATE
