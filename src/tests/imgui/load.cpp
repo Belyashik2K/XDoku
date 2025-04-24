@@ -11,7 +11,6 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
-// Инициализация GLFW
 bool initGLFW() {
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW!" << std::endl;
@@ -68,14 +67,12 @@ bool LoadTextureFromFile(const char* file_name, GLuint* out_texture, int* out_wi
     return ret;
 }
 
-// Инициализация OpenGL и ImGui
 bool initOpenGL() {
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cerr << "Failed to initialize OpenGL loader!" << std::endl;
         return false;
     }
 
-    // Инициализация ImGui
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
     (void) io;
@@ -89,14 +86,14 @@ bool initOpenGL() {
 
     // Персонализируем цвета
     ImGuiStyle &style = ImGui::GetStyle();
-    // style.Colors[ImGuiCol_WindowBg] = ImVec4(0.05f, 0.05f, 0.05f, 1.00f); // Тёмный фон
-    style.Colors[ImGuiCol_Button] = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+    style.Colors[ImGuiCol_Button] = ImVec4(0.196f, 0.196f, 0.196f, 1.00f);
     style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.64f, 0.64f, 0.64f, 1.00f);
     style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.160f, 0.160f, 0.160f, 1.00f);
 
-    style.Colors[ImGuiCol_Border] = ImVec4(0.24f, 0.36f, 0.47f, 0.92f); // Цвет границ
+    style.Colors[ImGuiCol_Border] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
     style.Colors[ImGuiCol_Text] = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
-    style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.44f, 0.44f, 0.44f, 1.00f); // Серый текст
+    style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.44f, 0.44f, 0.44f, 1.00f);
+    style.Colors[ImGuiCol_FrameBg] = ImVec4(0.196f, 0.196f, 0.196f, 1.00f);
     return true;
 }
 
@@ -129,9 +126,7 @@ void testLoadImgui() {
 
     char username[128] = "";
     char password[128] = "";
-    bool loginSuccess = false;
 
-    // Главный цикл
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
@@ -146,114 +141,96 @@ void testLoadImgui() {
         );
 
         ImVec2 windowPos = ImGui::GetWindowPos();
-        ImVec2 windowSize = ImGui::GetWindowSize();
-
+        const ImVec2 windowSize = ImGui::GetWindowSize();
         ImDrawList* drawList = ImGui::GetWindowDrawList();
 
-        // Рисуем текстуру как фон
         drawList->AddImage(
-            my_image_texture,                           // ID текстуры
-            windowPos,                                 // Левый верхний угол
-            ImVec2(windowPos.x + windowSize.x,         // Правый нижний угол
+            my_image_texture,
+            windowPos,
+            ImVec2(windowPos.x + windowSize.x,
                    windowPos.y + windowSize.y),
-            ImVec2(0, 0),                              // UV-координаты левого верхнего угла текстуры
-            ImVec2(1, 1),                              // UV-координаты правого нижнего угла текстуры
-            IM_COL32(255, 255, 255, 255)               // Цвет (белый, без прозрачности)
+            ImVec2(0, 0),
+            ImVec2(1, 1),
+            IM_COL32(255, 255, 255, 255)
         );
 
-        // Получаем размер текста
-        // ImVec2 textSize = ImGui::CalcTextSize(text);
-        //
-        // // Рассчитываем позицию текста (центр окна)
-        // ImVec2 textPosition;
-        // textPosition.x = (windowSize.x - textSize.x) * 0.5f; // Центрирование по горизонтали
-        // textPosition.y = (windowSize.y - textSize.y) * 0.5f; // Центрирование по вертикали
-        //
-        // // Устанавливаем позицию текста
-        // ImGui::SetCursorPos(textPosition);
-        //
-        // // Отображаем текст
-        // ImGui::Text("%s", text);
+        constexpr int childWidth = 650;
+        constexpr int childHeight = 350;
+        ImVec2 childSize(childWidth, childHeight);
 
-        // Центрирование формы авторизации
-        // ImVec2 window_pos = ImVec2((mode->width - 400) / 2, (mode->height - 300) / 2);
-        // ImGui::SetCursorPos(window_pos); // Ставим курсор в центр экрана
+        ImVec2 childPosition;
+        childPosition.x = (windowSize.x - childSize.x) * 0.5f;
+        childPosition.y = (windowSize.y - childSize.y) * 0.5f;
 
-        // Заголовок
-        // ImGui::Text("Please log in to your account");
-        // ImGui::Spacing();
+        ImGui::SetCursorPos(childPosition);
 
-        // ImGui::PushItemWidth(500.0f);
-        // ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 15.0f));
-        //
-        // // Поле для ввода логина
-        // // ImGui::InputText("Username", username, IM_ARRAYSIZE(username), ImGuiInputTextFlags_CharsNoBlank);
-        //
-        // // Поле для ввода пароля
-        // // ImGui::InputText("Password", password, IM_ARRAYSIZE(password), ImGuiInputTextFlags_Password);
-        //
-        // ImGui::PopStyleVar();
-        // ImGui::PopItemWidth();
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+        ImGui::BeginChild("CenteredChild", childSize, ImGuiChildFlags_AutoResizeX | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AlwaysAutoResize);
+        ImGui::PopStyleVar();
 
-        // Кнопка для входа
+        float textWidth = ImGui::CalcTextSize("Please log in to your account").x;
+        ImGui::SetCursorPosX((childWidth - textWidth) * 0.5f);
+        ImGui::Text("Please log in to your account");
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::Spacing();
 
-        const auto &buttonSize = ImVec2(300.0f, 50.0f);
+        ImGui::PushItemWidth(childWidth);
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 15.0f));
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
 
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f)); // Красный текст
+        ImGui::InputText("##Username", username, IM_ARRAYSIZE(username), ImGuiInputTextFlags_CharsNoBlank);
+        ImGui::Spacing();
+        ImGui::InputText("##Password", password, IM_ARRAYSIZE(password), ImGuiInputTextFlags_Password);
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::PopItemWidth();
+
+        const auto &buttonSize = ImVec2(childWidth, 50.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 10.0f);
 
         ImGui::PushID("login_button");
         ImGui::Button("Log In", buttonSize);
         ImGui::PopID();
-
-        ImGui::SameLine();
-
-        ImGui::PushID("register_button");
-        ImGui::Button("Register", buttonSize);
-        ImGui::PopID();
-
-        ImGui::PushID("exit_button");
-        ImGui::Button("Exit", buttonSize);
-        ImGui::PopID();
-
-        ImGui::PopStyleColor();
-
-        ImGui::PushID("login_button");
+        ImGui::Spacing();
         if (ImGui::IsItemClicked(0)) {
-            // Вставь логику аутентификации здесь
-            if (std::string(username) == "admin" && std::string(password) == "password") {
+            if (std::string(username) == "admin" && std::string(password) == "admin") {
                 printf("Login successful!\n");
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
             } else {
                 printf("Login failed!\n");
             }
         }
-        ImGui::PopID();
-
-        ImGui::PushID("register_button");
-        if (ImGui::IsItemClicked(0)) {
-            std::cout << "Registration button clicked\n";
-        }
-        ImGui::PopID();
 
         ImGui::PushID("exit_button");
+        ImGui::Button("Exit", buttonSize);
+        ImGui::PopID();
         if (ImGui::IsItemClicked(0)) {
             glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
-        ImGui::PopID();
+
+        ImGui::PopStyleColor(2);
+        ImGui::PopStyleVar(3);
+
+        ImGui::EndChild();
 
         ImGui::End();
 
         ImGui::Render();
-        // glClearColor(0.05f, 0.05f, 0.05f, 1.00f); // Темный фон
-        // glClear(GL_COLOR_BUFFER_BIT);
-
-        // Рендерим все данные ImGui
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        // Обмен буферов
         glfwSwapBuffers(window);
     }
 
-    // Очистка ресурсов ImGui
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
