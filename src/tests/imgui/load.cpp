@@ -78,7 +78,7 @@ bool initOpenGL() {
     (void) io;
     ImGui::StyleColorsDark(); // Темная тема
 
-    ImFont *font = io.Fonts->AddFontFromFileTTF("../assets/fonts/regular.ttf", 18.0f);
+    ImFont *font = io.Fonts->AddFontFromFileTTF("../assets/fonts/regular.ttf", 22.0f);
     if (!font) {
         printf("Font not set!");
         exit(EXIT_FAILURE);
@@ -179,7 +179,7 @@ void testLoadImgui() {
         ImGui::Spacing();
 
         ImGui::PushItemWidth(childWidth);
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 15.0f));
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(15.0f, 15.0f));
         ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
         ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
@@ -195,7 +195,7 @@ void testLoadImgui() {
         ImGui::Spacing();
         ImGui::PopItemWidth();
 
-        const auto &buttonSize = ImVec2(childWidth, 50.0f);
+        const auto &buttonSize = ImVec2(childWidth, 55);
         ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 10.0f);
 
         ImGui::PushID("login_button");
