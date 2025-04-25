@@ -11,7 +11,7 @@
 #include "app_events/IEvent.h"
 
 class EventBus {
-    std::pmr::unordered_map<std::type_index, std::function<void(const IEvent&)>> handlers;
+    std::pmr::unordered_map<std::type_index, std::vector<std::function<void(const IEvent&)>>> handlers;
 public:
     template<typename EventType>
     void subscribe(std::function<void(const EventType&)> handler);

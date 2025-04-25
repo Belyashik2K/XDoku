@@ -7,15 +7,18 @@
 
 void EventBus::publish(const IEvent &event) {
     if (const auto it = handlers.find(typeid(event)); it != handlers.end()) {
-        it->second(event);
+        for (const auto &handler : it->second) {
+            handler(event);
+        }
     } else {
-        throw std::runtime_error("No handler found for event type");
+        throw std::runtime_error("No handlers found for event type");
     }
 }
 
 template<typename EventType>
 void EventBus::subscribe(std::function<void(const EventType &)> handler) {
-    handlers[typeid(EventType)] = [handler](const IEvent &event) {
+    auto wrapper = [handler](const IEvent &event) {
         handler(static_cast<const EventType &>(event));
     };
+    handlers[typeid(EventType)].push_back(wrapper);
 }
