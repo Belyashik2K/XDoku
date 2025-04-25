@@ -8,7 +8,7 @@
 #include <functional>
 #include <typeindex>
 #include <unordered_map>
-#include "IEvent.h"
+#include "app_events/IEvent.h"
 
 class EventBus {
     std::pmr::unordered_map<std::type_index, std::function<void(const IEvent&)>> handlers;

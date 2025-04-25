@@ -81,10 +81,12 @@ add_executable(XDoku
         include/models/leaderboard/LeaderboardPlace.h
         include/models/sudoku/SudokuMove.h
         src/models/sudoku/SudokuMove.cpp
-        include/core/IEvent.h
+        include/core/app_events/IEvent.h
         include/core/EventBus.h
         include/core/AppMediator.h
         include/core/Application.h
+        src/EventBus.cpp
+        src/AppMediator.cpp
 )
 
 target_include_directories(XDoku PRIVATE
