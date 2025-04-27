@@ -7,16 +7,19 @@
 #include <memory>
 
 #include "EventBus.h"
+#include "IPresenter.h"
 
 class AppMediator {
+    IPresenter *currentPresenter = nullptr;
     std::shared_ptr<EventBus> eventBus;
+
 public:
-    explicit AppMediator(std::shared_ptr<EventBus> eventBus);
-    void draw();
+    explicit AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *presenter = nullptr);
 
-    // TODO: Implement the rest of the methods
-
-    std::shared_ptr<EventBus> getEventBus();
+    void setCurrentPresenter(IPresenter *presenter) {
+        currentPresenter = presenter;
+    }
+    void render() const;
 };
 
 #endif //APPMEDIATOR_H

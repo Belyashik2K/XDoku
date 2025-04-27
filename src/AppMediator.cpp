@@ -5,14 +5,13 @@
 #include <core/AppMediator.h>
 #include <core/EventBus.h>
 
-void AppMediator::draw() {
-    throw std::runtime_error("Not implemented yet");
+void AppMediator::render() const {
+    if (currentPresenter) {
+        currentPresenter->render();
+    }
 }
 
-std::shared_ptr<EventBus> AppMediator::getEventBus() {
-    return eventBus;
-}
-
-AppMediator::AppMediator(std::shared_ptr<EventBus> eventBus) {
+AppMediator::AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *presenter) {
     this->eventBus = std::move(eventBus);
+    this->currentPresenter = presenter;
 }

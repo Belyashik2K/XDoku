@@ -23,15 +23,6 @@ add_executable(XDoku
         include/models/User.h
         include/core/database/IDatabase.h
         include/models/database/PostgreSQL/PostgreSQLDatabase.h
-        include/views/MenuView.h
-        include/views/GameView.h
-        include/views/ProfileView.h
-        include/views/LeaderboardView.h
-        include/presenters/AuthPresenter.h
-        include/presenters/GamePresenter.h
-        include/presenters/LeaderboardPresenter.h
-        include/presenters/MenuPresenter.h
-        include/presenters/ProfilePresenter.h
         src/models/database/PostgreSQL/PostgreSQLDatabase.cpp
         include/models/database/PostgreSQL/PostgreSQLDatabase.h
         include/models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h
@@ -44,14 +35,8 @@ add_executable(XDoku
         include/models/custom_types/Timestamp.h
         src/models/custom_types/Timestamp.cpp
         src/models/User.cpp
-        src/presenters/auth.cpp
-        src/views/console/auth.cpp
-        include/views/auth/ConsoleAuthView.h
-        include/views/auth/IAuthView.h
         include/utils.h
         src/utils.cpp
-        src/tests/imgui/load.cpp
-        include/tests/imgui/load.h
         include/core/database/repositories/IGameRepository.h
         include/core/database/repositories/IMoveRepository.h
         include/core/database/repositories/ISessionRepository.h
@@ -87,6 +72,11 @@ add_executable(XDoku
         include/core/Application.h
         src/EventBus.cpp
         src/AppMediator.cpp
+        include/presenters/LoginPresenter.h
+        include/views/imgui/login/ImguiLoginView.h
+        include/views/imgui/ImguiView.h
+        src/views/imgui/ImguiLoginView.cpp
+        src/presenters/LoginPresenter.cpp
 )
 
 target_include_directories(XDoku PRIVATE
