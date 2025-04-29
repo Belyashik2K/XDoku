@@ -25,7 +25,6 @@ class Game(Base):
     board: Mapped[dict] = mapped_column(JSONB, nullable=False)
     solution: Mapped[dict] = mapped_column(JSONB, nullable=False)
     difficulty: Mapped[str] = mapped_column(nullable=False)
-    mistakes_count: Mapped[int] = mapped_column(nullable=False, default=0, server_default='0')
     start_time: Mapped[datetime] = mapped_column(nullable=False, default=func.now(), server_default=func.now())
     end_time: Mapped[datetime] = mapped_column(nullable=True)
     status: Mapped[str] = mapped_column(nullable=False, default='in_progress', server_default='in_progress')

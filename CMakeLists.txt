@@ -23,15 +23,6 @@ add_executable(XDoku
         include/models/User.h
         include/core/database/IDatabase.h
         include/models/database/PostgreSQL/PostgreSQLDatabase.h
-        include/views/MenuView.h
-        include/views/GameView.h
-        include/views/ProfileView.h
-        include/views/LeaderboardView.h
-        include/presenters/AuthPresenter.h
-        include/presenters/GamePresenter.h
-        include/presenters/LeaderboardPresenter.h
-        include/presenters/MenuPresenter.h
-        include/presenters/ProfilePresenter.h
         src/models/database/PostgreSQL/PostgreSQLDatabase.cpp
         include/models/database/PostgreSQL/PostgreSQLDatabase.h
         include/models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h
@@ -44,14 +35,8 @@ add_executable(XDoku
         include/models/custom_types/Timestamp.h
         src/models/custom_types/Timestamp.cpp
         src/models/User.cpp
-        src/presenters/auth.cpp
-        src/views/console/auth.cpp
-        include/views/auth/ConsoleAuthView.h
-        include/views/auth/IAuthView.h
         include/utils.h
         src/utils.cpp
-        src/tests/imgui/load.cpp
-        include/tests/imgui/load.h
         include/core/database/repositories/IGameRepository.h
         include/core/database/repositories/IMoveRepository.h
         include/core/database/repositories/ISessionRepository.h
@@ -76,6 +61,38 @@ add_executable(XDoku
         src/models/database/PostgreSQL/repositories/PostgreSQLGameRepository.cpp
         include/models/database/PostgreSQL/repositories/PostgreSQLRatingRepository.h
         src/models/database/PostgreSQL/repositories/PostgreSQLRatingRepository.cpp
+        include/models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h
+        src/models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.cpp
+        include/models/leaderboard/LeaderboardPlace.h
+        include/models/sudoku/SudokuMove.h
+        src/models/sudoku/SudokuMove.cpp
+        include/core/app_events/IEvent.h
+        include/core/EventBus.h
+        include/core/AppMediator.h
+        include/core/Application.h
+        src/EventBus.cpp
+        src/AppMediator.cpp
+        include/presenters/SignInPresenter.h
+        include/views/imgui/sign_in/ImguiSignInView.h
+        include/views/imgui/ImguiView.h
+        src/views/imgui/sign_in/ImguiSignInView.cpp
+        src/presenters/SignInPresenter.cpp
+        include/core/IFrameHandler.h
+        include/views/imgui/ImguiFrameHandler.h
+        src/views/imgui/ImguiFrameHandler.cpp
+        src/Application.cpp
+        include/managers/TextureManager.h
+        src/managers/TextureManager.cpp
+        include/views/imgui/ImguiWindow.h
+        include/views/imgui/ImguiChildWindow.h
+        src/views/imgui/ImguiWindow.cpp
+        src/views/imgui/ImguiChildWindow.cpp
+        src/views/imgui/ImguiView.cpp
+        src/views/imgui/sign_up/ImguiSignUpView.cpp
+        include/views/imgui/sign_up/ImguiSignUpView.h
+        include/presenters/SignUpPresenter.h
+        include/core/app_events/buttons.h
+        src/presenters/SignUpPresenter.cpp
 )
 
 target_include_directories(XDoku PRIVATE
@@ -84,6 +101,7 @@ target_include_directories(XDoku PRIVATE
         deps/imgui
         deps/imgui/backends
         deps/nlohmann_json
+        deps/stb
 )
 
 target_link_libraries(XDoku PRIVATE

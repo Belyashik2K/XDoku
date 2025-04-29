@@ -5,10 +5,13 @@
 #ifndef IVIEW_H
 #define IVIEW_H
 
+class IPresenter;
+
 class IView {
 public:
-    virtual void render() const = 0;
     virtual ~IView() = default;
+
+    virtual void render() = 0;
 };
 
 #endif //IVIEW_H

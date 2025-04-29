@@ -1,54 +1,54 @@
 #include <iostream>
-#include <ncurses.h>
-#include <bcrypt/BCrypt.hpp>
+#include "core/Application.h"
+#include "core/AppMediator.h"
+#include "core/EventBus.h"
 
-#include "models/database/PostgreSQL/repositories/PostgreSQLGameRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLRatingRepository.h"
-#include "presenters/AuthPresenter.h"
-#include "views/auth/ConsoleAuthView.h"
+#include "models/database/PostgreSQL/repositories/PostgreSQLGameRepository.h"
+#include "models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h"
 
-#include "tests/imgui/load.h"
-#include "tests/sudoku/generator.h"
+#include "presenters/SignInPresenter.h"
+#include "views/imgui/ImguiFrameHandler.h"
+
+#include "views/imgui/sign_in/ImguiSignInView.h"
+#include "views/imgui/sign_up/ImguiSignUpView.h"
 
 int main() {
-
-    initscr();
-
-    // testLoadImgui();
-    // testSudokuGameGenerator();
-
     try {
-        const std::string connectionString = "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku";
-
-        auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
-        const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
-        const auto sessionRepository = std::make_shared<PostgreSQLSessionRepository>(database);
-        const auto authView = std::make_shared<ConsoleAuthView>();
-
-        const AuthPresenter authPresenter(userRepository, sessionRepository, authView);
-        authPresenter.run();
-
+        // const std::string connectionString =
+        //         "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku";
+        //
+        // auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
+        // const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
+        // const auto sessionRepository = std::make_shared<PostgreSQLSessionRepository>(database);
         // const PostgreSQLRatingRepository ratingRepository(database);
-        // constexpr int userId = 61;
-        // auto ratingChange = -10;
-        // const auto comment = std::format("Testing add rating ({} points)", ratingChange);
-        // std::cout << comment << std::endl;
-        // ratingRepository.createRatingHistoryRecord(userId, std::nullopt, ratingChange, comment);
-        // std::cout << "Rating added successfully!" << std::endl;
-
-        // const SudokuGame game = SudokuGame::startNewGame(69, SudokuDifficultyEnum::EXPERT);
-        // game.printInfo();
-        // std::cout << "Trying to save game..." << std::endl;
+        // PostgreSQLMoveRepository moveRepository(database);
         // PostgreSQLGameRepository gameRepository(database);
-        // const auto savedGame = gameRepository.createGame(69, game);
-        // if (savedGame.has_value()) {
-        //     std::cout << "Game saved successfully!" << std::endl;
-        //     savedGame.value().printInfo();
-        // } else {
-        //     std::cout << "Failed to save game." << std::endl;
-        // }
+
+        const auto eventBus = std::make_shared<EventBus>();
+        const auto appMediator = std::make_shared<AppMediator>(eventBus);
+
+        const auto signInView = std::make_shared<ImguiSignInView>();
+        const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus.get());
+        const auto signUpView = std::make_shared<ImguiSignUpView>();
+        const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus.get());
+
+        signInPresenter->setView(signInView.get());
+        signInView->setPresenter(signInPresenter.get());
+
+        signUpPresenter->setView(signUpView.get());
+        signUpView->setPresenter(signUpPresenter.get());
+
+        appMediator->setCurrentPresenter(signInPresenter.get());
+        appMediator->setSignUpPresenter(signUpPresenter.get());
+        appMediator->setSignInPresenter(signInPresenter.get());
+        appMediator->subscribeToEvents();
+
+        auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
+        const Application app(std::move(frameHandler), appMediator.get());
+        app.start();
 
     } catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;

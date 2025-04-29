@@ -4,7 +4,6 @@
 
 #ifndef IGAMEREPOSITORY_H
 #define IGAMEREPOSITORY_H
-#include <any>
 #include <optional>
 
 #include "models/sudoku/SudokuGame.h"
@@ -18,17 +17,7 @@ public:
         int userId,
         SudokuGame game
     ) = 0;
-    // virtual SudokuGame getGame(int gameId) = 0;
-    // virtual SudokuGame getGameWithMoves(int gameId) = 0;
-    // virtual bool updateGame(
-    //     int gameId,
-    //     std::optional<std::any> endTime,
-    //     std::optional<std::any> status,
-    //     std::optional<std::any> exited_while_solved
-    // ) = 0;
-    // virtual bool finishGame(
-    //     SudokuGame game
-    // ) = 0;
+    virtual std::optional<SudokuGame> getGame(int gameId) = 0;
 };
 
 #endif //IGAMEREPOSITORY_H

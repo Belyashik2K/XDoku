@@ -16,6 +16,8 @@ public:
         int userId,
         SudokuGame game
     ) override;
+    std::optional<SudokuGame> getGame(int gameId) override;
+
 };
 
 #endif //POSTGRESQLGAMEREPOSITORY_H
