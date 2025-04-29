@@ -40,12 +40,7 @@ void ImguiLoginView::render() {
     float textWidth = ImGui::CalcTextSize("Sign in to XDoku").x;
     ImGui::SetCursorPosX((childWidth - textWidth) * 0.5f);
     ImGui::Text("Sign in to XDoku");
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
+    addVerticalSpacing(6);
 
     ImGui::PushItemWidth(childWidth);
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(15.0f, 15.0f));
@@ -54,33 +49,27 @@ void ImguiLoginView::render() {
     ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
 
     ImGui::InputText("##Username", presenter->getUsername(), presenter->getBufferSize(), ImGuiInputTextFlags_CharsNoBlank);
-    ImGui::Spacing();
+    addVerticalSpacing();
     ImGui::InputText("##Password", presenter->getPassword(), presenter->getBufferSize(), ImGuiInputTextFlags_Password);
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
+    addVerticalSpacing(6);
     ImGui::PopItemWidth();
+
 
     const auto &buttonSize = ImVec2(childWidth, 55);
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 10.0f);
 
-    ImGui::PushID("login_button");
-    ImGui::Button("Sign in", buttonSize);
-    ImGui::PopID();
-    ImGui::Spacing();
-    if (ImGui::IsItemClicked(0)) {
-        presenter->onLoginButtonClicked();
-    }
+    createButton("login_button", "Sign in", buttonSize,
+        [this] {
+            presenter->onLoginButtonClicked();
+        }
+    );
+    addVerticalSpacing();
 
-    ImGui::PushID("exit_button");
-    ImGui::Button("Sign up", buttonSize);
-    ImGui::PopID();
-    if (ImGui::IsItemClicked(0)) {
-        presenter->onSignUpButtonClicked();
-    }
+    createButton("signup_button", "Sign up", buttonSize,
+        [this] {
+            presenter->onSignUpButtonClicked();
+        }
+    );
 
     ImGui::PopStyleColor(2);
     ImGui::PopStyleVar(3);
