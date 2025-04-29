@@ -11,11 +11,6 @@ void ImguiSignUpView::render() {
     ImguiWindow window("Sign up Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
     updateBackground("../assets/textures/background.jpg");
 
-    //     ImGui::InputText("##Username", presenter->getUsername(), presenter->getBufferSize(), ImGuiInputTextFlags_CharsNoBlank);
-    //     ImGui::InputText("##Email", presenter->getEmail(), presenter->getBufferSize(), ImGuiInputTextFlags_CharsNoBlank);
-    //     ImGui::InputText("##Password", presenter->getPassword(), presenter->getBufferSize(), ImGuiInputTextFlags_CharsNoBlank);
-    //     ImGui::InputText("##ConfirmPassword", presenter->getConfirmPassword(), presenter->getBufferSize(), ImGuiInputTextFlags_CharsNoBlank);
-    // }
     {
         const ImVec2 windowSize = ImGui::GetWindowSize();
         const float childWidth = windowSize.x / 3;
