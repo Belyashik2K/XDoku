@@ -11,16 +11,27 @@
 
 class ImguiWindowHandler final : public IWindowHandler {
 public:
-    ImguiWindowHandler(int width, int height, const std::string &title);
+    ImguiWindowHandler(
+        int width,
+        int height,
+        const std::string &title
+    );
+
+    explicit ImguiWindowHandler(
+        const std::string &title
+    );
 
     void run(std::function<void()> renderCallback) override;
+
     void shutdown() override;
 
 private:
     void init();
 
-    GLFWwindow* window;
-    int windowWidth, windowHeight;
+    void createWindow();
+
+    GLFWwindow *window;
+    std::optional<int> windowWidth, windowHeight;
     std::string windowTitle;
 };
 

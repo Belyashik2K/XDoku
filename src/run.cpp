@@ -44,7 +44,7 @@ int main() {
 
         appMediator->setCurrentPresenter(loginPresenter.get());
 
-        auto windowHandler = std::make_unique<ImguiWindowHandler>(1920, 1080, "xdoku");
+        auto windowHandler = std::make_unique<ImguiWindowHandler>("XDoku");
         const Application app(std::move(windowHandler), appMediator.get());
         app.start();
 

@@ -10,52 +10,74 @@
 
 #include <views/imgui/ImguiWindowHandler.h>
 
-ImguiWindowHandler::ImguiWindowHandler(const int width, const int height, const std::string &title) {
+ImguiWindowHandler::ImguiWindowHandler(
+    int width,
+    int height,
+    const std::string &title
+) {
     windowWidth = width;
     windowHeight = height;
     windowTitle = title;
     window = nullptr;
 }
 
+ImguiWindowHandler::ImguiWindowHandler(
+    const std::string &title
+) {
+    windowWidth = std::nullopt;
+    windowHeight = std::nullopt;
+    windowTitle = title;
+    window = nullptr;
+}
+
 bool initGLFW() {
-    if (!glfwInit()) {
-        std::cerr << "Failed to initialize GLFW!" << std::endl;
-        return false;
-    }
-    return true;
+    return glfwInit();
 }
 
 bool initOpenGL() {
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
-        std::cerr << "Failed to initialize OpenGL loader!" << std::endl;
-        return false;
-    }
-
-
-    return true;
+    return gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 }
 
+void ImguiWindowHandler::createWindow() {
+    GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+
+    if (!windowWidth || !windowHeight) {
+        printf("Window size not set, using monitor resolution\n");
+        const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+        windowWidth = std::make_optional(mode->width);
+        windowHeight = std::make_optional(mode->height);
+    }
+
+    GLFWwindow *window = glfwCreateWindow(
+        windowWidth.value(),
+        windowHeight.value(),
+        windowTitle.c_str(),
+        monitor,
+        nullptr
+    );
+    this->window = window;
+}
 
 void ImguiWindowHandler::init() {
-    initGLFW();
-    GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-    const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+    if (!initGLFW()) {
+        std::cerr << "Failed to initialize GLFW" << std::endl;
+        return;
+    }
 
-    GLFWwindow *newWindow = glfwCreateWindow(mode->width, mode->height, "ImGui Login Menu", monitor, nullptr);
-    if (!newWindow) {
+    createWindow();
+    if (!window) {
         std::cerr << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return;
     }
-    windowHeight = mode->height;
-    windowWidth = mode->width;
-    windowTitle = glfwGetWindowTitle(newWindow);
-    window = newWindow;
 
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
-    initOpenGL();
+    if (!initOpenGL()) {
+        std::cerr << "Failed to initialize OpenGL" << std::endl;
+        return;
+    }
 
     ImGui::CreateContext();
     const ImGuiIO &io = ImGui::GetIO();
@@ -104,7 +126,3 @@ void ImguiWindowHandler::shutdown() {
     glfwDestroyWindow(window);
     glfwTerminate();
 }
-
-
-
-
