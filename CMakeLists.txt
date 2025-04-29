@@ -81,6 +81,8 @@ add_executable(XDoku
         include/views/imgui/ImguiWindowHandler.h
         src/views/imgui/ImguiWindowHandler.cpp
         src/Application.cpp
+        include/managers/TextureManager.h
+        src/managers/TextureManager.cpp
 )
 
 target_include_directories(XDoku PRIVATE

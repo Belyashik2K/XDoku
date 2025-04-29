@@ -13,12 +13,17 @@
 class LoginPresenter final : public IPresenter {
     EventBus *eventBus = nullptr;
 
+    char username[128] = "";
+    char password[128] = "";
+
     bool findActiveSession();
     bool authorizeUser(const std::string &username, const std::string &password);
 public:
     explicit LoginPresenter(EventBus *bus) : eventBus(bus) {}
 
-    void onLoginButtonClicked(const std::string &username, const std::string &password);
+    void onLoginButtonClicked();
+    char *getUsername() { return username; }
+    char *getPassword() { return password; }
 };
 
 #endif //LOGINPRESENTER_H
