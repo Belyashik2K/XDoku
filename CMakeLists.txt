@@ -77,6 +77,10 @@ add_executable(XDoku
         include/views/imgui/ImguiView.h
         src/views/imgui/ImguiLoginView.cpp
         src/presenters/LoginPresenter.cpp
+        include/core/IWindowHandler.h
+        include/views/imgui/ImguiWindowHandler.h
+        src/views/imgui/ImguiWindowHandler.cpp
+        src/Application.cpp
 )
 
 target_include_directories(XDoku PRIVATE
