@@ -9,10 +9,10 @@
 #include "views/imgui/ImguiView.h"
 
 class ImguiSignUpView final : public IImguiView {
-    RegisterPresenter *presenter = nullptr;
+    SignUpPresenter *presenter = nullptr;
 public:
     void render() override;
-    void setPresenter(RegisterPresenter *p) { presenter = p; }
+    void setPresenter(SignUpPresenter *p) { presenter = p; }
 };
 
 #endif //IMGUISIGNUPVIEW_H

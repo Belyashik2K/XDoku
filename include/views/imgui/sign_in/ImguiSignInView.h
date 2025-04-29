@@ -7,11 +7,11 @@
 #include "presenters/LoginPresenter.h"
 #include "views/imgui/ImguiView.h"
 
-class ImguiLoginView final : public IImguiView {
-    LoginPresenter *presenter = nullptr;
+class ImguiSignInView final : public IImguiView {
+    SignInPresenter *presenter = nullptr;
 public:
     void render() override;
-    void setPresenter(LoginPresenter *p) { presenter = p; }
+    void setPresenter(SignInPresenter *p) { presenter = p; }
 };
 
 #endif //IMGUILOGINVIEW_H

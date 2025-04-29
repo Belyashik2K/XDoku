@@ -15,15 +15,15 @@ class AppMediator {
     IPresenter *currentPresenter = nullptr;
     std::shared_ptr<EventBus> eventBus;
 
-    RegisterPresenter *registerPresenter = nullptr;
+    SignUpPresenter *signUpPresenter = nullptr;
 public:
     explicit AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *presenter = nullptr);
 
     void setCurrentPresenter(IPresenter *presenter) {
         currentPresenter = presenter;
     }
-    void setRegisterPresenter(RegisterPresenter *presenter) {
-        registerPresenter = presenter;
+    void setSignUpPresenter(SignUpPresenter *presenter) {
+        signUpPresenter = presenter;
     }
     void subscribeToEvents();
 

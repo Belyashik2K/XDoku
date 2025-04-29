@@ -6,7 +6,7 @@
 #define REGISTERPRESENTER_H
 #include "core/IPresenter.h"
 
-class RegisterPresenter final : public IPresenter {
+class SignUpPresenter final : public IPresenter {
 
 };
 

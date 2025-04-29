@@ -6,10 +6,10 @@
 
 #include "core/app_events/buttons.h"
 
-void LoginPresenter::onLoginButtonClicked() {
+void SignInPresenter::onLoginButtonClicked() {
     printf("Login button clicked with username: %s and password: %s\n", username, password);
 }
 
-void LoginPresenter::onSignUpButtonClicked() const {
+void SignInPresenter::onSignUpButtonClicked() const {
     eventBus->publish(OnSignUpButtonClicked());
 }

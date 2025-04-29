@@ -12,7 +12,7 @@
 #include "presenters/LoginPresenter.h"
 #include "views/imgui/ImguiFrameHandler.h"
 
-#include "views/imgui/login/ImguiLoginView.h"
+#include "views/imgui/sign_in/ImguiSignInView.h"
 #include "views/imgui/sign_up/ImguiSignUpView.h"
 
 int main() {
@@ -30,19 +30,19 @@ int main() {
         const auto eventBus = std::make_shared<EventBus>();
         const auto appMediator = std::make_shared<AppMediator>(eventBus);
 
-        const auto loginView = std::make_shared<ImguiLoginView>();
-        const auto loginPresenter = std::make_shared<LoginPresenter>(eventBus.get());
-        const auto registerView = std::make_shared<ImguiSignUpView>();
-        const auto registerPresenter = std::make_shared<RegisterPresenter>();
+        const auto loginView = std::make_shared<ImguiSignInView>();
+        const auto loginPresenter = std::make_shared<SignInPresenter>(eventBus.get());
+        const auto signUpView = std::make_shared<ImguiSignUpView>();
+        const auto signUpPresenter = std::make_shared<SignUpPresenter>();
 
         loginPresenter->setView(loginView.get());
         loginView->setPresenter(loginPresenter.get());
 
-        registerPresenter->setView(registerView.get());
-        registerView->setPresenter(registerPresenter.get());
+        signUpPresenter->setView(signUpView.get());
+        signUpView->setPresenter(signUpPresenter.get());
 
         appMediator->setCurrentPresenter(loginPresenter.get());
-        appMediator->setRegisterPresenter(registerPresenter.get());
+        appMediator->setSignUpPresenter(signUpPresenter.get());
         appMediator->subscribeToEvents();
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");

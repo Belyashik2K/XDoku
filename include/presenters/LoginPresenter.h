@@ -10,7 +10,7 @@
 #include "core/EventBus.h"
 #include "core/IPresenter.h"
 
-class LoginPresenter final : public IPresenter {
+class SignInPresenter final : public IPresenter {
     EventBus *eventBus = nullptr;
 
     char username[128] = "";
@@ -19,7 +19,7 @@ class LoginPresenter final : public IPresenter {
     bool findActiveSession();
     bool authorizeUser(const std::string &username, const std::string &password);
 public:
-    explicit LoginPresenter(EventBus *bus) : eventBus(bus) {}
+    explicit SignInPresenter(EventBus *bus) : eventBus(bus) {}
 
     void onLoginButtonClicked();
     void onSignUpButtonClicked() const;

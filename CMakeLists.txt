@@ -73,9 +73,9 @@ add_executable(XDoku
         src/EventBus.cpp
         src/AppMediator.cpp
         include/presenters/LoginPresenter.h
-        include/views/imgui/login/ImguiLoginView.h
+        include/views/imgui/sign_in/ImguiSignInView.h
         include/views/imgui/ImguiView.h
-        src/views/imgui/login/ImguiLoginView.cpp
+        src/views/imgui/sign_in/ImguiSignInView.cpp
         src/presenters/LoginPresenter.cpp
         include/core/IFrameHandler.h
         include/views/imgui/ImguiFrameHandler.h

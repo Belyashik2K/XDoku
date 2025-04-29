@@ -2,14 +2,14 @@
 // Created by belyashik2k on 4/27/25.
 //
 
-#include "views/imgui/login/ImguiLoginView.h"
+#include "views/imgui/sign_in/ImguiSignInView.h"
 
 #include <imgui.h>
 
 #include "views/imgui/ImguiChildWindow.h"
 #include "views/imgui/ImguiWindow.h"
 
-void ImguiLoginView::render() {
+void ImguiSignInView::render() {
     ImguiWindow window("Login Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
     {
         updateBackground("../assets/textures/background.jpg");
