@@ -44,8 +44,8 @@ int main() {
 
         appMediator->setCurrentPresenter(loginPresenter.get());
 
-        auto windowHandler = std::make_unique<ImguiFrameHandler>("XDoku");
-        const Application app(std::move(windowHandler), appMediator.get());
+        auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
+        const Application app(std::move(frameHandler), appMediator.get());
         app.start();
 
     } catch (const std::exception &e) {
