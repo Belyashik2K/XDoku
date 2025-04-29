@@ -75,7 +75,7 @@ add_executable(XDoku
         include/presenters/LoginPresenter.h
         include/views/imgui/login/ImguiLoginView.h
         include/views/imgui/ImguiView.h
-        src/views/imgui/ImguiLoginView.cpp
+        src/views/imgui/login/ImguiLoginView.cpp
         src/presenters/LoginPresenter.cpp
         include/core/IWindowHandler.h
         include/views/imgui/ImguiWindowHandler.h
@@ -83,6 +83,11 @@ add_executable(XDoku
         src/Application.cpp
         include/managers/TextureManager.h
         src/managers/TextureManager.cpp
+        include/views/imgui/ImguiWindow.h
+        include/views/imgui/ImguiChildWindow.h
+        src/views/imgui/ImguiWindow.cpp
+        src/views/imgui/ImguiChildWindow.cpp
+        src/views/imgui/ImguiView.cpp
 )
 
 target_include_directories(XDoku PRIVATE

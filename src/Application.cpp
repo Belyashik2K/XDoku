@@ -10,7 +10,7 @@ Application::Application(std::unique_ptr<IWindowHandler> handler, AppMediator *m
 }
 
 void Application::start() const {
-    this->windowHandler->run([this]() {
+    this->windowHandler->run([this] {
         this->appMediator->render();
     });
 }

@@ -9,37 +9,18 @@
 #include <imgui.h>
 
 #include "managers/TextureManager.h"
+#include "views/imgui/ImguiChildWindow.h"
+#include "views/imgui/ImguiWindow.h"
 
 void ImguiLoginView::render() {
-    const GLuint backgroundTex = TextureManager::GetInstance().loadTextureFromFile("../assets/textures/background.jpg");
-
-    char *username = presenter->getUsername();
-    char *password = presenter->getPassword();
-
-    ImGui::Begin(
-        "Login Menu",
-        nullptr,
-        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove
-    );
-
-    const ImVec2 windowPos = ImGui::GetWindowPos();
-    const ImVec2 windowSize = ImGui::GetWindowSize();
-    ImDrawList* drawList = ImGui::GetWindowDrawList();
-
-    drawList->AddImage(
-        backgroundTex,
-        windowPos,
-        ImVec2(windowPos.x + windowSize.x,
-               windowPos.y + windowSize.y),
-        ImVec2(0, 0),
-        ImVec2(1, 1),
-        IM_COL32(255, 255, 255, 255)
-    );
+    ImguiWindow window("Login Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+    updateBackground("../assets/textures/background.jpg");
 
     constexpr int childWidth = 650;
     constexpr int childHeight = 350;
     constexpr ImVec2 childSize(childWidth, childHeight);
 
+    const ImVec2 windowSize = ImGui::GetWindowSize();
     ImVec2 childPosition;
     childPosition.x = (windowSize.x - childSize.x) * 0.5f;
     childPosition.y = (windowSize.y - childSize.y) * 0.5f;
@@ -47,7 +28,13 @@ void ImguiLoginView::render() {
     ImGui::SetCursorPos(childPosition);
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-    ImGui::BeginChild("CenteredChild", childSize, ImGuiChildFlags_AutoResizeX | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AlwaysAutoResize);
+
+    ImguiChildWindow childWindow(
+        "CenteredChild",
+        childSize,
+        ImGuiChildFlags_AutoResizeX | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AlwaysAutoResize
+    );
+
     ImGui::PopStyleVar();
 
     float textWidth = ImGui::CalcTextSize("Sign in to XDoku").x;
@@ -66,9 +53,9 @@ void ImguiLoginView::render() {
     ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
     ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
 
-    ImGui::InputText("##Username", username, 128, ImGuiInputTextFlags_CharsNoBlank);
+    ImGui::InputText("##Username", presenter->getUsername(), presenter->getBufferSize(), ImGuiInputTextFlags_CharsNoBlank);
     ImGui::Spacing();
-    ImGui::InputText("##Password", password, 128, ImGuiInputTextFlags_Password);
+    ImGui::InputText("##Password", presenter->getPassword(), presenter->getBufferSize(), ImGuiInputTextFlags_Password);
     ImGui::Spacing();
     ImGui::Spacing();
     ImGui::Spacing();
@@ -97,6 +84,4 @@ void ImguiLoginView::render() {
 
     ImGui::PopStyleColor(2);
     ImGui::PopStyleVar(3);
-
-    ImGui::EndChild();
 }

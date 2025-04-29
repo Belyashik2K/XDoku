@@ -26,6 +26,7 @@ public:
 
     char *getUsername() { return username; }
     char *getPassword() { return password; }
+    int getBufferSize() const { return sizeof(username); }
 };
 
 #endif //LOGINPRESENTER_H

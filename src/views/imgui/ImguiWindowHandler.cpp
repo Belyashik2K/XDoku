@@ -114,7 +114,6 @@ void ImguiWindowHandler::run(const std::function<void()> renderCallback) {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         renderCallback();
-        ImGui::End();
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
