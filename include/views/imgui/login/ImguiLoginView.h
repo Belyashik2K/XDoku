@@ -8,7 +8,6 @@
 #include "views/imgui/ImguiView.h"
 
 class ImguiLoginView final : public IImguiView {
-protected:
     LoginPresenter *presenter = nullptr;
 public:
     void render() override;

@@ -8,17 +8,25 @@
 
 #include "EventBus.h"
 #include "IPresenter.h"
+#include "app_events/buttons.h"
+#include "presenters/RegisterPresenter.h"
 
 class AppMediator {
     IPresenter *currentPresenter = nullptr;
     std::shared_ptr<EventBus> eventBus;
 
+    RegisterPresenter *registerPresenter = nullptr;
 public:
     explicit AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *presenter = nullptr);
 
     void setCurrentPresenter(IPresenter *presenter) {
         currentPresenter = presenter;
     }
+    void setRegisterPresenter(RegisterPresenter *presenter) {
+        registerPresenter = presenter;
+    }
+    void subscribeToEvents();
+
     void render() const;
 };
 

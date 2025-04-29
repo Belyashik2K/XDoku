@@ -88,6 +88,10 @@ add_executable(XDoku
         src/views/imgui/ImguiWindow.cpp
         src/views/imgui/ImguiChildWindow.cpp
         src/views/imgui/ImguiView.cpp
+        src/views/imgui/sign_up/ImguiSignUpView.cpp
+        include/views/imgui/sign_up/ImguiSignUpView.h
+        include/presenters/RegisterPresenter.h
+        include/core/app_events/buttons.h
 )
 
 target_include_directories(XDoku PRIVATE

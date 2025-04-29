@@ -6,16 +6,16 @@
 
 Application::Application(std::unique_ptr<IFrameHandler> handler, AppMediator *mediator) {
     this->appMediator = mediator;
-    this->windowHandler = std::move(handler);
+    this->frameHandler = std::move(handler);
 }
 
 void Application::start() const {
-    this->windowHandler->run([this] {
+    this->frameHandler->run([this] {
         this->appMediator->render();
     });
 }
 
 Application::~Application() {
-    this->windowHandler->shutdown();
+    this->frameHandler->shutdown();
 }
 

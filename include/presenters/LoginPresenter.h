@@ -22,7 +22,7 @@ public:
     explicit LoginPresenter(EventBus *bus) : eventBus(bus) {}
 
     void onLoginButtonClicked();
-    void onSignUpButtonClicked();
+    void onSignUpButtonClicked() const;
 
     char *getUsername() { return username; }
     char *getPassword() { return password; }

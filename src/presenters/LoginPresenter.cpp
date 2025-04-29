@@ -4,13 +4,12 @@
 
 #include "presenters/LoginPresenter.h"
 
-#include <iostream>
-#include <ostream>
+#include "core/app_events/buttons.h"
 
 void LoginPresenter::onLoginButtonClicked() {
     printf("Login button clicked with username: %s and password: %s\n", username, password);
 }
 
-void LoginPresenter::onSignUpButtonClicked() {
-    printf("Switching to sign up view\n");
+void LoginPresenter::onSignUpButtonClicked() const {
+    eventBus->publish(OnSignUpButtonClicked());
 }

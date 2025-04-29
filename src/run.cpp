@@ -20,6 +20,7 @@
 #include "views/imgui/ImguiFrameHandler.h"
 
 #include "views/imgui/login/ImguiLoginView.h"
+#include "views/imgui/sign_up/ImguiSignUpView.h"
 
 int main() {
     try {
@@ -33,16 +34,23 @@ int main() {
         // PostgreSQLMoveRepository moveRepository(database);
         // PostgreSQLGameRepository gameRepository(database);
 
-        auto eventBus = std::make_shared<EventBus>();
+        const auto eventBus = std::make_shared<EventBus>();
         const auto appMediator = std::make_shared<AppMediator>(eventBus);
 
         const auto loginView = std::make_shared<ImguiLoginView>();
         const auto loginPresenter = std::make_shared<LoginPresenter>(eventBus.get());
+        const auto registerView = std::make_shared<ImguiSignUpView>();
+        const auto registerPresenter = std::make_shared<RegisterPresenter>();
 
         loginPresenter->setView(loginView.get());
         loginView->setPresenter(loginPresenter.get());
 
+        registerPresenter->setView(registerView.get());
+        registerView->setPresenter(registerPresenter.get());
+
         appMediator->setCurrentPresenter(loginPresenter.get());
+        appMediator->setRegisterPresenter(registerPresenter.get());
+        appMediator->subscribeToEvents();
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
         const Application app(std::move(frameHandler), appMediator.get());

@@ -9,7 +9,7 @@ protected:
 public:
     virtual ~IPresenter() = default;
 
-    void render() const { if (view) view->render(); }
+    void render() const { if (view) view->render();}
 
     void setView(IView *v) { view = v; }
 };

@@ -15,3 +15,13 @@ AppMediator::AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *present
     this->eventBus = std::move(eventBus);
     this->currentPresenter = presenter;
 }
+
+
+void AppMediator::subscribeToEvents() {
+    eventBus->subscribe<OnSignUpButtonClicked>([this](const OnSignUpButtonClicked &) {
+        if (registerPresenter) {
+            printf("Switching to register presenter\n");
+            this->currentPresenter = registerPresenter;
+        }
+    });
+}

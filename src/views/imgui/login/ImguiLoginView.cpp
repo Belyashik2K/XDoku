@@ -15,11 +15,11 @@ void ImguiLoginView::render() {
         updateBackground("../assets/textures/background.jpg");
 
         {
-            constexpr int childWidth = 650;
-            constexpr int childHeight = 350;
-            constexpr ImVec2 childSize(childWidth, childHeight);
-
             const ImVec2 windowSize = ImGui::GetWindowSize();
+            const float childWidth = windowSize.x / 3;
+            const float childHeight = windowSize.y / 3;
+            const ImVec2 childSize(childWidth, childHeight);
+
             ImVec2 childPosition;
             childPosition.x = (windowSize.x - childSize.x) * 0.5f;
             childPosition.y = (windowSize.y - childSize.y) * 0.5f;
@@ -36,7 +36,7 @@ void ImguiLoginView::render() {
 
             ImGui::PopStyleVar();
 
-            float textWidth = ImGui::CalcTextSize("Sign in to XDoku").x;
+            const float textWidth = ImGui::CalcTextSize("Sign in to XDoku").x;
             ImGui::SetCursorPosX((childWidth - textWidth) * 0.5f);
             ImGui::Text("Sign in to XDoku");
             addVerticalSpacing(6);

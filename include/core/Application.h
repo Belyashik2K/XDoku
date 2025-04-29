@@ -10,7 +10,7 @@
 #include "IFrameHandler.h"
 
 class Application {
-    std::unique_ptr<IFrameHandler> windowHandler;
+    std::unique_ptr<IFrameHandler> frameHandler;
     AppMediator* appMediator;
 public:
     Application(std::unique_ptr<IFrameHandler> handler, AppMediator* mediator);
