@@ -14,7 +14,7 @@ void ImguiSignUpView::render() {
     {
         const ImVec2 windowSize = ImGui::GetWindowSize();
         const float childWidth = windowSize.x / 3;
-        const float childHeight = 450.0f;
+        const float childHeight = 470.0f;
         const ImVec2 childSize(childWidth, childHeight);
 
         ImVec2 childPosition;
