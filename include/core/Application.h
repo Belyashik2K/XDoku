@@ -7,13 +7,13 @@
 #include <memory>
 
 #include "AppMediator.h"
-#include "IWindowHandler.h"
+#include "IFrameHandler.h"
 
 class Application {
-    std::unique_ptr<IWindowHandler> windowHandler;
+    std::unique_ptr<IFrameHandler> windowHandler;
     AppMediator* appMediator;
 public:
-    Application(std::unique_ptr<IWindowHandler> handler, AppMediator* mediator);
+    Application(std::unique_ptr<IFrameHandler> handler, AppMediator* mediator);
     void start() const;
     ~Application();
 };

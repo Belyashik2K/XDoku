@@ -2,22 +2,22 @@
 // Created by belyashik2k on 4/29/25.
 //
 
-#ifndef IMGUIWINDOWHANDLER_H
-#define IMGUIWINDOWHANDLER_H
+#ifndef IMGUIFRAMEHANDLER_H
+#define IMGUIFRAMEHANDLER_H
 #include <string>
 #include <GLFW/glfw3.h>
 
-#include "core/IWindowHandler.h"
+#include "core/IFrameHandler.h"
 
-class ImguiWindowHandler final : public IWindowHandler {
+class ImguiFrameHandler final : public IFrameHandler {
 public:
-    ImguiWindowHandler(
+    ImguiFrameHandler(
         int width,
         int height,
         const std::string &title
     );
 
-    explicit ImguiWindowHandler(
+    explicit ImguiFrameHandler(
         const std::string &title
     );
 
@@ -34,4 +34,4 @@ private:
     std::string windowTitle;
 };
 
-#endif //IMGUIWINDOWHANDLER_H
+#endif //IMGUIFRAMEHANDLER_H

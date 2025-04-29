@@ -8,9 +8,9 @@
 #include <imgui_impl_opengl3.h>
 #include <iostream>
 
-#include <views/imgui/ImguiWindowHandler.h>
+#include <views/imgui/ImguiFrameHandler.h>
 
-ImguiWindowHandler::ImguiWindowHandler(
+ImguiFrameHandler::ImguiFrameHandler(
     int width,
     int height,
     const std::string &title
@@ -21,7 +21,7 @@ ImguiWindowHandler::ImguiWindowHandler(
     window = nullptr;
 }
 
-ImguiWindowHandler::ImguiWindowHandler(
+ImguiFrameHandler::ImguiFrameHandler(
     const std::string &title
 ) {
     windowWidth = std::nullopt;
@@ -38,7 +38,7 @@ bool initOpenGL() {
     return gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 }
 
-void ImguiWindowHandler::createWindow() {
+void ImguiFrameHandler::createWindow() {
     GLFWmonitor *monitor = glfwGetPrimaryMonitor();
 
     if (!windowWidth || !windowHeight) {
@@ -58,7 +58,7 @@ void ImguiWindowHandler::createWindow() {
     this->window = window;
 }
 
-void ImguiWindowHandler::init() {
+void ImguiFrameHandler::init() {
     if (!initGLFW()) {
         std::cerr << "Failed to initialize GLFW" << std::endl;
         return;
@@ -106,7 +106,7 @@ void ImguiWindowHandler::init() {
     ImGui_ImplOpenGL3_Init("#version 130");
 }
 
-void ImguiWindowHandler::run(const std::function<void()> renderCallback) {
+void ImguiFrameHandler::run(const std::function<void()> renderCallback) {
     init();
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -120,7 +120,7 @@ void ImguiWindowHandler::run(const std::function<void()> renderCallback) {
     }
 }
 
-void ImguiWindowHandler::shutdown() {
+void ImguiFrameHandler::shutdown() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

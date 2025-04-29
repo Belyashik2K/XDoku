@@ -4,7 +4,7 @@
 
 #include "core/Application.h"
 
-Application::Application(std::unique_ptr<IWindowHandler> handler, AppMediator *mediator) {
+Application::Application(std::unique_ptr<IFrameHandler> handler, AppMediator *mediator) {
     this->appMediator = mediator;
     this->windowHandler = std::move(handler);
 }

@@ -17,7 +17,7 @@
 #include "models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h"
 
 #include "presenters/LoginPresenter.h"
-#include "views/imgui/ImguiWindowHandler.h"
+#include "views/imgui/ImguiFrameHandler.h"
 
 #include "views/imgui/login/ImguiLoginView.h"
 
@@ -44,7 +44,7 @@ int main() {
 
         appMediator->setCurrentPresenter(loginPresenter.get());
 
-        auto windowHandler = std::make_unique<ImguiWindowHandler>("XDoku");
+        auto windowHandler = std::make_unique<ImguiFrameHandler>("XDoku");
         const Application app(std::move(windowHandler), appMediator.get());
         app.start();
 

@@ -2,15 +2,15 @@
 // Created by belyashik2k on 4/29/25.
 //
 
-#ifndef IWINDOWHANDLER_H
-#define IWINDOWHANDLER_H
+#ifndef IFRAMEHANDLER_H
+#define IFRAMEHANDLER_H
 #include <functional>
 
-class IWindowHandler {
+class IFrameHandler {
 public:
     virtual void run(std::function<void()> renderCallback) = 0;
     virtual void shutdown() = 0;
-    virtual ~IWindowHandler() = default;
+    virtual ~IFrameHandler() = default;
 };
 
-#endif //IWINDOWHANDLER_H
+#endif //IFRAMEHANDLER_H
