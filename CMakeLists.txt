@@ -72,11 +72,11 @@ add_executable(XDoku
         include/core/Application.h
         src/EventBus.cpp
         src/AppMediator.cpp
-        include/presenters/LoginPresenter.h
+        include/presenters/SignInPresenter.h
         include/views/imgui/sign_in/ImguiSignInView.h
         include/views/imgui/ImguiView.h
         src/views/imgui/sign_in/ImguiSignInView.cpp
-        src/presenters/LoginPresenter.cpp
+        src/presenters/SignInPresenter.cpp
         include/core/IFrameHandler.h
         include/views/imgui/ImguiFrameHandler.h
         src/views/imgui/ImguiFrameHandler.cpp
@@ -90,8 +90,9 @@ add_executable(XDoku
         src/views/imgui/ImguiView.cpp
         src/views/imgui/sign_up/ImguiSignUpView.cpp
         include/views/imgui/sign_up/ImguiSignUpView.h
-        include/presenters/RegisterPresenter.h
+        include/presenters/SignUpPresenter.h
         include/core/app_events/buttons.h
+        src/presenters/SignUpPresenter.cpp
 )
 
 target_include_directories(XDoku PRIVATE

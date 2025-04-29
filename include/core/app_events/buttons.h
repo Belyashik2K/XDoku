@@ -7,5 +7,6 @@
 #include "IEvent.h"
 
 class OnSignUpButtonClicked : public IEvent {};
+class OnSignInButtonClicked : public IEvent {};
 
 #endif //BUTTONS_H

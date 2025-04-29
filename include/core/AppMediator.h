@@ -9,13 +9,15 @@
 #include "EventBus.h"
 #include "IPresenter.h"
 #include "app_events/buttons.h"
-#include "presenters/RegisterPresenter.h"
+#include "presenters/SignInPresenter.h"
+#include "presenters/SignUpPresenter.h"
 
 class AppMediator {
     IPresenter *currentPresenter = nullptr;
     std::shared_ptr<EventBus> eventBus;
 
     SignUpPresenter *signUpPresenter = nullptr;
+    SignInPresenter *signInPresenter = nullptr;
 public:
     explicit AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *presenter = nullptr);
 
@@ -24,6 +26,9 @@ public:
     }
     void setSignUpPresenter(SignUpPresenter *presenter) {
         signUpPresenter = presenter;
+    }
+    void setSignInPresenter(SignInPresenter *presenter) {
+        signInPresenter = presenter;
     }
     void subscribeToEvents();
 

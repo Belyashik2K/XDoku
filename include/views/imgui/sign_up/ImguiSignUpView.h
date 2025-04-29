@@ -5,7 +5,7 @@
 #ifndef IMGUISIGNUPVIEW_H
 #define IMGUISIGNUPVIEW_H
 
-#include "presenters/RegisterPresenter.h"
+#include "presenters/SignUpPresenter.h"
 #include "views/imgui/ImguiView.h"
 
 class ImguiSignUpView final : public IImguiView {

@@ -5,7 +5,6 @@
 class IPresenter {
 protected:
     IView *view = nullptr;
-
 public:
     virtual ~IPresenter() = default;
 

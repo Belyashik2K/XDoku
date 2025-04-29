@@ -9,7 +9,7 @@
 #include "models/database/PostgreSQL/repositories/PostgreSQLGameRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h"
 
-#include "presenters/LoginPresenter.h"
+#include "presenters/SignInPresenter.h"
 #include "views/imgui/ImguiFrameHandler.h"
 
 #include "views/imgui/sign_in/ImguiSignInView.h"
@@ -30,19 +30,20 @@ int main() {
         const auto eventBus = std::make_shared<EventBus>();
         const auto appMediator = std::make_shared<AppMediator>(eventBus);
 
-        const auto loginView = std::make_shared<ImguiSignInView>();
-        const auto loginPresenter = std::make_shared<SignInPresenter>(eventBus.get());
+        const auto signInView = std::make_shared<ImguiSignInView>();
+        const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus.get());
         const auto signUpView = std::make_shared<ImguiSignUpView>();
-        const auto signUpPresenter = std::make_shared<SignUpPresenter>();
+        const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus.get());
 
-        loginPresenter->setView(loginView.get());
-        loginView->setPresenter(loginPresenter.get());
+        signInPresenter->setView(signInView.get());
+        signInView->setPresenter(signInPresenter.get());
 
         signUpPresenter->setView(signUpView.get());
         signUpView->setPresenter(signUpPresenter.get());
 
-        appMediator->setCurrentPresenter(loginPresenter.get());
+        appMediator->setCurrentPresenter(signInPresenter.get());
         appMediator->setSignUpPresenter(signUpPresenter.get());
+        appMediator->setSignInPresenter(signInPresenter.get());
         appMediator->subscribeToEvents();
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
