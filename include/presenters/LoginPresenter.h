@@ -22,6 +22,8 @@ public:
     explicit LoginPresenter(EventBus *bus) : eventBus(bus) {}
 
     void onLoginButtonClicked();
+    void onSignUpButtonClicked();
+
     char *getUsername() { return username; }
     char *getPassword() { return password; }
 };

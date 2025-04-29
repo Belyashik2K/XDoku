@@ -6,7 +6,6 @@
 
 #include <iostream>
 #include <glad/glad.h>
-#include <string>
 #include <imgui.h>
 
 #include "managers/TextureManager.h"
@@ -23,7 +22,7 @@ void ImguiLoginView::render() {
         ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove
     );
 
-    ImVec2 windowPos = ImGui::GetWindowPos();
+    const ImVec2 windowPos = ImGui::GetWindowPos();
     const ImVec2 windowSize = ImGui::GetWindowSize();
     ImDrawList* drawList = ImGui::GetWindowDrawList();
 
@@ -39,7 +38,7 @@ void ImguiLoginView::render() {
 
     constexpr int childWidth = 650;
     constexpr int childHeight = 350;
-    ImVec2 childSize(childWidth, childHeight);
+    constexpr ImVec2 childSize(childWidth, childHeight);
 
     ImVec2 childPosition;
     childPosition.x = (windowSize.x - childSize.x) * 0.5f;
@@ -67,9 +66,9 @@ void ImguiLoginView::render() {
     ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
     ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
 
-    ImGui::InputText("##Username", username, IM_ARRAYSIZE(username), ImGuiInputTextFlags_CharsNoBlank);
+    ImGui::InputText("##Username", username, 128, ImGuiInputTextFlags_CharsNoBlank);
     ImGui::Spacing();
-    ImGui::InputText("##Password", password, IM_ARRAYSIZE(password), ImGuiInputTextFlags_Password);
+    ImGui::InputText("##Password", password, 128, ImGuiInputTextFlags_Password);
     ImGui::Spacing();
     ImGui::Spacing();
     ImGui::Spacing();
@@ -87,18 +86,13 @@ void ImguiLoginView::render() {
     ImGui::Spacing();
     if (ImGui::IsItemClicked(0)) {
         presenter->onLoginButtonClicked();
-        if (std::string(username) == "admin" && std::string(password) == "admin") {
-            printf("Sign in successful!\n");
-        } else {
-            printf("Sign in failed!\n");
-        }
     }
 
     ImGui::PushID("exit_button");
     ImGui::Button("Sign up", buttonSize);
     ImGui::PopID();
     if (ImGui::IsItemClicked(0)) {
-        printf("Sign up button clicked!\n");
+        presenter->onSignUpButtonClicked();
     }
 
     ImGui::PopStyleColor(2);

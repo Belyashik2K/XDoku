@@ -10,3 +10,7 @@
 void LoginPresenter::onLoginButtonClicked() {
     printf("Login button clicked with username: %s and password: %s\n", username, password);
 }
+
+void LoginPresenter::onSignUpButtonClicked() {
+    printf("Switching to sign up view\n");
+}
