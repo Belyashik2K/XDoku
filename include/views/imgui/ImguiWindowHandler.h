@@ -27,7 +27,6 @@ public:
 
 private:
     void init();
-
     void createWindow();
 
     GLFWwindow *window;

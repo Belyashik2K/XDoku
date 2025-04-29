@@ -76,6 +76,8 @@ void ImguiWindowHandler::init() {
 
     if (!initOpenGL()) {
         std::cerr << "Failed to initialize OpenGL" << std::endl;
+        glfwDestroyWindow(window);
+        glfwTerminate();
         return;
     }
 

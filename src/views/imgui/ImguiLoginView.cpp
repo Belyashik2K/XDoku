@@ -11,8 +11,6 @@
 #include <imgui.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
 
 
 bool LoadTextureFromMemory(const void* data, size_t data_size, GLuint* out_texture, int* out_width, int* out_height)
