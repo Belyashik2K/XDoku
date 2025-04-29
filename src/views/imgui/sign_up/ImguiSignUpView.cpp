@@ -8,6 +8,6 @@
 #include "views/imgui/ImguiWindow.h"
 
 void ImguiSignUpView::render() {
-    ImguiWindow window("Sign up Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+    ImguiWindow window("Sign up Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove );
     updateBackground("../assets/textures/background.jpg");
 }

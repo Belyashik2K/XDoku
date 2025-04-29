@@ -1,11 +1,4 @@
 #include <iostream>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#define STB_IMAGE_IMPLEMENTATION
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
-
-
 #include "core/Application.h"
 #include "core/AppMediator.h"
 #include "core/EventBus.h"
