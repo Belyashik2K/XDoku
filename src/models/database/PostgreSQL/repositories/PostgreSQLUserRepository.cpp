@@ -74,7 +74,7 @@ std::string PostgreSQLUserRepository::getHashedPassword(const std::string &usern
 
     const pqxx::result result = database->execute(query);
     if (result.empty()) {
-        throw std::invalid_argument("User not found");
+        return std::string();
     }
 
     const pqxx::row row = result[0];

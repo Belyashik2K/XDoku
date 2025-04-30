@@ -17,11 +17,11 @@
 
 int main() {
     try {
-        // const std::string connectionString =
-        //         "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku";
-        //
-        // auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
-        // const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
+        const std::string connectionString =
+        "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku";
+
+        auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
+        const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
         // const auto sessionRepository = std::make_shared<PostgreSQLSessionRepository>(database);
         // const PostgreSQLRatingRepository ratingRepository(database);
         // PostgreSQLMoveRepository moveRepository(database);
@@ -31,7 +31,7 @@ int main() {
         const auto appMediator = std::make_shared<AppMediator>(eventBus);
 
         const auto signInView = std::make_shared<ImguiSignInView>();
-        const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus.get());
+        const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus.get(), userRepository.get());
         const auto signUpView = std::make_shared<ImguiSignUpView>();
         const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus.get());
 

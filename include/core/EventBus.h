@@ -22,19 +22,17 @@ public:
             handler(static_cast<const EventType &>(event));
         };
         handlers[typeid(EventType)].push_back(wrapper);
-        // printf("[EventBus] Subscribed to event type: %s\n", typeid(EventType).name());
     }
 
     template<typename EventType>
     void publish(const EventType &event) {
-        // printf("[EventBus] Publishing event of type: %s\n", typeid(EventType).name());
-
+        printf("[EventBus] Publishing event of type: %s\n", typeid(EventType).name());
         if (const auto it = handlers.find(typeid(EventType)); it != handlers.end()) {
             for (const auto &handler: it->second) {
                 handler(event);
             }
         } else {
-            throw std::runtime_error("No handlers found for event type");
+            printf("[EventBus] No handlers found for event type: %s\n", typeid(EventType).name());
         }
     }
 };

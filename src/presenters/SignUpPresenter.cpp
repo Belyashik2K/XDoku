@@ -4,7 +4,7 @@
 
 #include "presenters/SignUpPresenter.h"
 
-#include "core/app_events/buttons.h"
+#include "core/app_events/ButtonEvents.h"
 
 void SignUpPresenter::onSignUpButtonClicked() const {
     printf("Sign up button clicked with username: %s, email: %s, password: %s, confirm password: %s\n",

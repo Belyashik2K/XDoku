@@ -9,9 +9,11 @@
 
 #include "core/EventBus.h"
 #include "core/IPresenter.h"
+#include "core/database/repositories/IUserRepository.h"
 
 class SignInPresenter final : public IPresenter {
     EventBus *eventBus = nullptr;
+    IUserRepository *userRepository = nullptr;
 
     char username[128] = "";
     char password[128] = "";
@@ -19,7 +21,7 @@ class SignInPresenter final : public IPresenter {
     bool findActiveSession();
     bool authorizeUser(const std::string &username, const std::string &password);
 public:
-    explicit SignInPresenter(EventBus *bus) : eventBus(bus) {}
+    explicit SignInPresenter(EventBus *bus, IUserRepository *userRepos) : eventBus(bus), userRepository(userRepos) {}
 
     void onLoginButtonClicked();
     void onSignUpButtonClicked() const;

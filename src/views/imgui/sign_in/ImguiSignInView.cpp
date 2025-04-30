@@ -7,6 +7,7 @@
 #include <imgui.h>
 
 #include "views/imgui/ImguiChildWindow.h"
+#include "views/imgui/ImguiStyleVarGuard.h"
 #include "views/imgui/ImguiWindow.h"
 
 void ImguiSignInView::render() {
@@ -46,7 +47,12 @@ void ImguiSignInView::render() {
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
             ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
             ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
-
+            // ImguiStyleGuard<ImVec2> give_me_a_name(
+            //     {
+            //         {ImGuiStyleVar_FramePadding, ImVec2(15.0f, 15.0f)},
+            //         // {ImGuiStyleVar_FrameBorderSize, 1.0f}
+            //     }
+            // );
             ImGui::InputText("##Username", presenter->getUsername(), presenter->getBufferSize(), ImGuiInputTextFlags_CharsNoBlank);
             addVerticalSpacing();
             ImGui::InputText("##Password", presenter->getPassword(), presenter->getBufferSize(), ImGuiInputTextFlags_Password);
