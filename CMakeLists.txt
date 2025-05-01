@@ -97,6 +97,7 @@ add_executable(XDoku
         src/views/imgui/ImguiStyleColorGuard.cpp
         include/views/imgui/ImguiStyleVarGuard.h
         include/core/app_events/UserEvents.h
+        include/views/imgui/ImguiStyleColorGuard.h
 )
 
 target_include_directories(XDoku PRIVATE

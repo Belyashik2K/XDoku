@@ -10,10 +10,10 @@
 class ImguiChildWindow {
 public:
     explicit ImguiChildWindow(const char *str_id, const ImVec2 &size = ImVec2(0, 0),
-                              ImGuiChildFlags flags = ImGuiChildFlags_None);
+                              ImGuiChildFlags flags = ImGuiChildFlags_None, bool isCentered = false);
 
     explicit ImguiChildWindow(ImGuiID id, const ImVec2 &size = ImVec2(0, 0),
-                              ImGuiChildFlags flags = ImGuiChildFlags_None);
+                              ImGuiChildFlags flags = ImGuiChildFlags_None, bool isCentered = false);
 
     ~ImguiChildWindow();
 
@@ -24,6 +24,9 @@ public:
     ImguiChildWindow &operator=(const ImguiChildWindow &) = delete;
 
 private:
+    ImVec2 getGlobalWindowSize() const;
+    void setCentered(const ImVec2 &size) const;
+
     bool m_Started;
 };
 

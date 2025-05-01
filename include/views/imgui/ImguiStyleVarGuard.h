@@ -4,25 +4,17 @@
 
 #ifndef IMGUISTYLEVARGUARD_H
 #define IMGUISTYLEVARGUARD_H
+
 #include <imgui.h>
+#include <variant>
 #include <vector>
 
-class ImguiStyleGuard {
+class ImguiStyleVarGuard {
 public:
-    // explicit ImguiStyleGuard(const std::vector<std::pair<ImGuiStyleVar, ImVec2>>& styles);
-    // explicit ImguiStyleGuard(const std::vector<std::pair<ImGuiStyleVar, float>>& styles);
+    using AvailableTypes = std::variant<ImVec2, float>;
 
-    template<typename T>
-    explicit ImguiStyleGuard(const std::vector<std::pair<ImGuiStyleVar, T>>& styles) {
-        for (const auto& [var, value] : styles) {
-            ImGui::PushStyleVar(var, value);
-            count++;
-        }
-    }
-
-    ~ImguiStyleGuard() {
-        ImGui::PopStyleVar(count);
-    }
+    explicit ImguiStyleVarGuard(const std::vector<std::pair<ImGuiStyleVar, AvailableTypes>> &styles);
+    ~ImguiStyleVarGuard();
 
 private:
     int count = 0;

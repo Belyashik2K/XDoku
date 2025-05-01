@@ -29,9 +29,9 @@ void IImguiView::createButton(
     const char *id,
     const char *label,
     const ImVec2 &size,
-    const std::function<void()>& onLeftClick,
-    const std::function<void()>& onRightClick
-    ) {
+    const std::function<void()> &onLeftClick,
+    const std::function<void()> &onRightClick
+) {
     ImGui::PushID(id);
     ImGui::Button(label, size);
     ImGui::PopID();
@@ -51,4 +51,37 @@ void IImguiView::addVerticalSpacing(const int count) {
     for (int i = 0; i < count; ++i) {
         ImGui::Spacing();
     }
+}
+
+void IImguiView::printText(const char *text, const bool isCentered) {
+    if (isCentered) {
+        const ImVec2 textWidth = ImGui::CalcTextSize(text);
+        centerCursor(textWidth);
+    }
+    ImGui::Text(text);
+}
+
+void IImguiView::centerCursor(const ImVec2 &sizeOfObject) {
+    const float width = ImGui::GetWindowSize().x;
+    ImGui::SetCursorPosX((width - sizeOfObject.x) * 0.5f);
+}
+
+void IImguiView::createInputField(
+    const char *id,
+    const char *label,
+    char *buffer,
+    const int bufferSize,
+    const ImGuiInputTextFlags flags,
+    const bool isLabelHidden
+) {
+    ImGui::PushID(id);
+
+    auto resultLabel = std::string(label);
+    if (isLabelHidden) {
+        resultLabel = "##" + resultLabel;
+    }
+
+    ImGui::InputText(resultLabel.c_str(), buffer, bufferSize, flags);
+
+    ImGui::PopID();
 }
