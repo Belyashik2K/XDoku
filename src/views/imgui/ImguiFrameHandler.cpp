@@ -121,7 +121,7 @@ void ImguiFrameHandler::run(const std::function<void()> renderCallback) {
         ImGui::NewFrame();
         ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(windowWidth.value(), windowHeight.value()), ImGuiCond_FirstUseEver);
-        ImGui::PushFont(FontManager::getInstance().getFont(22));
+        ImGui::PushFont(FontManager::getInstance().getFont(28));
         renderCallback();
         ImGui::PopFont();
         ImGui::Render();

@@ -20,7 +20,7 @@ void ImguiSignUpView::render() {
 void ImguiSignUpView::renderSignUpForm() const {
     const ImVec2 windowSize = ImGui::GetWindowSize();
     const float childWidth = windowSize.x * 0.33f;
-    const float childHeight = windowSize.y * 0.55f;
+    const float childHeight = windowSize.y * 0.60f;
     const ImVec2 childSize(childWidth, childHeight);
 
     ImguiChildWindow childWindow(
@@ -37,7 +37,7 @@ void ImguiSignUpView::renderSignUpForm() const {
 
 void ImguiSignUpView::renderFormHeader() {
     const auto headerText = "Sign up to XDoku";
-    printText(headerText, BLACK, 28, true);
+    printText(headerText, BLACK, 30, true);
     addVerticalSpacing(6);
 }
 
@@ -54,9 +54,9 @@ void ImguiSignUpView::renderFormInputs() const {
     });
 
     const ImVec2 childSize = ImGui::GetWindowSize();
-    const auto &inputSize = ImVec2(childSize.x, 15);
+    const auto &inputSize = ImVec2(childSize.x, 18);
 
-    printText("Username", BLACK, 20, false);
+    printText("Username", BLACK, 23, false);
     createInputField(
         "username_input",
         "Username",
@@ -67,7 +67,7 @@ void ImguiSignUpView::renderFormInputs() const {
         false
     );
     addVerticalSpacing();
-    printText("Email", BLACK, 20, false);
+    printText("Email", BLACK, 23, false);
     createInputField(
         "email_input",
         "Email",
@@ -78,7 +78,7 @@ void ImguiSignUpView::renderFormInputs() const {
         false
     );
     addVerticalSpacing();
-    printText("Password", BLACK, 20, false);
+    printText("Password", BLACK, 23, false);
     createInputField(
         "password_input",
         "Password",
@@ -89,7 +89,7 @@ void ImguiSignUpView::renderFormInputs() const {
         false
     );
     addVerticalSpacing();
-    printText("Repeat Password", BLACK, 20, false);
+    printText("Repeat Password", BLACK, 23, false);
     createInputField(
         "repeat_password_input",
         "Repeat password",
@@ -108,7 +108,7 @@ void ImguiSignUpView::renderFormButtons() const {
         {ImGuiStyleVar_FrameBorderSize, 1.0f}
     });
 
-    const auto &buttonSize = ImVec2(ImGui::GetWindowSize().x, 55);
+    const auto &buttonSize = ImVec2(ImGui::GetWindowSize().x, 60);
 
     {
         ImguiStyleColorGuard signUpButton({

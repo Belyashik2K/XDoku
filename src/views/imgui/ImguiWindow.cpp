@@ -6,7 +6,11 @@ ImguiWindow::ImguiWindow(
     const char *name,
     const ImGuiWindowFlags flags,
     bool *p_open
-) : m_Name(name), m_Flags(flags | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar), m_Open(p_open) {
+) : m_Name(name),
+    m_Flags(
+        flags | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar |
+        ImGuiWindowFlags_NoDecoration),
+    m_Open(p_open) {
     ImGui::Begin(m_Name, m_Open ? m_Open : &m_DefaultOpenState, m_Flags);
 }
 

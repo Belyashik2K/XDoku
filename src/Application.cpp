@@ -13,6 +13,7 @@ Application::Application(std::unique_ptr<IFrameHandler> handler, AppMediator *me
 }
 
 void Application::start() const {
+    printf("[Application] Starting application...\n");
     this->eventBus->publish(OnApplicationStartup());
     this->frameHandler->run([this] {
         this->appMediator->render();
@@ -20,6 +21,7 @@ void Application::start() const {
 }
 
 Application::~Application() {
+    printf("[Application] Shutting down application...\n");
     this->frameHandler->shutdown();
 }
 

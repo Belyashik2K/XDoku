@@ -22,7 +22,7 @@ void ImguiSignInView::render() {
 void ImguiSignInView::renderLoginForm() const {
     const ImVec2 windowSize = ImGui::GetWindowSize();
     const float childWidth = windowSize.x * 0.33f;
-    const float childHeight = windowSize.y * 0.4f;
+    const float childHeight = windowSize.y * 0.43f;
     const ImVec2 childSize(childWidth, childHeight);
 
     ImguiChildWindow childWindow(
@@ -40,7 +40,7 @@ void ImguiSignInView::renderLoginForm() const {
 
 void ImguiSignInView::renderFormHeader() {
     const auto headerText = "Sign in to XDoku";
-    printText(headerText, BLACK, 28, true);
+    printText(headerText, BLACK, 30, true);
     addVerticalSpacing(6);
 }
 
@@ -57,9 +57,9 @@ void ImguiSignInView::renderFormInputs() const {
     });
 
     const ImVec2 childSize = ImGui::GetWindowSize();
-    const auto &inputSize = ImVec2(childSize.x, 15);
+    const auto &inputSize = ImVec2(childSize.x, 18);
 
-    printText("Username", BLACK, 20, false);
+    printText("Username", BLACK, 23, false);
     addVerticalSpacing();
     createInputField(
         "username_input",
@@ -71,7 +71,7 @@ void ImguiSignInView::renderFormInputs() const {
         false
     );
     addVerticalSpacing();
-    printText("Password", BLACK, 20, false);
+    printText("Password", BLACK, 23, false);
     createInputField(
         "password_input",
         "Password",
@@ -91,7 +91,7 @@ void ImguiSignInView::renderFormButtons() const {
     });
 
     const ImVec2 childSize = ImGui::GetWindowSize();
-    const auto &buttonSize = ImVec2(childSize.x, 55);
+    const auto &buttonSize = ImVec2(childSize.x, 60);
 
     {
         ImguiStyleColorGuard signInButton({
