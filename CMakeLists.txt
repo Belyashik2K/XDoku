@@ -100,6 +100,11 @@ add_executable(XDoku
         include/views/imgui/ImguiStyleColorGuard.h
         include/managers/FontManager.h
         src/managers/FontManager.cpp
+        include/core/app_events/ApplicationEvents.h
+        src/presenters/MainMenuPresenter.cpp
+        include/presenters/MainMenuPresenter.h
+        src/views/imgui/main_menu/ImguiMainMenuView.cpp
+        include/views/imgui/main_menu/ImguiMainMenuView.h
 )
 
 target_include_directories(XDoku PRIVATE

@@ -5,6 +5,8 @@
 #include <core/AppMediator.h>
 #include <core/EventBus.h>
 
+#include "core/app_events/UserEvents.h"
+
 void AppMediator::render() const {
     if (currentPresenter) {
         currentPresenter->render();
@@ -26,6 +28,11 @@ void AppMediator::subscribeToEvents() {
     eventBus->subscribe<OnSignInButtonClicked>([this](const OnSignInButtonClicked &) {
         if (currentPresenter) {
             this->currentPresenter = signInPresenter;
+        }
+    });
+    eventBus->subscribe<OnUserLoggedIn>([this](const OnUserLoggedIn &) {
+        if (mainMenuPresenter) {
+            this->currentPresenter = mainMenuPresenter;
         }
     });
 }

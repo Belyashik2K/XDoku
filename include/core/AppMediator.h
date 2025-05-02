@@ -9,6 +9,7 @@
 #include "EventBus.h"
 #include "IPresenter.h"
 #include "app_events/ButtonEvents.h"
+#include "presenters/MainMenuPresenter.h"
 #include "presenters/SignInPresenter.h"
 #include "presenters/SignUpPresenter.h"
 
@@ -18,6 +19,7 @@ class AppMediator {
 
     SignUpPresenter *signUpPresenter = nullptr;
     SignInPresenter *signInPresenter = nullptr;
+    MainMenuPresenter *mainMenuPresenter = nullptr;
 public:
     explicit AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *presenter = nullptr);
 
@@ -29,6 +31,9 @@ public:
     }
     void setSignInPresenter(SignInPresenter *presenter) {
         signInPresenter = presenter;
+    }
+    void setMainMenuPresenter(MainMenuPresenter *presenter) {
+        mainMenuPresenter = presenter;
     }
     void subscribeToEvents();
 

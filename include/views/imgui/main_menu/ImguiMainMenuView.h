@@ -1,0 +1,17 @@
+//
+// Created by belyashik2k on 5/2/25.
+//
+
+#ifndef IMGUIMAINMENUVIEW_H
+#define IMGUIMAINMENUVIEW_H
+#include "presenters/MainMenuPresenter.h"
+#include "views/imgui/ImguiView.h"
+
+class ImguiMainMenuView final : public IImguiView {
+    MainMenuPresenter *presenter = nullptr;
+public:
+    void render() override;
+    void setPresenter(MainMenuPresenter *p) { presenter = p; }
+};
+
+#endif //IMGUIMAINMENUVIEW_H

@@ -6,6 +6,6 @@
 #define USEREVENTS_H
 #include "IEvent.h"
 
-class UserLoggedIn : public IEvent {};
+class OnUserLoggedIn : public IEvent {};
 
 #endif //USEREVENTS_H
