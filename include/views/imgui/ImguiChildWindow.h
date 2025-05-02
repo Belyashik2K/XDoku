@@ -24,8 +24,9 @@ public:
     ImguiChildWindow &operator=(const ImguiChildWindow &) = delete;
 
 private:
-    ImVec2 getGlobalWindowSize() const;
-    void setCentered(const ImVec2 &size) const;
+    static ImVec2 getGlobalWindowSize();
+
+    static void setCentered(const ImVec2 &size);
 
     bool m_Started;
 };

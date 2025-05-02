@@ -11,6 +11,11 @@ class ImguiMainMenuView final : public IImguiView {
     MainMenuPresenter *presenter = nullptr;
 public:
     void render() override;
+
+    void renderMainMenu() const;
+
+    void renderFormButtons() const;
+
     void setPresenter(MainMenuPresenter *p) { presenter = p; }
 };
 

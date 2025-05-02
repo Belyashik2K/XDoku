@@ -11,6 +11,14 @@ class MainMenuPresenter final : public IPresenter {
     EventBus *eventBus = nullptr;
 public:
     explicit MainMenuPresenter(EventBus *eventBus) : eventBus(eventBus) {}
+
+    void onPlayButtonClicked();
+
+    void onProfileButtonClicked();
+
+    void onLeaderboardButtonClicked();
+
+    void onHowToPlayButtonClicked();
 };
 
 #endif //MAINMENUPRESENTER_H

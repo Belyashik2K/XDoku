@@ -37,12 +37,12 @@ ImguiChildWindow::ImguiChildWindow(
     m_Started = ImGui::BeginChild(str_id, size, flags);
 }
 
-ImVec2 ImguiChildWindow::getGlobalWindowSize() const {
+ImVec2 ImguiChildWindow::getGlobalWindowSize() {
     return ImGui::GetWindowSize();
 }
 
 
-void ImguiChildWindow::setCentered(const ImVec2 &size) const {
+void ImguiChildWindow::setCentered(const ImVec2 &size) {
     const ImVec2 windowSize = getGlobalWindowSize();
     ImVec2 childPosition;
     childPosition.x = (windowSize.x - size.x) * 0.5f;
