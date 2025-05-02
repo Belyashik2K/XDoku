@@ -7,6 +7,7 @@
 #include <imgui.h>
 
 #include "views/imgui/ImguiChildWindow.h"
+#include "views/imgui/ImguiColors.h"
 #include "views/imgui/ImguiStyleColorGuard.h"
 #include "views/imgui/ImguiStyleVarGuard.h"
 #include "views/imgui/ImguiWindow.h"
@@ -38,15 +39,15 @@ void ImguiSignInView::renderLoginForm() const {
 
 void ImguiSignInView::renderFormHeader() {
     const auto headerText = "Sign in to XDoku";
-    printText(headerText, ImColor(0, 0, 0), 28, true);
+    printText(headerText, BLACK, 28, true);
     addVerticalSpacing(6);
 }
 
 void ImguiSignInView::renderFormInputs() const {
     ImguiStyleColorGuard localColorGuard({
-        {ImGuiCol_Text, ImColor(255, 255, 255)},
-        {ImGuiCol_Border, ImColor(255, 255, 255)},
-        {ImGuiCol_FrameBg, ImColor(35, 35, 36)},
+        {ImGuiCol_Text, WHITE},
+        {ImGuiCol_Border, LIGHT_GRAY},
+        {ImGuiCol_FrameBg, GRAY},
     });
 
     ImguiStyleVarGuard localVarGuard({
@@ -57,7 +58,7 @@ void ImguiSignInView::renderFormInputs() const {
     const ImVec2 childSize = ImGui::GetWindowSize();
     const auto &inputSize = ImVec2(childSize.x, 15);
 
-    printText("Username", ImColor(0, 0, 0), 20, false);
+    printText("Username", BLACK, 20, false);
     addVerticalSpacing();
     createInputField(
         "username_input",
@@ -69,7 +70,7 @@ void ImguiSignInView::renderFormInputs() const {
         false
     );
     addVerticalSpacing();
-    printText("Password", ImColor(0, 0, 0), 20, false);
+    printText("Password", BLACK, 20, false);
     createInputField(
         "password_input",
         "Password",
@@ -93,8 +94,9 @@ void ImguiSignInView::renderFormButtons() const {
 
     {
         ImguiStyleColorGuard signInButton({
-            {ImGuiCol_Text, ImColor(255, 255, 255)},
-            {ImGuiCol_Border, ImColor(255, 255, 255)},
+            {ImGuiCol_Text, WHITE},
+            {ImGuiCol_Border, WHITE},
+            {ImGuiCol_Button, GRAY},
         });
         createButton(
             "login_button",
@@ -110,9 +112,9 @@ void ImguiSignInView::renderFormButtons() const {
 
     {
         ImguiStyleColorGuard signUpButton({
-            {ImGuiCol_Text, ImColor(0, 0, 0)},
-            {ImGuiCol_Border, ImColor(0, 0, 0)},
-            {ImGuiCol_Button, ImColor(255, 255, 255)},
+            {ImGuiCol_Text, BLACK},
+            {ImGuiCol_Border, BLACK},
+            {ImGuiCol_Button, WHITE},
         });
         createButton(
             "signup_button",

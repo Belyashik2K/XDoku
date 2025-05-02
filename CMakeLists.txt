@@ -107,6 +107,7 @@ add_executable(XDoku
         include/views/imgui/main_menu/ImguiMainMenuView.h
         include/managers/SessionManager.h
         src/managers/SessionManager.cpp
+        include/views/imgui/ImguiColors.h
 )
 
 target_include_directories(XDoku PRIVATE

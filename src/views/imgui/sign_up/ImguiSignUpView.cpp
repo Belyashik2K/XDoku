@@ -5,6 +5,7 @@
 #include "views/imgui/sign_up/ImguiSignUpView.h"
 
 #include "views/imgui/ImguiChildWindow.h"
+#include "views/imgui/ImguiColors.h"
 #include "views/imgui/ImguiStyleColorGuard.h"
 #include "views/imgui/ImguiStyleVarGuard.h"
 #include "views/imgui/ImguiWindow.h"
@@ -36,15 +37,15 @@ void ImguiSignUpView::renderSignUpForm() const {
 
 void ImguiSignUpView::renderFormHeader() {
     const auto headerText = "Sign up to XDoku";
-    printText(headerText, ImColor(0, 0, 0), 28, true);
+    printText(headerText, BLACK, 28, true);
     addVerticalSpacing(6);
 }
 
 void ImguiSignUpView::renderFormInputs() const {
     ImguiStyleColorGuard localColorGuard({
-        {ImGuiCol_Text, ImColor(255, 255, 255)},
-        {ImGuiCol_Border, ImColor(255, 255, 255)},
-        {ImGuiCol_FrameBg, ImColor(35, 35, 36)},
+        {ImGuiCol_Text, WHITE},
+        {ImGuiCol_Border, WHITE},
+        {ImGuiCol_FrameBg, GRAY},
     });
 
     ImguiStyleVarGuard localVarGuard({
@@ -55,7 +56,7 @@ void ImguiSignUpView::renderFormInputs() const {
     const ImVec2 childSize = ImGui::GetWindowSize();
     const auto &inputSize = ImVec2(childSize.x, 15);
 
-    printText("Username", ImColor(0, 0, 0), 20, false);
+    printText("Username", BLACK, 20, false);
     createInputField(
         "username_input",
         "Username",
@@ -66,7 +67,7 @@ void ImguiSignUpView::renderFormInputs() const {
         false
     );
     addVerticalSpacing();
-    printText("Email", ImColor(0, 0, 0), 20, false);
+    printText("Email", BLACK, 20, false);
     createInputField(
         "email_input",
         "Email",
@@ -77,7 +78,7 @@ void ImguiSignUpView::renderFormInputs() const {
         false
     );
     addVerticalSpacing();
-    printText("Password", ImColor(0, 0, 0), 20, false);
+    printText("Password", BLACK, 20, false);
     createInputField(
         "password_input",
         "Password",
@@ -88,10 +89,10 @@ void ImguiSignUpView::renderFormInputs() const {
         false
     );
     addVerticalSpacing();
-    printText("Repeat Password", ImColor(0, 0, 0), 20, false);
+    printText("Repeat Password", BLACK, 20, false);
     createInputField(
         "repeat_password_input",
-        "Repeat Password",
+        "Repeat password",
         presenter->getConfirmPassword(),
         presenter->getBufferSize(),
         inputSize,
@@ -111,13 +112,17 @@ void ImguiSignUpView::renderFormButtons() const {
 
     {
         ImguiStyleColorGuard signUpButton({
-            {ImGuiCol_Text, ImColor(255, 255, 255)},
-            {ImGuiCol_Border, ImColor(255, 255, 255)},
+            {ImGuiCol_Text, WHITE},
+            {ImGuiCol_Border, WHITE},
+            {ImGuiCol_Button, GRAY},
         });
-        createButton("signup_button", "Sign up", buttonSize,
-                 [this] {
-                     presenter->onSignUpButtonClicked();
-                 }
+        createButton(
+            "signup_button",
+            "Sign up",
+            buttonSize,
+            [this] {
+                presenter->onSignUpButtonClicked();
+            }
         );
     }
 
@@ -125,14 +130,17 @@ void ImguiSignUpView::renderFormButtons() const {
 
     {
         ImguiStyleColorGuard backToSingInButton({
-            {ImGuiCol_Text, ImColor(0, 0, 0)},
-            {ImGuiCol_Border, ImColor(0, 0, 0)},
-            {ImGuiCol_Button, ImColor(255, 255, 255)},
+            {ImGuiCol_Text, BLACK},
+            {ImGuiCol_Border, BLACK},
+            {ImGuiCol_Button, WHITE},
         });
-        createButton("sign_in_button", "Back to sign in", buttonSize,
-                     [this] {
-                         presenter->onBackButtonClicked();
-                     }
+        createButton(
+            "sign_in_button",
+            "Back to sign in",
+            buttonSize,
+            [this] {
+                presenter->onBackButtonClicked();
+            }
         );
     }
 }
