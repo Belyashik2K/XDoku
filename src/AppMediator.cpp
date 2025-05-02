@@ -20,6 +20,7 @@ AppMediator::AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *present
 
 
 void AppMediator::subscribeToEvents() {
+    printf("[AppMediator] Subscribing to events...\n");
     eventBus->subscribe<OnSignUpButtonClicked>([this](const OnSignUpButtonClicked &) {
         if (signUpPresenter) {
             this->currentPresenter = signUpPresenter;

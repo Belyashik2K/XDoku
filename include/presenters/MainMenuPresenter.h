@@ -19,6 +19,8 @@ public:
     void onLeaderboardButtonClicked();
 
     void onHowToPlayButtonClicked();
+
+    void onExitButtonClicked();
 };
 
 #endif //MAINMENUPRESENTER_H

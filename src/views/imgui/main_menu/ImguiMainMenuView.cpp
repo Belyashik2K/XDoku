@@ -35,7 +35,7 @@ void ImguiMainMenuView::renderMainMenu() const {
     {
         const ImVec2 menuSize = ImGui::GetWindowSize();
         const float childWidth = menuSize.x * 0.75f;
-        const float childHeight = menuSize.y * 0.36f;
+        const float childHeight = menuSize.y * 0.52f;
         const ImVec2 childSize(childWidth, childHeight);
 
         ImguiChildWindow menuPos(
@@ -95,6 +95,14 @@ void ImguiMainMenuView::renderFormButtons() const {
         buttonSize,
         [this] {
             presenter->onHowToPlayButtonClicked();
+        }
+    );
+    createButton(
+        "exit_button",
+        "Exit",
+        buttonSize,
+        [this] {
+            presenter->onExitButtonClicked();
         }
     );
     ImGui::PopFont();

@@ -73,6 +73,7 @@ bool SessionManager::isSessionExpired(const Timestamp &expiredAt) {
 }
 
 void SessionManager::subscribeToEvents() const {
+    printf("[SessionManager] Subscribing to events...\n");
     eventBus->subscribe<OnApplicationStartup>([this](const OnApplicationStartup &) {
         findActiveSession();
     });

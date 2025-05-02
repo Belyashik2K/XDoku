@@ -23,6 +23,8 @@ public:
 
     void run(std::function<void()> renderCallback) override;
 
+    void afterRender() const;
+
     void shutdown() override;
 
 private:

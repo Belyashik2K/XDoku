@@ -16,6 +16,9 @@ class Application {
 public:
     Application(std::unique_ptr<IFrameHandler> handler, AppMediator* mediator, EventBus *eventBus = nullptr);
     void start() const;
+
+    void subscribeToEvents() const;
+
     ~Application();
 };
 

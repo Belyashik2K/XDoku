@@ -132,12 +132,18 @@ void ImguiFrameHandler::run(const std::function<void()> renderCallback) {
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
     }
+    afterRender();
 }
 
-void ImguiFrameHandler::shutdown() {
+void ImguiFrameHandler::afterRender() const {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
     glfwDestroyWindow(window);
     glfwTerminate();
+}
+
+void ImguiFrameHandler::shutdown() {
+    printf("[ImguiFrameHandler] Shutting down ImGui frame handler...\n");
+    glfwSetWindowShouldClose(window, true);
 }

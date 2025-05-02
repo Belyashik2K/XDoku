@@ -22,7 +22,7 @@ ImFont* FontManager::getFont(const int size) {
         io.Fonts->Build();
         return font;
     }
-    printf("Не удалось загрузить шрифт (%dpt): %s\n", size, fontPath.c_str());
-    throw std::runtime_error("Font loading failed");
+    printf("[FontManager] Failed to load font from %s\n", fontPath.c_str());
+    throw std::runtime_error("[FontManager] Failed to load font");
 }
 

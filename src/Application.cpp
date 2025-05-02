@@ -13,6 +13,7 @@ Application::Application(std::unique_ptr<IFrameHandler> handler, AppMediator *me
 }
 
 void Application::start() const {
+    subscribeToEvents();
     printf("[Application] Starting application...\n");
     this->eventBus->publish(OnApplicationStartup());
     this->frameHandler->run([this] {
@@ -20,8 +21,14 @@ void Application::start() const {
     });
 }
 
+void Application::subscribeToEvents() const {
+    printf("[Application] Subscribing to events...\n");
+    this->eventBus->subscribe<OnApplicationShutdown>([this](const OnApplicationShutdown &) {
+        this->frameHandler->shutdown();
+    });
+}
+
 Application::~Application() {
     printf("[Application] Shutting down application...\n");
-    this->frameHandler->shutdown();
 }
 
