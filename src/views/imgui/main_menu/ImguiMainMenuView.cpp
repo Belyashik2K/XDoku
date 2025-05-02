@@ -34,7 +34,7 @@ void ImguiMainMenuView::renderMainMenu() const {
     {
         const ImVec2 menuSize = ImGui::GetWindowSize();
         const float childWidth = menuSize.x * 0.75f;
-        const float childHeight = menuSize.y * 0.5f;
+        const float childHeight = menuSize.y * 0.36f;
         const ImVec2 childSize(childWidth, childHeight);
 
         ImguiChildWindow menuPos(
