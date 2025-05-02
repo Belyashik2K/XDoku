@@ -23,16 +23,33 @@ bool PostgreSQLSessionRepository::createSession(const int &userId, const std::st
     return result.affected_rows() > 0;
 }
 
-std::optional<std::string> PostgreSQLSessionRepository::getUsernameBySessionId(const std::string &sessionId) const {
+std::optional<std::pair<int, Timestamp>> PostgreSQLSessionRepository::getUserIdAndSessionExpiration(const std::string &sessionId) const {
+    if (!database->isConnected()) {
+        return std::nullopt;
+    }
+
+    PostgreSQLQuery query("SELECT user_id, expires_at FROM sessions WHERE hwid = $1");
+    query.addParameter(sessionId);
+    const pqxx::result result = database->execute(query);
+    if (result.empty()) {
+        return std::nullopt;
+    }
+    const pqxx::row row = result[0];
+    const int userId = row["user_id"].as<int>();
+    const std::string expiration = row["expires_at"].as<std::string>();
+    return std::make_pair(userId, Timestamp(expiration));
+}
+
+
+std::optional<int> PostgreSQLSessionRepository::getUserIdBySessionId(const std::string &sessionId) const {
     if (!database->isConnected()) {
         return std::nullopt;
     }
 
     PostgreSQLQuery query(R"(
-        SELECT u.username
-        FROM sessions s
-        JOIN users u ON s.user_id = u.id
-        WHERE s.hwid = $1;
+        SELECT user_id
+        FROM sessions
+        WHERE hwid = $1
     )");
     query.addParameter(sessionId);
 
@@ -42,5 +59,16 @@ std::optional<std::string> PostgreSQLSessionRepository::getUsernameBySessionId(c
     }
 
     const pqxx::row row = result[0];
-    return row["username"].as<std::string>();
+    return row["user_id"].as<int>();
 }
+
+bool PostgreSQLSessionRepository::deleteSession(const std::string &sessionId) const {
+    if (!database->isConnected()) {
+        return false;
+    }
+    PostgreSQLQuery query("DELETE FROM sessions WHERE hwid = $1");
+    query.addParameter(sessionId);
+    const pqxx::result result = database->execute(query);
+    return result.affected_rows() > 0;
+}
+

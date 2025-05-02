@@ -14,16 +14,16 @@ class SessionManager {
     ISessionRepository *sessionRepository = nullptr;
     EventBus *eventBus = nullptr;
 
-    void findActiveSession();
+    void findActiveSession() const;
     void createSession(const OnUserLoggedIn &event) const;
 
-    bool isSessionExpired(Timestamp expiredAt) const;
-    void onExpiredSessionFound();
-    void onActiveSessionFound() const;
+    static bool isSessionExpired(const Timestamp &expiredAt);
+    void onExpiredSessionFound(const std::string &sessionId) const;
+    void onActiveSessionFound(int userId) const;
 public:
     SessionManager(ISessionRepository *sessionRepository, EventBus *eventBus) :
         sessionRepository(sessionRepository), eventBus(eventBus) {}
-    void subscribeToEvents();
+    void subscribeToEvents() const;
 };
 
 #endif //SESSIONMANAGER_H

@@ -8,51 +8,67 @@
 #include "core/app_events/ApplicationEvents.h"
 #include "core/app_events/UserEvents.h"
 
-void SessionManager::findActiveSession() {
+void SessionManager::findActiveSession() const {
     const std::optional<std::string> HWID = getDeviceHWID();
     if (!HWID.has_value()) {
-        printf("HWID is not available\n");
+        printf("[SessionManager] HWID is not available\n");
         return;
     }
-    const std::optional<std::string> session = sessionRepository->getUsernameBySessionId(*HWID);
-    if (session.has_value()) {
-        printf("Active session found for user: %s\n", session->c_str());
-        if (isSessionExpired(Timestamp("2025-04-07 20:51:31.675962"))) {
-            onExpiredSessionFound();
+    const std::optional<std::pair<int, Timestamp>> userIdAndExpiration = sessionRepository->getUserIdAndSessionExpiration(HWID.value());
+    if (userIdAndExpiration.has_value()) {
+        const int userId = userIdAndExpiration.value().first;
+        const Timestamp expiration = userIdAndExpiration.value().second;
+        printf("[SessionManager] Found active session for user ID: %d\n", userId);
+        printf("[SessionManager] Session expiration: %s\n", expiration.toString().c_str());
+        if (isSessionExpired(expiration)) {
+            onExpiredSessionFound(HWID.value());
+        } else {
+            onActiveSessionFound(userIdAndExpiration.value().first);
         }
-        onActiveSessionFound();
     } else {
-        printf("No active session found\n");
+        printf("[SessionManager] No active session found\n");
     }
 }
 
 void SessionManager::createSession(const OnUserLoggedIn &event) const {
     const std::optional<std::string> HWID = getDeviceHWID();
     if (!HWID.has_value()) {
-        printf("HWID is not available\n");
+        printf("[SessionManager] HWID is not available\n");
         return;
     }
-    try {
-        const bool sessionCreationStatus = sessionRepository->createSession(event.userId, *HWID);
-        printf("Session creation status: %s\n", sessionCreationStatus ? "Success" : "Failed");
-    } catch (const std::exception &e) {
-        printf("Error creating session: %s\n", e.what());
+
+    if (sessionRepository->getUserIdBySessionId(HWID.value()).has_value()) {
+        printf("[SessionManager] Session already exists for user ID: %d\n", event.userId);
+        return;
+    }
+
+    if (sessionRepository->createSession(event.userId, HWID.value())) {
+        printf("[SessionManager] Session created for user ID: %d\n", event.userId);
+    } else {
+        printf("[SessionManager] Failed to create session for user ID: %d\n", event.userId);
     }
 }
 
 
-void SessionManager::onActiveSessionFound() const {
-    eventBus->publish(OnUserLoggedIn(69));
+void SessionManager::onActiveSessionFound(const int userId) const {
+    eventBus->publish(OnUserLoggedIn(userId));
 }
 
-void SessionManager::onExpiredSessionFound() {
+void SessionManager::onExpiredSessionFound(const std::string &sessionId) const {
+    printf("[SessionManager] Session expired\n");
+    const bool result = sessionRepository->deleteSession(sessionId);
+    if (result) {
+        printf("[SessionManager] Session deleted successfully\n");
+    } else {
+        printf("[SessionManager] Failed to delete session\n");
+    }
 }
 
-bool SessionManager::isSessionExpired(Timestamp expiredAt) const {
-    return 0;
+bool SessionManager::isSessionExpired(const Timestamp &expiredAt) {
+    return Timestamp::now() > expiredAt;
 }
 
-void SessionManager::subscribeToEvents() {
+void SessionManager::subscribeToEvents() const {
     eventBus->subscribe<OnApplicationStartup>([this](const OnApplicationStartup &) {
         findActiveSession();
     });
