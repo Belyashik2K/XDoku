@@ -12,7 +12,7 @@
 
 void ImguiSignUpView::render() {
     ImguiWindow window("Sign Up Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove); {
-        updateBackground("../assets/textures/background.jpg");
+        updateBackground("../assets/textures/auth/background.jpg");
         renderSignUpForm();
     }
 }

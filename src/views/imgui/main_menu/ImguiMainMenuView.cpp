@@ -8,7 +8,7 @@
 void ImguiMainMenuView::render() {
     ImguiWindow window("Main Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
     {
-        updateBackground("../assets/textures/background.jpg");
+        updateBackground("../assets/textures/auth/background.jpg");
         printText("XDoku", ImColor(0, 0, 0), 28, true);
         // addVerticalSpacing(6);
     }
