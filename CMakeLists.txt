@@ -110,7 +110,6 @@ add_executable(XDoku
         include/views/imgui/ImguiColors.h
         src/views/imgui/leaderboard/ImguiLeaderboardView.cpp
         include/views/imgui/leaderboard/ImguiLeaderboardView.h
-        include/presenters/LeaderboardPresenter.cpp
         include/presenters/LeaderboardPresenter.h
         src/presenters/LeaderboardPresenter.cpp
 )
