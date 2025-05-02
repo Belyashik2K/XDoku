@@ -22,7 +22,7 @@ void SignInPresenter::onLoginButtonClicked() {
         if (user.has_value()) {
             printf("User authorized, username: %s, email: %s\n", user->getUsername().c_str(), user->getEmail().c_str());
         }
-        eventBus->publish(OnUserLoggedIn());
+        eventBus->publish(OnUserLoggedIn(user.value().getId()));
     } else {
         printf("Invalid password\n");
     }

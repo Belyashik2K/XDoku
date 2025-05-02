@@ -2,6 +2,7 @@
 #include "core/Application.h"
 #include "core/AppMediator.h"
 #include "core/EventBus.h"
+#include "managers/SessionManager.h"
 
 #include "models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h"
 #include "models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
@@ -24,13 +25,16 @@ int main() {
 
         auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
         const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
-        // const auto sessionRepository = std::make_shared<PostgreSQLSessionRepository>(database);
+        const auto sessionRepository = std::make_shared<PostgreSQLSessionRepository>(database);
         // const PostgreSQLRatingRepository ratingRepository(database);
         // PostgreSQLMoveRepository moveRepository(database);
         // PostgreSQLGameRepository gameRepository(database);
 
         const auto eventBus = std::make_shared<EventBus>();
         const auto appMediator = std::make_shared<AppMediator>(eventBus);
+
+        const auto sessionManager = std::make_shared<SessionManager>(sessionRepository.get(), eventBus.get());
+        sessionManager->subscribeToEvents();
 
         const auto signInView = std::make_shared<ImguiSignInView>();
         const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus.get(), userRepository.get());
@@ -55,7 +59,7 @@ int main() {
         appMediator->subscribeToEvents();
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
-        const Application app(std::move(frameHandler), appMediator.get());
+        const Application app(std::move(frameHandler), appMediator.get(), eventBus.get());
         app.start();
 
     } catch (const std::exception &e) {

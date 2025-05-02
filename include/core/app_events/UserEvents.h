@@ -6,6 +6,10 @@
 #define USEREVENTS_H
 #include "IEvent.h"
 
-class OnUserLoggedIn : public IEvent {};
+class OnUserLoggedIn : public IEvent {
+public:
+    int userId;
+    explicit OnUserLoggedIn(const int userId) : userId(userId) {}
+};
 
 #endif //USEREVENTS_H

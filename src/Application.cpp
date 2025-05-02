@@ -4,12 +4,16 @@
 
 #include "core/Application.h"
 
-Application::Application(std::unique_ptr<IFrameHandler> handler, AppMediator *mediator) {
-    this->appMediator = mediator;
+#include "core/app_events/ApplicationEvents.h"
+
+Application::Application(std::unique_ptr<IFrameHandler> handler, AppMediator *mediator, EventBus *eventBus) {
     this->frameHandler = std::move(handler);
+    this->appMediator = mediator;
+    this->eventBus = eventBus;
 }
 
 void Application::start() const {
+    this->eventBus->publish(OnApplicationStartup());
     this->frameHandler->run([this] {
         this->appMediator->render();
     });

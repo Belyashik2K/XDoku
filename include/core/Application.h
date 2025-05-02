@@ -12,8 +12,9 @@
 class Application {
     std::unique_ptr<IFrameHandler> frameHandler;
     AppMediator* appMediator;
+    EventBus *eventBus = nullptr;
 public:
-    Application(std::unique_ptr<IFrameHandler> handler, AppMediator* mediator);
+    Application(std::unique_ptr<IFrameHandler> handler, AppMediator* mediator, EventBus *eventBus = nullptr);
     void start() const;
     ~Application();
 };
