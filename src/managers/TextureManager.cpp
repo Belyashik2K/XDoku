@@ -16,7 +16,7 @@ GLuint TextureManager::loadTextureFromFile(const std::string &filePath) {
     TextureData data;
 
     if (const bool success = LoadTextureFromFile(filePath.c_str(), &data.textureID, &data.width, &data.height); !success) {
-        throw std::runtime_error("Failed to load texture");
+        throw std::runtime_error("[TextureManager] Failed to load texture from file: " + filePath);
     }
 
     textureCache[filePath] = data;

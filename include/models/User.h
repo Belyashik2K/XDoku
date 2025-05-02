@@ -46,11 +46,11 @@ public:
     int getRating() const;
     Timestamp getCreatedAt() const;
     std::string getCreatedAtAsString() const;
-private:
     static bool validatePassword(const std::string& password);
-    static std::string hashPassword(const std::string& password);
     static bool validateEmail(const std::string& email);
     static bool validateUsername(const std::string &username);
+private:
+    static std::string hashPassword(const std::string& password);
 };
 
 #endif //USER_H

@@ -14,6 +14,8 @@ public:
 
     virtual std::optional<User> create(User newUser) = 0;
     virtual std::optional<User> get(const std::string& username) const = 0;
+    virtual bool isUsernameTaken(const std::string& username) const = 0;
+    virtual bool isEmailTaken(const std::string& email) const = 0;
     virtual std::string getHashedPassword(const std::string &username) const = 0;
 };
 

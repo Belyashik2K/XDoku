@@ -11,6 +11,17 @@ class ImguiSignInView final : public IImguiView {
     SignInPresenter *presenter = nullptr;
 public:
     void render() override;
+
+    void renderLoginForm() const;
+
+    void renderLoginError() const;
+
+    static void renderFormHeader();
+
+    void renderFormInputs() const;
+
+    void renderFormButtons() const;
+
     void setPresenter(SignInPresenter *p) { presenter = p; }
 };
 

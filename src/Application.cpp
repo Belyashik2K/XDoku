@@ -4,18 +4,31 @@
 
 #include "core/Application.h"
 
-Application::Application(std::unique_ptr<IFrameHandler> handler, AppMediator *mediator) {
-    this->appMediator = mediator;
+#include "core/app_events/ApplicationEvents.h"
+
+Application::Application(std::unique_ptr<IFrameHandler> handler, AppMediator *mediator, EventBus *eventBus) {
     this->frameHandler = std::move(handler);
+    this->appMediator = mediator;
+    this->eventBus = eventBus;
 }
 
 void Application::start() const {
+    subscribeToEvents();
+    printf("[Application] Starting application...\n");
+    this->eventBus->publish(OnApplicationStartup());
     this->frameHandler->run([this] {
         this->appMediator->render();
     });
 }
 
+void Application::subscribeToEvents() const {
+    printf("[Application] Subscribing to events...\n");
+    this->eventBus->subscribe<OnApplicationShutdown>([this](const OnApplicationShutdown &) {
+        this->frameHandler->shutdown();
+    });
+}
+
 Application::~Application() {
-    this->frameHandler->shutdown();
+    printf("[Application] Shutting down application...\n");
 }
 

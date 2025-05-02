@@ -17,7 +17,7 @@ struct TextureData {
 
 class TextureManager {
 public:
-    static TextureManager& GetInstance() {
+    static TextureManager& getInstance() {
         static TextureManager instance;
         return instance;
     }

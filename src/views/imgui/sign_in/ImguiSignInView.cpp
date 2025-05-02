@@ -7,72 +7,130 @@
 #include <imgui.h>
 
 #include "views/imgui/ImguiChildWindow.h"
+#include "views/imgui/ImguiColors.h"
+#include "views/imgui/ImguiStyleColorGuard.h"
+#include "views/imgui/ImguiStyleVarGuard.h"
 #include "views/imgui/ImguiWindow.h"
 
 void ImguiSignInView::render() {
-    ImguiWindow window("Login Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+    ImguiWindow window("Sign In Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove); {
+        updateBackground("../assets/textures/auth/background.jpg");
+        renderLoginForm();
+    }
+}
+
+void ImguiSignInView::renderLoginForm() const {
+    const ImVec2 windowSize = ImGui::GetWindowSize();
+    const float childWidth = windowSize.x * 0.33f;
+    const float childHeight = windowSize.y * 0.43f;
+    const ImVec2 childSize(childWidth, childHeight);
+
+    ImguiChildWindow childWindow(
+        "CenteredChild",
+        childSize,
+        ImGuiChildFlags_AutoResizeX | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AlwaysAutoResize,
+        true
+    );
+
+    renderFormHeader();
+    renderFormInputs();
+    renderFormButtons();
+    renderLoginError();
+}
+
+void ImguiSignInView::renderFormHeader() {
+    const auto headerText = "Sign in to XDoku";
+    printText(headerText, BLACK, 30, true);
+    addVerticalSpacing(6);
+}
+
+void ImguiSignInView::renderFormInputs() const {
+    ImguiStyleColorGuard localColorGuard({
+        {ImGuiCol_Text, WHITE},
+        {ImGuiCol_Border, LIGHT_GRAY},
+        {ImGuiCol_FrameBg, GRAY},
+    });
+
+    ImguiStyleVarGuard localVarGuard({
+        {ImGuiStyleVar_FrameRounding, 10.0f},
+        {ImGuiStyleVar_FrameBorderSize, 1.0f}
+    });
+
+    const ImVec2 childSize = ImGui::GetWindowSize();
+    const auto &inputSize = ImVec2(childSize.x, 18);
+
+    printText("Username", BLACK, 23, false);
+    addVerticalSpacing();
+    createInputField(
+        "username_input",
+        "Username",
+        presenter->getUsername(),
+        presenter->getBufferSize(),
+        inputSize,
+        ImGuiInputTextFlags_CharsNoBlank,
+        false
+    );
+    addVerticalSpacing();
+    printText("Password", BLACK, 23, false);
+    createInputField(
+        "password_input",
+        "Password",
+        presenter->getPassword(),
+        presenter->getBufferSize(),
+        inputSize,
+        ImGuiInputTextFlags_Password,
+        false
+    );
+    addVerticalSpacing(6);
+}
+
+void ImguiSignInView::renderFormButtons() const {
+    ImguiStyleVarGuard localVarGuard({
+        {ImGuiStyleVar_FrameRounding, 10.0f},
+        {ImGuiStyleVar_FrameBorderSize, 1.0f}
+    });
+
+    const ImVec2 childSize = ImGui::GetWindowSize();
+    const auto &buttonSize = ImVec2(childSize.x, 60);
+
     {
-        updateBackground("../assets/textures/background.jpg");
-
-        {
-            const ImVec2 windowSize = ImGui::GetWindowSize();
-            const float childWidth = windowSize.x / 3;
-            const float childHeight = windowSize.y / 3;
-            const ImVec2 childSize(childWidth, childHeight);
-
-            ImVec2 childPosition;
-            childPosition.x = (windowSize.x - childSize.x) * 0.5f;
-            childPosition.y = (windowSize.y - childSize.y) * 0.5f;
-
-            ImGui::SetCursorPos(childPosition);
-
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-
-            ImguiChildWindow childWindow(
-                "CenteredChild",
-                childSize,
-                ImGuiChildFlags_AutoResizeX | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AlwaysAutoResize
-            );
-
-            ImGui::PopStyleVar();
-
-            const float textWidth = ImGui::CalcTextSize("Sign in to XDoku").x;
-            ImGui::SetCursorPosX((childWidth - textWidth) * 0.5f);
-            ImGui::Text("Sign in to XDoku");
-            addVerticalSpacing(6);
-
-            ImGui::PushItemWidth(childWidth);
-            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(15.0f, 15.0f));
-            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-            ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
-
-            ImGui::InputText("##Username", presenter->getUsername(), presenter->getBufferSize(), ImGuiInputTextFlags_CharsNoBlank);
-            addVerticalSpacing();
-            ImGui::InputText("##Password", presenter->getPassword(), presenter->getBufferSize(), ImGuiInputTextFlags_Password);
-            addVerticalSpacing(6);
-            ImGui::PopItemWidth();
-
-
-            const auto &buttonSize = ImVec2(childWidth, 55);
-            ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 10.0f);
-
-            createButton("login_button", "Sign in", buttonSize,
-                [this] {
-                    presenter->onLoginButtonClicked();
-                }
-            );
-            addVerticalSpacing();
-
-            createButton("signup_button", "Sign up", buttonSize,
-                [this] {
-                    presenter->onSignUpButtonClicked();
-                }
-            );
-
-            ImGui::PopStyleColor(2);
-            ImGui::PopStyleVar(3);
-        }
+        ImguiStyleColorGuard signInButton({
+            {ImGuiCol_Text, WHITE},
+            {ImGuiCol_Border, WHITE},
+            {ImGuiCol_Button, GRAY},
+        });
+        createButton(
+            "login_button",
+            "Sign in",
+            buttonSize,
+            [this] {
+                presenter->onLoginButtonClicked();
+            }
+        );
     }
 
+    addVerticalSpacing();
+
+    {
+        ImguiStyleColorGuard signUpButton({
+            {ImGuiCol_Text, BLACK},
+            {ImGuiCol_Border, BLACK},
+            {ImGuiCol_Button, WHITE},
+        });
+        createButton(
+            "signup_button",
+            "Sign up",
+            buttonSize,
+            [this] {
+                presenter->onSignUpButtonClicked();
+            }
+        );
+    }
+}
+
+void ImguiSignInView::renderLoginError() const {
+    if (presenter->isIncorrectLogin()) {
+        addVerticalSpacing(3);
+        printText("Invalid username or password", RED, 22, true);
+    }
 }

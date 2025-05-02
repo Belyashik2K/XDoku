@@ -17,14 +17,21 @@ PostgreSQLDatabase::PostgreSQLDatabase(const std::string &connString) {
 }
 
 PostgreSQLDatabase::~PostgreSQLDatabase() {
+    printf("[PostgreSQLDatabase] Disconnecting from database...\n");
     PostgreSQLDatabase::disconnect();
 }
 
 bool PostgreSQLDatabase::connect() {
     try {
         conn = std::make_unique<pqxx::connection>(connectionString);
+        printf(
+            "[PostgreSQLDatabase] Connected to database %s on host %s:%s\n",
+            conn->dbname(),
+            conn->hostname(),
+            conn->port()
+        );
         return true;
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         throw std::runtime_error("PostgreSQLDatabase::connect(): " + std::string(e.what()));
     }
 }
@@ -47,9 +54,8 @@ pqxx::result PostgreSQLDatabase::execute(IQuery<pqxx::params> &query) {
         const pqxx::result result = txn.exec(query.getQueryString(), query.getQueryParameters());
         txn.commit();
         return result;
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         txn.abort();
         throw std::runtime_error("PostgreSQLDatabase::execute(): " + std::string(e.what()));
     }
 }
-

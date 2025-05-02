@@ -10,6 +10,10 @@
 
 #include <views/imgui/ImguiFrameHandler.h>
 
+#include "managers/FontManager.h"
+
+bool loaded = false;
+
 ImguiFrameHandler::ImguiFrameHandler(
     int width,
     int height,
@@ -42,7 +46,7 @@ void ImguiFrameHandler::createWindow() {
     GLFWmonitor *monitor = glfwGetPrimaryMonitor();
 
     if (!windowWidth || !windowHeight) {
-        printf("Window size not set, using monitor resolution\n");
+        printf("[ImguiFrameHandler] Window size is not set. Using monitor resolution.\n");
         const GLFWvidmode *mode = glfwGetVideoMode(monitor);
         windowWidth = std::make_optional(mode->width);
         windowHeight = std::make_optional(mode->height);
@@ -86,10 +90,12 @@ void ImguiFrameHandler::init() {
     (void) io;
     ImGui::StyleColorsDark();
 
-    ImFont *font = io.Fonts->AddFontFromFileTTF("../assets/fonts/regular.ttf", 22.0f);
-    if (!font) {
-        printf("Font not set!");
-        exit(EXIT_FAILURE);
+    FontManager::getInstance().setFontPath("../assets/fonts/regular.ttf");
+    if (!loaded) {
+        for (int i = 1; i < 40; ++i) {
+            FontManager::getInstance().getFont(i);
+            loaded = true;
+        }
     }
 
     ImGuiStyle &style = ImGui::GetStyle();
@@ -115,7 +121,9 @@ void ImguiFrameHandler::run(const std::function<void()> renderCallback) {
         ImGui::NewFrame();
         ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(windowWidth.value(), windowHeight.value()), ImGuiCond_FirstUseEver);
+        ImGui::PushFont(FontManager::getInstance().getFont(28));
         renderCallback();
+        ImGui::PopFont();
         ImGui::Render();
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -124,12 +132,18 @@ void ImguiFrameHandler::run(const std::function<void()> renderCallback) {
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
     }
+    afterRender();
 }
 
-void ImguiFrameHandler::shutdown() {
+void ImguiFrameHandler::afterRender() const {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
     glfwDestroyWindow(window);
     glfwTerminate();
+}
+
+void ImguiFrameHandler::shutdown() {
+    printf("[ImguiFrameHandler] Shutting down ImGui frame handler...\n");
+    glfwSetWindowShouldClose(window, true);
 }

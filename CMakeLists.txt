@@ -91,8 +91,23 @@ add_executable(XDoku
         src/views/imgui/sign_up/ImguiSignUpView.cpp
         include/views/imgui/sign_up/ImguiSignUpView.h
         include/presenters/SignUpPresenter.h
-        include/core/app_events/buttons.h
+        include/core/app_events/ButtonEvents.h
         src/presenters/SignUpPresenter.cpp
+        src/views/imgui/ImguiStyleVarGuard.cpp
+        src/views/imgui/ImguiStyleColorGuard.cpp
+        include/views/imgui/ImguiStyleVarGuard.h
+        include/core/app_events/UserEvents.h
+        include/views/imgui/ImguiStyleColorGuard.h
+        include/managers/FontManager.h
+        src/managers/FontManager.cpp
+        include/core/app_events/ApplicationEvents.h
+        src/presenters/MainMenuPresenter.cpp
+        include/presenters/MainMenuPresenter.h
+        src/views/imgui/main_menu/ImguiMainMenuView.cpp
+        include/views/imgui/main_menu/ImguiMainMenuView.h
+        include/managers/SessionManager.h
+        src/managers/SessionManager.cpp
+        include/views/imgui/ImguiColors.h
 )
 
 target_include_directories(XDoku PRIVATE
