@@ -17,7 +17,7 @@ public:
     static void createButton(
         const char *id,
         const char *label,
-        const ImVec2 & size = ImVec2(0, 0),
+        const ImVec2 &size = ImVec2(0, 0),
         const std::function<void()>& onLeftClick = nullptr,
         const std::function<void()>& onRightClick = nullptr
     );
@@ -32,6 +32,7 @@ public:
         const char *label,
         char *buffer,
         int bufferSize,
+        const ImVec2 &size = ImVec2(0, 0),
         ImGuiInputTextFlags flags = ImGuiInputFlags_None,
         bool isLabelHidden = false
     );

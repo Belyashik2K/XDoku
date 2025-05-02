@@ -85,10 +85,13 @@ void IImguiView::createInputField(
     const char *label,
     char *buffer,
     const int bufferSize,
+    const ImVec2 &size,
     const ImGuiInputTextFlags flags,
     const bool isLabelHidden
 ) {
     ImGui::PushID(id);
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, size.y));
+    ImGui::PushItemWidth(size.x);
 
     auto resultLabel = std::string(label);
     if (isLabelHidden) {
@@ -97,5 +100,7 @@ void IImguiView::createInputField(
 
     ImGui::InputText(resultLabel.c_str(), buffer, bufferSize, flags);
 
+    ImGui::PopItemWidth();
+    ImGui::PopStyleVar();
     ImGui::PopID();
 }
