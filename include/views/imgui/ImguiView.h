@@ -23,6 +23,8 @@ public:
     );
     static void printText(
         const char *text,
+        const ImColor &color = ImColor(255, 255, 255),
+        int fontSize = 16,
         bool isCentered = false
     ) ;
     static void createInputField(

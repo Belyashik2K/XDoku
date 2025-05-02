@@ -6,10 +6,12 @@
 
 #include <imgui.h>
 
+#include "managers/FontManager.h"
 #include "managers/TextureManager.h"
+#include "views/imgui/ImguiStyleColorGuard.h"
 
 void IImguiView::updateBackground(const std::string &filePath) {
-    const GLuint backgroundTex = TextureManager::GetInstance().loadTextureFromFile(filePath);
+    const GLuint backgroundTex = TextureManager::getInstance().loadTextureFromFile(filePath);
     const ImVec2 windowPos = ImGui::GetWindowPos();
     const ImVec2 windowSize = ImGui::GetWindowSize();
     ImDrawList *drawList = ImGui::GetWindowDrawList();
@@ -53,12 +55,24 @@ void IImguiView::addVerticalSpacing(const int count) {
     }
 }
 
-void IImguiView::printText(const char *text, const bool isCentered) {
+void IImguiView::printText(
+    const char *text,
+    const ImColor &color,
+    const int fontSize,
+    const bool isCentered
+) {
+    ImguiStyleColorGuard localColorGuard({
+        {ImGuiCol_Text, color},
+    });
+    ImGui::PushFont(FontManager::getInstance().getFont(fontSize));
+
     if (isCentered) {
         const ImVec2 textWidth = ImGui::CalcTextSize(text);
         centerCursor(textWidth);
     }
     ImGui::Text(text);
+
+    ImGui::PopFont();
 }
 
 void IImguiView::centerCursor(const ImVec2 &sizeOfObject) {

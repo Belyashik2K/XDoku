@@ -98,6 +98,8 @@ add_executable(XDoku
         include/views/imgui/ImguiStyleVarGuard.h
         include/core/app_events/UserEvents.h
         include/views/imgui/ImguiStyleColorGuard.h
+        include/managers/FontManager.h
+        src/managers/FontManager.cpp
 )
 
 target_include_directories(XDoku PRIVATE

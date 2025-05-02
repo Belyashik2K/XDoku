@@ -21,7 +21,7 @@ void ImguiSignInView::render() {
 void ImguiSignInView::renderLoginForm() {
     const ImVec2 windowSize = ImGui::GetWindowSize();
     const float childWidth = windowSize.x / 3;
-    const float childHeight = windowSize.y / 3;
+    const float childHeight = windowSize.y / 2.5;
     const ImVec2 childSize(childWidth, childHeight);
 
     ImguiChildWindow childWindow(
@@ -38,14 +38,14 @@ void ImguiSignInView::renderLoginForm() {
 
 void ImguiSignInView::renderFormHeader() {
     const auto headerText = "Sign in to XDoku";
-    printText(headerText, true);
+    printText(headerText, ImColor(0, 0, 0), 28, true);
     addVerticalSpacing(6);
 }
 
 void ImguiSignInView::renderFormInputs() const {
     ImguiStyleColorGuard localColorGuard({
         {ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 1.0f)},
-        {ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f)}
+        {ImGuiCol_Text, ImColor(255, 255, 255)}
     });
 
     ImguiStyleVarGuard localVarGuard({
@@ -55,7 +55,7 @@ void ImguiSignInView::renderFormInputs() const {
 
     const ImVec2 childSize = ImGui::GetWindowSize();
     ImGui::PushItemWidth(childSize.x);
-    // printText("Username", false); -> TODO: add ability to change color of text and size
+    printText("Username", ImColor(0, 0, 0), 20, false);
     addVerticalSpacing();
     createInputField(
         "username_input",
@@ -65,6 +65,7 @@ void ImguiSignInView::renderFormInputs() const {
         ImGuiInputTextFlags_CharsNoBlank
     );
     addVerticalSpacing();
+    printText("Password", ImColor(0, 0, 0), 20, false);
     createInputField(
         "password_input",
         "Password",

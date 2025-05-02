@@ -5,11 +5,12 @@
 #ifndef IMGUISTYLECOLORGUARD_H
 #define IMGUISTYLECOLORGUARD_H
 #include <imgui.h>
+#include <variant>
 #include <vector>
 
 class ImguiStyleColorGuard {
 public:
-    using AvailableTypes = ImVec4;
+    using AvailableTypes = std::variant<ImVec4, ImColor>;
 
     explicit ImguiStyleColorGuard(const std::vector<std::pair<ImGuiCol, AvailableTypes>> &styles);
     ~ImguiStyleColorGuard();

@@ -1,0 +1,28 @@
+//
+// Created by Belyashik2K on 02.05.2025.
+//
+
+#include "managers/FontManager.h"
+
+#include <stdexcept>
+
+void FontManager::setFontPath(const std::string &path) {
+    fontPath = path;
+}
+
+ImFont* FontManager::getFont(const int size) {
+    if (const auto it = fonts.find(size); it != fonts.end()) {
+        return it->second;
+    }
+
+    const ImGuiIO& io = ImGui::GetIO();
+    ImFont* font = io.Fonts->AddFontFromFileTTF(fontPath.c_str(), size);
+    if (font) {
+        fonts[size] = font;
+        io.Fonts->Build();
+        return font;
+    }
+    printf("Не удалось загрузить шрифт (%dpt): %s\n", size, fontPath.c_str());
+    throw std::runtime_error("Font loading failed");
+}
+
