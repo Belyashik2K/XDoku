@@ -35,6 +35,7 @@ void ImguiSignInView::renderLoginForm() const {
     renderFormHeader();
     renderFormInputs();
     renderFormButtons();
+    renderLoginError();
 }
 
 void ImguiSignInView::renderFormHeader() {
@@ -124,5 +125,23 @@ void ImguiSignInView::renderFormButtons() const {
                 presenter->onSignUpButtonClicked();
             }
         );
+    }
+}
+
+void ImguiSignInView::renderLoginError() const {
+    if (presenter->isIncorrectLogin()) {
+        ImguiStyleColorGuard localColorGuard({
+            {ImGuiCol_Text, RED},
+            {ImGuiCol_Border, LIGHT_GRAY},
+            {ImGuiCol_FrameBg, GRAY},
+        });
+
+        ImguiStyleVarGuard localVarGuard({
+            {ImGuiStyleVar_FrameRounding, 10.0f},
+            {ImGuiStyleVar_FrameBorderSize, 1.0f}
+        });
+
+        addVerticalSpacing(3);
+        printText("Invalid username or password", RED, 22, true);
     }
 }

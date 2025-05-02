@@ -14,6 +14,8 @@ public:
 
     void renderLoginForm() const;
 
+    void renderLoginError() const;
+
     static void renderFormHeader();
 
     void renderFormInputs() const;

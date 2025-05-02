@@ -18,8 +18,12 @@ class SignInPresenter final : public IPresenter {
     char username[128] = "";
     char password[128] = "";
 
-    bool findActiveSession();
-    bool authorizeUser(const std::string &username, const std::string &password);
+    bool incorrectLogin = false;
+
+    static bool isPasswordValid(const std::string &password, const std::string &hash);
+    void setIncorrectLogin(const bool incorrect) { incorrectLogin = incorrect; }
+
+    bool authorizeUser(const std::string &username, const std::string &password) const;
 public:
     explicit SignInPresenter(EventBus *bus, IUserRepository *userRepos) : eventBus(bus), userRepository(userRepos) {}
 
@@ -28,6 +32,7 @@ public:
 
     char *getUsername() { return username; }
     char *getPassword() { return password; }
+    bool isIncorrectLogin() const { return incorrectLogin; }
     int getBufferSize() const { return sizeof(username); }
 };
 

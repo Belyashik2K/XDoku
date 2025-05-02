@@ -46,7 +46,7 @@ void ImguiFrameHandler::createWindow() {
     GLFWmonitor *monitor = glfwGetPrimaryMonitor();
 
     if (!windowWidth || !windowHeight) {
-        printf("Window size not set, using monitor resolution\n");
+        printf("[ImguiFrameHandler] Window size is not set. Using monitor resolution.\n");
         const GLFWvidmode *mode = glfwGetVideoMode(monitor);
         windowWidth = std::make_optional(mode->width);
         windowHeight = std::make_optional(mode->height);
