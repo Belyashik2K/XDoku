@@ -8,5 +8,7 @@
 
 class OnSignUpButtonClicked : public IEvent {};
 class OnSignInButtonClicked : public IEvent {};
+class OnLeaderboardButtonClicked : public IEvent {};
+class OnMainMenuButtonClicked : public IEvent {};
 
 #endif //BUTTONS_H

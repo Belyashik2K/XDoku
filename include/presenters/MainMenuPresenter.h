@@ -16,7 +16,7 @@ public:
 
     void onProfileButtonClicked();
 
-    void onLeaderboardButtonClicked();
+    void onLeaderboardButtonClicked() const;
 
     void onHowToPlayButtonClicked();
 

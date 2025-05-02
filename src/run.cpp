@@ -13,6 +13,7 @@
 
 #include "presenters/SignInPresenter.h"
 #include "views/imgui/ImguiFrameHandler.h"
+#include "views/imgui/leaderboard/ImguiLeaderboardView.h"
 #include "views/imgui/main_menu/ImguiMainMenuView.h"
 
 #include "views/imgui/sign_in/ImguiSignInView.h"
@@ -26,7 +27,7 @@ int main() {
         auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
         const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
         const auto sessionRepository = std::make_shared<PostgreSQLSessionRepository>(database);
-        // const PostgreSQLRatingRepository ratingRepository(database);
+        const auto ratingRepository = std::make_shared<PostgreSQLRatingRepository>(database);
         // PostgreSQLMoveRepository moveRepository(database);
         // PostgreSQLGameRepository gameRepository(database);
 
@@ -42,6 +43,8 @@ int main() {
         const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus.get(), userRepository.get());
         const auto mainMenuView = std::make_shared<ImguiMainMenuView>();
         const auto mainMenuPresenter = std::make_shared<MainMenuPresenter>(eventBus.get());
+        const auto leaderboardView = std::make_shared<ImguiLeaderboardView>();
+        const auto leaderboardPresenter = std::make_shared<LeaderboardPresenter>(eventBus.get(), ratingRepository.get());
 
         signInPresenter->setView(signInView.get());
         signInView->setPresenter(signInPresenter.get());
@@ -52,10 +55,14 @@ int main() {
         mainMenuPresenter->setView(mainMenuView.get());
         mainMenuView->setPresenter(mainMenuPresenter.get());
 
+        leaderboardPresenter->setView(leaderboardView.get());
+        leaderboardView->setPresenter(leaderboardPresenter.get());
+
         appMediator->setCurrentPresenter(signInPresenter.get());
         appMediator->setSignUpPresenter(signUpPresenter.get());
         appMediator->setSignInPresenter(signInPresenter.get());
         appMediator->setMainMenuPresenter(mainMenuPresenter.get());
+        appMediator->setLeaderboardPresenter(leaderboardPresenter.get());
         appMediator->subscribeToEvents();
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");

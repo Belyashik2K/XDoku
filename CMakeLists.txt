@@ -108,6 +108,11 @@ add_executable(XDoku
         include/managers/SessionManager.h
         src/managers/SessionManager.cpp
         include/views/imgui/ImguiColors.h
+        src/views/imgui/leaderboard/ImguiLeaderboardView.cpp
+        include/views/imgui/leaderboard/ImguiLeaderboardView.h
+        include/presenters/LeaderboardPresenter.cpp
+        include/presenters/LeaderboardPresenter.h
+        src/presenters/LeaderboardPresenter.cpp
 )
 
 target_include_directories(XDoku PRIVATE

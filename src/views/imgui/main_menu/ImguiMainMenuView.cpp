@@ -13,10 +13,8 @@
 
 void ImguiMainMenuView::render() {
     ImguiWindow window("Main Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
-    {
-        updateBackground("../assets/textures/menu/background.jpg");
-        renderMainMenu();
-    }
+    updateBackground("../assets/textures/menu/background.jpg");
+    renderMainMenu();
 }
 
 void ImguiMainMenuView::renderMainMenu() const {

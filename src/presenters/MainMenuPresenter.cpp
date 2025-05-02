@@ -5,14 +5,15 @@
 #include "presenters/MainMenuPresenter.h"
 
 #include "core/app_events/ApplicationEvents.h"
+#include "core/app_events/ButtonEvents.h"
 
 void MainMenuPresenter::onPlayButtonClicked() {
     printf("[MainMenuPresenter] Play button clicked\n");
 }
 
-
-void MainMenuPresenter::onLeaderboardButtonClicked() {
+void MainMenuPresenter::onLeaderboardButtonClicked() const {
     printf("[MainMenuPresenter] Leaderboard button clicked\n");
+    eventBus->publish(OnLeaderboardButtonClicked());
 }
 
 void MainMenuPresenter::onProfileButtonClicked() {

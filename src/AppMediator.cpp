@@ -36,4 +36,14 @@ void AppMediator::subscribeToEvents() {
             this->currentPresenter = mainMenuPresenter;
         }
     });
+    eventBus->subscribe<OnLeaderboardButtonClicked>([this](const OnLeaderboardButtonClicked &) {
+        if (leaderboardPresenter) {
+            this->currentPresenter = leaderboardPresenter;
+        }
+    });
+    eventBus->subscribe<OnMainMenuButtonClicked>([this](const OnMainMenuButtonClicked &) {
+        if (mainMenuPresenter) {
+            this->currentPresenter = mainMenuPresenter;
+        }
+    });
 }
