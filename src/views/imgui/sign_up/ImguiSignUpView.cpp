@@ -33,6 +33,7 @@ void ImguiSignUpView::renderSignUpForm() const {
     renderFormHeader();
     renderFormInputs();
     renderFormButtons();
+    renderSignUpError();
 }
 
 void ImguiSignUpView::renderFormHeader() {
@@ -142,5 +143,12 @@ void ImguiSignUpView::renderFormButtons() const {
                 presenter->onBackButtonClicked();
             }
         );
+    }
+}
+
+void ImguiSignUpView::renderSignUpError() const {
+    if (const std::string errorMessage = presenter->getErrorMessage(); !errorMessage.empty()) {
+        addVerticalSpacing(3);
+        printText(presenter->getErrorMessage().c_str(), RED, 23, true);
     }
 }

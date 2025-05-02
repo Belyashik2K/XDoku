@@ -13,6 +13,8 @@ class ImguiSignUpView final : public IImguiView {
 public:
     void render() override;
 
+    void renderSignUpError() const;
+
     void renderSignUpForm() const;
 
     static void renderFormHeader();

@@ -138,3 +138,32 @@ std::optional<User> PostgreSQLUserRepository::get(const std::string &username) c
     return User(id, finalUsername, email, finalPasswordHash, rating, createdAt, false);
 }
 
+bool PostgreSQLUserRepository::isUsernameTaken(const std::string &username) const {
+    if (!database->isConnected()) {
+        return false;
+    }
+    PostgreSQLQuery query("SELECT COUNT(*) FROM users WHERE username = $1");
+    query.addParameter(username);
+    const pqxx::result result = database->execute(query);
+    if (result.empty()) {
+        return false;
+    }
+    const pqxx::row row = result[0];
+    return row[0].as<int>() > 0;
+}
+
+bool PostgreSQLUserRepository::isEmailTaken(const std::string &email) const {
+    if (!database->isConnected()) {
+        return false;
+    }
+    PostgreSQLQuery query("SELECT COUNT(*) FROM users WHERE email = $1");
+    query.addParameter(email);
+    const pqxx::result result = database->execute(query);
+    if (result.empty()) {
+        return false;
+    }
+    const pqxx::row row = result[0];
+    return row[0].as<int>() > 0;
+}
+
+

@@ -18,6 +18,8 @@ public:
 
     std::optional<User> create(User newUser) override;
     std::optional<User> get(const std::string &username) const override;
+    bool isUsernameTaken(const std::string &username) const override;
+    bool isEmailTaken(const std::string &email) const override;
     std::string getHashedPassword(const std::string &username) const override;
 };
 

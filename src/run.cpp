@@ -39,7 +39,7 @@ int main() {
         const auto signInView = std::make_shared<ImguiSignInView>();
         const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus.get(), userRepository.get());
         const auto signUpView = std::make_shared<ImguiSignUpView>();
-        const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus.get());
+        const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus.get(), userRepository.get());
         const auto mainMenuView = std::make_shared<ImguiMainMenuView>();
         const auto mainMenuPresenter = std::make_shared<MainMenuPresenter>(eventBus.get());
 
