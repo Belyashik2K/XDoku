@@ -5,6 +5,7 @@
 #include "views/imgui/ImguiWindow.h"
 #include "views/imgui/main_menu/ImguiMainMenuView.h"
 
+#include "managers/FontManager.h"
 #include "views/imgui/ImguiChildWindow.h"
 #include "views/imgui/ImguiColors.h"
 #include "views/imgui/ImguiStyleColorGuard.h"
@@ -63,7 +64,7 @@ void ImguiMainMenuView::renderFormButtons() const {
             {ImGuiCol_Border, WHITE},
             {ImGuiCol_Button, GRAY},
     });
-
+    ImGui::PushFont(FontManager::getInstance().getFont(30));
     createButton(
         "play_button",
         "Play",
@@ -96,4 +97,5 @@ void ImguiMainMenuView::renderFormButtons() const {
             presenter->onHowToPlayButtonClicked();
         }
     );
+    ImGui::PopFont();
 }
