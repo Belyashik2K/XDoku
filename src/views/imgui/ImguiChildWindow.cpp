@@ -21,7 +21,7 @@ ImguiChildWindow::ImguiChildWindow(
     if (isCentered) {
         setCentered(size);
     }
-    m_Started = ImGui::BeginChild(id, size, flags);
+    m_Started = ImGui::BeginChild(id, size, flags, ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar);
 }
 
 ImguiChildWindow::ImguiChildWindow(
@@ -34,7 +34,7 @@ ImguiChildWindow::ImguiChildWindow(
     if (isCentered) {
         setCentered(size);
     }
-    m_Started = ImGui::BeginChild(str_id, size, flags);
+    m_Started = ImGui::BeginChild(str_id, size, flags, ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar);
 }
 
 ImVec2 ImguiChildWindow::getGlobalWindowSize() {

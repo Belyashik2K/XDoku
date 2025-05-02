@@ -11,7 +11,7 @@
 #include "views/imgui/ImguiStyleVarGuard.h"
 
 void ImguiMainMenuView::render() {
-    ImguiWindow window("Main Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+    ImguiWindow window("Main Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
     {
         updateBackground("../assets/textures/menu/background.jpg");
         renderMainMenu();
