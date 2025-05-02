@@ -12,6 +12,15 @@ class ImguiSignUpView final : public IImguiView {
     SignUpPresenter *presenter = nullptr;
 public:
     void render() override;
+
+    void renderSignUpForm() const;
+
+    static void renderFormHeader();
+
+    void renderFormInputs() const;
+
+    void renderFormButtons() const;
+
     void setPresenter(SignUpPresenter *p) { presenter = p; }
 };
 

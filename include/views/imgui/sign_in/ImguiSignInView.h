@@ -12,9 +12,9 @@ class ImguiSignInView final : public IImguiView {
 public:
     void render() override;
 
-    void renderLoginForm();
+    void renderLoginForm() const;
 
-    void renderFormHeader();
+    static void renderFormHeader();
 
     void renderFormInputs() const;
 

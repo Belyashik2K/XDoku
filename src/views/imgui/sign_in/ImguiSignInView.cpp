@@ -12,13 +12,13 @@
 #include "views/imgui/ImguiWindow.h"
 
 void ImguiSignInView::render() {
-    ImguiWindow window("Login Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove); {
+    ImguiWindow window("Sign In Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove); {
         updateBackground("../assets/textures/background.jpg");
         renderLoginForm();
     }
 }
 
-void ImguiSignInView::renderLoginForm() {
+void ImguiSignInView::renderLoginForm() const {
     const ImVec2 windowSize = ImGui::GetWindowSize();
     const float childWidth = windowSize.x * 0.33f;
     const float childHeight = windowSize.y * 0.4f;
