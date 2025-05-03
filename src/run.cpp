@@ -4,7 +4,7 @@
 #include "core/AppMediator.h"
 #include "core/EventBus.h"
 
-#include "managers/GameManager.h"
+#include "managers/SudokuGameManager.h"
 #include "managers/SessionManager.h"
 
 #include "models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h"
@@ -40,7 +40,7 @@ int main() {
         const auto appMediator = std::make_shared<AppMediator>(eventBus);
 
         const auto sessionManager = std::make_shared<SessionManager>(eventBus.get(), sessionRepository.get());
-        const auto gameManager = std::make_shared<GameManager>(eventBus.get(), gameRepository.get(), moveRepository.get());
+        const auto sudokuGameManager = std::make_shared<SudokuGameManager>(eventBus.get(), gameRepository.get(), moveRepository.get());
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
 

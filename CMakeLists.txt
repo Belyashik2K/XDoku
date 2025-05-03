@@ -112,8 +112,8 @@ add_executable(XDoku
         include/views/imgui/leaderboard/ImguiLeaderboardView.h
         include/presenters/LeaderboardPresenter.h
         src/presenters/LeaderboardPresenter.cpp
-        src/managers/GameManager.cpp
-        include/managers/GameManager.h
+        src/managers/SudokuGameManager.cpp
+        include/managers/SudokuGameManager.h
         src/views/imgui/game/ImguiSudokuGameView.cpp
         src/views/imgui/game/ImguiSudokuGameDifficultySelectorView.cpp
         src/presenters/game/SudokuGamePresenter.cpp

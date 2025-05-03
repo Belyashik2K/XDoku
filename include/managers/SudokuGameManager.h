@@ -8,14 +8,14 @@
 #include "core/database/repositories/IGameRepository.h"
 #include "core/database/repositories/IMoveRepository.h"
 
-class GameManager {
+class SudokuGameManager {
     IGameRepository *gameRepository;
     IMoveRepository *moveRepository;
     EventBus *eventBus;
 
     void subscribeToEvents() const;
 public:
-    GameManager(
+    SudokuGameManager(
         EventBus *eventBus,
         IGameRepository *gameRepository,
         IMoveRepository *moveRepository
