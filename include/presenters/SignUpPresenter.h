@@ -2,8 +2,8 @@
 // Created by belyashik2k on 4/29/25.
 //
 
-#ifndef REGISTERPRESENTER_H
-#define REGISTERPRESENTER_H
+#ifndef SIGNUPPRESENTER_H
+#define SIGNUPPRESENTER_H
 #include "core/EventBus.h"
 #include "core/IPresenter.h"
 #include "core/database/repositories/IUserRepository.h"
@@ -45,9 +45,11 @@ class SignUpPresenter final : public IPresenter {
     SignUpError error = NO_ERROR;
 
 public:
-    SignUpPresenter(EventBus *bus, IUserRepository *userRepos) : eventBus(bus), userRepository(userRepos) {
+    SignUpPresenter(
+        EventBus *eventBus,
+        IUserRepository *userRepository
+    ) : eventBus(eventBus), userRepository(userRepository) {
     }
-
 
     void onSignUpButtonClicked();
 
@@ -62,4 +64,4 @@ public:
     int getBufferSize() const { return sizeof(username); }
 };
 
-#endif //REGISTERPRESENTER_H
+#endif //SIGNUPPRESENTER_H

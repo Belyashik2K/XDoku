@@ -9,11 +9,11 @@
 
 class SudokuMove {
     std::optional<int> id;
-    const int gameId;
-    const int row;
-    const int column;
-    const int value;
-    const bool isValid;
+    int gameId;
+    int row;
+    int column;
+    int value;
+    bool isValid;
 
 public:
     SudokuMove(

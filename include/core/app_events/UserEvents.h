@@ -5,11 +5,19 @@
 #ifndef USEREVENTS_H
 #define USEREVENTS_H
 #include "IEvent.h"
+#include "models/sudoku/SudokuGame.h"
 
 class OnUserLoggedIn : public IEvent {
 public:
     int userId;
     explicit OnUserLoggedIn(const int userId) : userId(userId) {}
 };
+
+class OnActiveSudokuGameFound : public IEvent {
+public:
+    SudokuGame game;
+    explicit OnActiveSudokuGameFound(const SudokuGame &game) : game(game) {}
+};
+class OnActiveSudokuGameNotFound : public IEvent {};
 
 #endif //USEREVENTS_H

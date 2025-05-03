@@ -20,7 +20,7 @@ void SessionManager::findActiveSession() const {
         const int userId = userIdAndExpiration.value().first;
         const Timestamp expiration = userIdAndExpiration.value().second;
         printf(
-            "[SessionManager] Found active session for user ID: %d, expiration at: %s\n",
+            "[SessionManager] Found session for user ID: %d, expiration at: %s, validating...\n",
             userId,
             expiration.toString().c_str()
         );
@@ -55,6 +55,7 @@ void SessionManager::createSession(const OnUserLoggedIn &event) const {
 
 
 void SessionManager::onActiveSessionFound(const int userId) const {
+    printf("[SessionManager] Session active, logging in user ID: %d\n", userId);
     eventBus->publish(OnUserLoggedIn(userId));
 }
 

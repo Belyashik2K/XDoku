@@ -25,7 +25,7 @@ class SignInPresenter final : public IPresenter {
 
     bool authorizeUser(const std::string &username, const std::string &password) const;
 public:
-    explicit SignInPresenter(EventBus *bus, IUserRepository *userRepos) : eventBus(bus), userRepository(userRepos) {}
+    explicit SignInPresenter(EventBus *eventBus, IUserRepository *userRepository) : eventBus(eventBus), userRepository(userRepository) {}
 
     void onLoginButtonClicked();
     void onSignUpButtonClicked() const;

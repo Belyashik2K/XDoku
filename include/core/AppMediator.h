@@ -8,10 +8,14 @@
 
 #include "EventBus.h"
 #include "IPresenter.h"
-#include "app_events/ButtonEvents.h"
+#include "presenters/HowToPlayPresenter.h"
+#include "presenters/LeaderboardPresenter.h"
 #include "presenters/MainMenuPresenter.h"
+#include "presenters/ProfilePresenter.h"
 #include "presenters/SignInPresenter.h"
 #include "presenters/SignUpPresenter.h"
+#include "presenters/game/SudokuGameDifficultySelectorPresenter.h"
+#include "presenters/game/SudokuGamePresenter.h"
 
 class AppMediator {
     IPresenter *currentPresenter = nullptr;
@@ -20,6 +24,13 @@ class AppMediator {
     SignUpPresenter *signUpPresenter = nullptr;
     SignInPresenter *signInPresenter = nullptr;
     MainMenuPresenter *mainMenuPresenter = nullptr;
+    ProfilePresenter *profilePresenter = nullptr;
+    LeaderboardPresenter * leaderboardPresenter = nullptr;
+    HowToPlayPresenter *howToPlayPresenter = nullptr;
+    SudokuGamePresenter *sudokuGamePresenter = nullptr;
+    SudokuGameDifficultySelectorPresenter *sudokuGameDifficultySelectorPresenter = nullptr;
+
+    void subscribeToEvents();
 public:
     explicit AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *presenter = nullptr);
 
@@ -35,8 +46,21 @@ public:
     void setMainMenuPresenter(MainMenuPresenter *presenter) {
         mainMenuPresenter = presenter;
     }
-    void subscribeToEvents();
-
+    void setLeaderboardPresenter(LeaderboardPresenter *presenter) {
+        leaderboardPresenter = presenter;
+    }
+    void setSudokuGamePresenter(SudokuGamePresenter *presenter) {
+        sudokuGamePresenter = presenter;
+    }
+    void setSudokuGameDifficultySelectorPresenter(SudokuGameDifficultySelectorPresenter *presenter) {
+        sudokuGameDifficultySelectorPresenter = presenter;
+    }
+    void setProfilePresenter(ProfilePresenter *presenter) {
+        profilePresenter = presenter;
+    }
+    void setHowToPlayPresenter(HowToPlayPresenter *presenter) {
+        howToPlayPresenter = presenter;
+    }
     void render() const;
 };
 

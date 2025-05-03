@@ -20,10 +20,13 @@ class SessionManager {
     static bool isSessionExpired(const Timestamp &expiredAt);
     void onExpiredSessionFound(const std::string &sessionId) const;
     void onActiveSessionFound(int userId) const;
-public:
-    SessionManager(ISessionRepository *sessionRepository, EventBus *eventBus) :
-        sessionRepository(sessionRepository), eventBus(eventBus) {}
     void subscribeToEvents() const;
+public:
+    SessionManager(EventBus *eventBus, ISessionRepository *sessionRepository) :
+        sessionRepository(sessionRepository), eventBus(eventBus) {
+        subscribeToEvents();
+    }
+
 };
 
 #endif //SESSIONMANAGER_H

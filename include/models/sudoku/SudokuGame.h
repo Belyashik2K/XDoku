@@ -65,7 +65,7 @@ private:
     SudokuGameStatusEnum status;
     bool exitedWhileSolved;
 
-    std::optional<std::vector<SudokuMove>> moves;
+    std::optional<std::vector<SudokuMove>> moves; // TODO: Replace with a vector of unique_ptr to SudokuMove
 
     void loadGridsFromString(
         const std::string &grid,
