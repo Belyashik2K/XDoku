@@ -21,6 +21,7 @@
 #include "views/imgui/game/ImguiSudokuGameView.h"
 #include "views/imgui/leaderboard/ImguiLeaderboardView.h"
 #include "views/imgui/main_menu/ImguiMainMenuView.h"
+#include "views/imgui/profile/ImguiProfileView.h"
 #include "views/imgui/sign_in/ImguiSignInView.h"
 #include "views/imgui/sign_up/ImguiSignUpView.h"
 
@@ -53,6 +54,9 @@ int main() {
         const auto mainMenuView = std::make_shared<ImguiMainMenuView>();
         const auto mainMenuPresenter = std::make_shared<MainMenuPresenter>(eventBus.get());
 
+        const auto profileView = std::make_shared<ImguiProfileView>();
+        const auto profilePresenter = std::make_shared<ProfilePresenter>(eventBus.get());
+
         const auto leaderboardView = std::make_shared<ImguiLeaderboardView>();
         const auto leaderboardPresenter = std::make_shared<
             LeaderboardPresenter>(eventBus.get(), ratingRepository.get());
@@ -76,6 +80,9 @@ int main() {
         mainMenuPresenter->setView(mainMenuView.get());
         mainMenuView->setPresenter(mainMenuPresenter.get());
 
+        profilePresenter->setView(profileView.get());
+        profileView->setPresenter(profilePresenter.get());
+
         leaderboardPresenter->setView(leaderboardView.get());
         leaderboardView->setPresenter(leaderboardPresenter.get());
 
@@ -89,6 +96,7 @@ int main() {
         appMediator->setSignUpPresenter(signUpPresenter.get());
         appMediator->setSignInPresenter(signInPresenter.get());
         appMediator->setMainMenuPresenter(mainMenuPresenter.get());
+        appMediator->setProfilePresenter(profilePresenter.get());
         appMediator->setLeaderboardPresenter(leaderboardPresenter.get());
         appMediator->setSudokuGamePresenter(sudokuGamePresenter.get());
         appMediator->setSudokuGameDifficultySelectorPresenter(sudokuGameDifficultySelectorPresenter.get());

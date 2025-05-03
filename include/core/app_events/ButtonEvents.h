@@ -11,5 +11,6 @@ class OnSignInButtonClicked : public IEvent {};
 class OnLeaderboardButtonClicked : public IEvent {};
 class OnMainMenuButtonClicked : public IEvent {};
 class OnPlayButtonClicked : public IEvent {};
+class OnProfileButtonClicked : public IEvent {};
 
 #endif //BUTTONS_H

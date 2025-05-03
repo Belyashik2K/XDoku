@@ -19,6 +19,7 @@ void MainMenuPresenter::onLeaderboardButtonClicked() const {
 
 void MainMenuPresenter::onProfileButtonClicked() {
     printf("[MainMenuPresenter] Profile button clicked\n");
+    eventBus->publish(OnProfileButtonClicked());
 }
 
 void MainMenuPresenter::onHowToPlayButtonClicked() {

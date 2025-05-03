@@ -58,4 +58,9 @@ void AppMediator::subscribeToEvents() {
             this->currentPresenter = sudokuGameDifficultySelectorPresenter;
         }
     });
+    eventBus->subscribe<OnProfileButtonClicked>([this](const OnProfileButtonClicked &) {
+        if (profilePresenter) {
+            this->currentPresenter = profilePresenter;
+        }
+    });
 }
