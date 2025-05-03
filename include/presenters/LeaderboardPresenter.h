@@ -23,8 +23,8 @@ class LeaderboardPresenter final : public IPresenter {
 public:
     explicit LeaderboardPresenter(
         EventBus *eventBus,
-        IRatingRepository *ratingRepo
-    ) : eventBus(eventBus), ratingRepository(ratingRepo) {
+        IRatingRepository *ratingRepository
+    ) : eventBus(eventBus), ratingRepository(ratingRepository) {
         subscribeToEvents();
     }
 

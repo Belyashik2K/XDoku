@@ -112,6 +112,8 @@ add_executable(XDoku
         include/views/imgui/leaderboard/ImguiLeaderboardView.h
         include/presenters/LeaderboardPresenter.h
         src/presenters/LeaderboardPresenter.cpp
+        src/managers/GameManager.cpp
+        include/managers/GameManager.h
 )
 
 target_include_directories(XDoku PRIVATE

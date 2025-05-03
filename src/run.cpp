@@ -2,6 +2,7 @@
 #include "core/Application.h"
 #include "core/AppMediator.h"
 #include "core/EventBus.h"
+#include "managers/GameManager.h"
 #include "managers/SessionManager.h"
 
 #include "models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h"
@@ -28,14 +29,14 @@ int main() {
         const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
         const auto sessionRepository = std::make_shared<PostgreSQLSessionRepository>(database);
         const auto ratingRepository = std::make_shared<PostgreSQLRatingRepository>(database);
-        // PostgreSQLMoveRepository moveRepository(database);
-        // PostgreSQLGameRepository gameRepository(database);
+        const auto gameRepository = std::make_shared<PostgreSQLGameRepository>(database);
+        const auto moveRepository = std::make_shared<PostgreSQLMoveRepository>(database);
 
         const auto eventBus = std::make_shared<EventBus>();
         const auto appMediator = std::make_shared<AppMediator>(eventBus);
 
-        const auto sessionManager = std::make_shared<SessionManager>(sessionRepository.get(), eventBus.get());
-        sessionManager->subscribeToEvents();
+        const auto sessionManager = std::make_shared<SessionManager>(eventBus.get(), sessionRepository.get());
+        const auto gameManager = std::make_shared<GameManager>(eventBus.get(), gameRepository.get());
 
         const auto signInView = std::make_shared<ImguiSignInView>();
         const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus.get(), userRepository.get());
@@ -63,7 +64,6 @@ int main() {
         appMediator->setSignInPresenter(signInPresenter.get());
         appMediator->setMainMenuPresenter(mainMenuPresenter.get());
         appMediator->setLeaderboardPresenter(leaderboardPresenter.get());
-        appMediator->subscribeToEvents();
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
         const Application app(std::move(frameHandler), appMediator.get(), eventBus.get());

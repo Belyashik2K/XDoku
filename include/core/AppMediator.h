@@ -8,7 +8,6 @@
 
 #include "EventBus.h"
 #include "IPresenter.h"
-#include "app_events/ButtonEvents.h"
 #include "presenters/LeaderboardPresenter.h"
 #include "presenters/MainMenuPresenter.h"
 #include "presenters/SignInPresenter.h"
@@ -22,6 +21,8 @@ class AppMediator {
     SignInPresenter *signInPresenter = nullptr;
     MainMenuPresenter *mainMenuPresenter = nullptr;
     LeaderboardPresenter * leaderboardPresenter = nullptr;
+
+    void subscribeToEvents();
 public:
     explicit AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *presenter = nullptr);
 
@@ -40,7 +41,6 @@ public:
     void setLeaderboardPresenter(LeaderboardPresenter *presenter) {
         leaderboardPresenter = presenter;
     }
-    void subscribeToEvents();
 
     void render() const;
 };

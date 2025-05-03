@@ -5,6 +5,7 @@
 #include <core/AppMediator.h>
 #include <core/EventBus.h>
 
+#include "core/app_events/ButtonEvents.h"
 #include "core/app_events/UserEvents.h"
 
 void AppMediator::render() const {
@@ -16,6 +17,7 @@ void AppMediator::render() const {
 AppMediator::AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *presenter) {
     this->eventBus = std::move(eventBus);
     this->currentPresenter = presenter;
+    subscribeToEvents();
 }
 
 
