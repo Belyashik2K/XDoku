@@ -9,11 +9,8 @@
 
 class SudokuGameDifficultySelectorPresenter final : public IPresenter {
     EventBus *eventBus = nullptr;
-    void subscribeToEvents();
 public:
-    explicit SudokuGameDifficultySelectorPresenter(EventBus *eventBus) : eventBus(eventBus) {
-        subscribeToEvents();
-    }
+    explicit SudokuGameDifficultySelectorPresenter(EventBus *eventBus) : eventBus(eventBus) {}
 };
 
 #endif //SUDOKUGAMEDIFFICULTYSELECTORPRESENTER_H

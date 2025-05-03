@@ -3,7 +3,3 @@
 //
 
 #include "presenters/game/SudokuGameDifficultySelectorPresenter.h"
-
-void SudokuGameDifficultySelectorPresenter::subscribeToEvents() {
-    ;
-}

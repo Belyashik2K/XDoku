@@ -13,7 +13,9 @@ class SudokuGamePresenter final : public IPresenter {
     EventBus *eventBus = nullptr;
     IGameRepository *gameRepository = nullptr;
     IMoveRepository *moveRepository = nullptr;
+    std::optional<SudokuGame> currentGame = std::nullopt;
 
+    void setCurrentGame(const SudokuGame& game);
     void subscribeToEvents();
 public:
     SudokuGamePresenter(

@@ -172,6 +172,9 @@ bool SudokuGame::addMove(const SudokuMove &move) {
 
 void SudokuGame::actualizeCurrentGrid() {
     auto &cells = this->currentGrid.getCells();
+    if (!moves.has_value()) {
+        return;
+    }
 
     for (const auto &move: moves.value()) {
         const auto [fst, snd] = move.coords();
