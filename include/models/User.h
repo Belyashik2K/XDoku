@@ -19,13 +19,13 @@ class User {
 
 public:
     User(
-        const std::optional<int> id,
+        std::optional<int> id,
         std::string username,
         std::string email,
         std::string password,
-        const std::optional<int> rating,
+        std::optional<int> rating,
         const std::optional<std::string> &createdAt,
-        const bool needToHash
+        bool needToHash
     );
     User(
         std::string username,
@@ -46,7 +46,7 @@ public:
     int getRating() const;
     Timestamp getCreatedAt() const;
     std::string getCreatedAtAsString() const;
-    static bool validatePassword(const std::string& password);
+    static bool validatePassword(const std::string& password); // TODO: Move to validator class
     static bool validateEmail(const std::string& email);
     static bool validateUsername(const std::string &username);
 private:

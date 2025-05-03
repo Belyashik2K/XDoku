@@ -17,6 +17,8 @@
 #include "presenters/SignInPresenter.h"
 
 #include "views/imgui/ImguiFrameHandler.h"
+#include "views/imgui/game/ImguiSudokuGameDifficultySelectorView.h"
+#include "views/imgui/game/ImguiSudokuGameView.h"
 #include "views/imgui/leaderboard/ImguiLeaderboardView.h"
 #include "views/imgui/main_menu/ImguiMainMenuView.h"
 #include "views/imgui/sign_in/ImguiSignInView.h"
@@ -25,7 +27,7 @@
 int main() {
     try {
         const std::string connectionString =
-        "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku";
+                "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku";
 
         auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
         const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);
@@ -38,17 +40,32 @@ int main() {
         const auto appMediator = std::make_shared<AppMediator>(eventBus);
 
         const auto sessionManager = std::make_shared<SessionManager>(eventBus.get(), sessionRepository.get());
-        const auto gameManager = std::make_shared<GameManager>(eventBus.get(), gameRepository.get());
+        const auto gameManager = std::make_shared<GameManager>(eventBus.get(), gameRepository.get(), moveRepository.get());
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
+
         const auto signInView = std::make_shared<ImguiSignInView>();
         const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus.get(), userRepository.get());
+
         const auto signUpView = std::make_shared<ImguiSignUpView>();
         const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus.get(), userRepository.get());
+
         const auto mainMenuView = std::make_shared<ImguiMainMenuView>();
         const auto mainMenuPresenter = std::make_shared<MainMenuPresenter>(eventBus.get());
+
         const auto leaderboardView = std::make_shared<ImguiLeaderboardView>();
-        const auto leaderboardPresenter = std::make_shared<LeaderboardPresenter>(eventBus.get(), ratingRepository.get());
+        const auto leaderboardPresenter = std::make_shared<
+            LeaderboardPresenter>(eventBus.get(), ratingRepository.get());
+
+        const auto sudokuGameDifficultySelectorView = std::make_shared<ImguiSudokuGameDifficultySelectorView>();
+        const auto sudokuGameDifficultySelectorPresenter = std::make_shared<SudokuGameDifficultySelectorPresenter>(
+            eventBus.get()
+        );
+
+        const auto sudokuGameView = std::make_shared<ImguiSudokuGameView>();
+        const auto sudokuGamePresenter = std::make_shared<SudokuGamePresenter>(
+            eventBus.get(), gameRepository.get(), moveRepository.get()
+        );
 
         signInPresenter->setView(signInView.get());
         signInView->setPresenter(signInPresenter.get());
@@ -62,15 +79,22 @@ int main() {
         leaderboardPresenter->setView(leaderboardView.get());
         leaderboardView->setPresenter(leaderboardPresenter.get());
 
-        appMediator->setCurrentPresenter(signInPresenter.get());
+        sudokuGameDifficultySelectorPresenter->setView(sudokuGameDifficultySelectorView.get());
+        sudokuGameDifficultySelectorView->setPresenter(sudokuGameDifficultySelectorPresenter.get());
+
+        sudokuGamePresenter->setView(sudokuGameView.get());
+        sudokuGameView->setPresenter(sudokuGamePresenter.get());
+
+        appMediator->setCurrentPresenter(signInPresenter.get()); // TODO: Encapsulate this logic in AppMediator
         appMediator->setSignUpPresenter(signUpPresenter.get());
         appMediator->setSignInPresenter(signInPresenter.get());
         appMediator->setMainMenuPresenter(mainMenuPresenter.get());
         appMediator->setLeaderboardPresenter(leaderboardPresenter.get());
+        appMediator->setSudokuGamePresenter(sudokuGamePresenter.get());
+        appMediator->setSudokuGameDifficultySelectorPresenter(sudokuGameDifficultySelectorPresenter.get());
 
         const Application app(std::move(frameHandler), appMediator.get(), eventBus.get());
         app.start();
-
     } catch (const std::exception &e) {
         printf("Oops! An error occurred: %s\n", e.what());
     }

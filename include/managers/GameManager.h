@@ -6,19 +6,23 @@
 #define GAMEMANAGER_H
 #include "core/EventBus.h"
 #include "core/database/repositories/IGameRepository.h"
+#include "core/database/repositories/IMoveRepository.h"
 
 class GameManager {
     IGameRepository *gameRepository;
+    IMoveRepository *moveRepository;
     EventBus *eventBus;
 
-    void subscribeToEvents();
+    void subscribeToEvents() const;
 public:
     GameManager(
         EventBus *eventBus,
-        IGameRepository *gameRepository
-    ) : gameRepository(gameRepository), eventBus(eventBus) {
+        IGameRepository *gameRepository,
+        IMoveRepository *moveRepository
+    ) : gameRepository(gameRepository), moveRepository(moveRepository), eventBus(eventBus) {
         subscribeToEvents();
     }
+    void getActiveGame() const;
 };
 
 #endif //GAMEMANAGER_H

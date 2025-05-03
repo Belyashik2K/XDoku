@@ -9,6 +9,7 @@
 
 void MainMenuPresenter::onPlayButtonClicked() {
     printf("[MainMenuPresenter] Play button clicked\n");
+    eventBus->publish(OnPlayButtonClicked());
 }
 
 void MainMenuPresenter::onLeaderboardButtonClicked() const {

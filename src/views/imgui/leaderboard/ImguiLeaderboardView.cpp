@@ -12,7 +12,7 @@
 #include "views/imgui/ImguiWindow.h"
 
 void ImguiLeaderboardView::render() {
-    ImguiWindow window("Main Menu",
+    ImguiWindow window("Leaderboard Menu",
                        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
     updateBackground("../assets/textures/menu/leaderboard.jpg");
     printLoader();

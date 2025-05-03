@@ -12,6 +12,8 @@
 #include "presenters/MainMenuPresenter.h"
 #include "presenters/SignInPresenter.h"
 #include "presenters/SignUpPresenter.h"
+#include "presenters/game/SudokuGameDifficultySelectorPresenter.h"
+#include "presenters/game/SudokuGamePresenter.h"
 
 class AppMediator {
     IPresenter *currentPresenter = nullptr;
@@ -21,6 +23,8 @@ class AppMediator {
     SignInPresenter *signInPresenter = nullptr;
     MainMenuPresenter *mainMenuPresenter = nullptr;
     LeaderboardPresenter * leaderboardPresenter = nullptr;
+    SudokuGamePresenter *sudokuGamePresenter = nullptr;
+    SudokuGameDifficultySelectorPresenter *sudokuGameDifficultySelectorPresenter = nullptr;
 
     void subscribeToEvents();
 public:
@@ -41,7 +45,12 @@ public:
     void setLeaderboardPresenter(LeaderboardPresenter *presenter) {
         leaderboardPresenter = presenter;
     }
-
+    void setSudokuGamePresenter(SudokuGamePresenter *presenter) {
+        sudokuGamePresenter = presenter;
+    }
+    void setSudokuGameDifficultySelectorPresenter(SudokuGameDifficultySelectorPresenter *presenter) {
+        sudokuGameDifficultySelectorPresenter = presenter;
+    }
     void render() const;
 };
 

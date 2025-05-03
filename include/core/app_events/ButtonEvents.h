@@ -10,5 +10,6 @@ class OnSignUpButtonClicked : public IEvent {};
 class OnSignInButtonClicked : public IEvent {};
 class OnLeaderboardButtonClicked : public IEvent {};
 class OnMainMenuButtonClicked : public IEvent {};
+class OnPlayButtonClicked : public IEvent {};
 
 #endif //BUTTONS_H
