@@ -63,4 +63,9 @@ void AppMediator::subscribeToEvents() {
             this->currentPresenter = profilePresenter;
         }
     });
+    eventBus->subscribe<OnHowToPlayButtonClicked>([this](const OnHowToPlayButtonClicked &) {
+        if (howToPlayPresenter) {
+            this->currentPresenter = howToPlayPresenter;
+        }
+    });
 }

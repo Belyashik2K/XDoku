@@ -7,7 +7,7 @@
 #include "core/app_events/ApplicationEvents.h"
 #include "core/app_events/ButtonEvents.h"
 
-void MainMenuPresenter::onPlayButtonClicked() {
+void MainMenuPresenter::onPlayButtonClicked() const {
     printf("[MainMenuPresenter] Play button clicked\n");
     eventBus->publish(OnPlayButtonClicked());
 }
@@ -17,16 +17,17 @@ void MainMenuPresenter::onLeaderboardButtonClicked() const {
     eventBus->publish(OnLeaderboardButtonClicked());
 }
 
-void MainMenuPresenter::onProfileButtonClicked() {
+void MainMenuPresenter::onProfileButtonClicked() const {
     printf("[MainMenuPresenter] Profile button clicked\n");
     eventBus->publish(OnProfileButtonClicked());
 }
 
-void MainMenuPresenter::onHowToPlayButtonClicked() {
+void MainMenuPresenter::onHowToPlayButtonClicked() const {
     printf("[MainMenuPresenter] How play button clicked\n");
+    eventBus->publish(OnHowToPlayButtonClicked());
 }
 
-void MainMenuPresenter::onExitButtonClicked() {
+void MainMenuPresenter::onExitButtonClicked() const {
     printf("[MainMenuPresenter] Exit button clicked\n");
     eventBus->publish(OnApplicationShutdown());
 }

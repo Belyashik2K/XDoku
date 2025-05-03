@@ -12,15 +12,15 @@ class MainMenuPresenter final : public IPresenter {
 public:
     explicit MainMenuPresenter(EventBus *eventBus) : eventBus(eventBus) {}
 
-    void onPlayButtonClicked();
+    void onPlayButtonClicked() const;
 
-    void onProfileButtonClicked();
+    void onProfileButtonClicked() const;
 
     void onLeaderboardButtonClicked() const;
 
-    void onHowToPlayButtonClicked();
+    void onHowToPlayButtonClicked() const;
 
-    void onExitButtonClicked();
+    void onExitButtonClicked() const;
 };
 
 #endif //MAINMENUPRESENTER_H
