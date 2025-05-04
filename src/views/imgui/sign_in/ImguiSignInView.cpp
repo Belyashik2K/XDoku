@@ -119,7 +119,7 @@ void ImguiSignInView::renderFormButtons() const {
         });
         createButton(
             "signup_button",
-            "Sign up",
+            "Don't have an account? Sign up",
             buttonSize,
             [this] {
                 presenter->onSignUpButtonClicked();

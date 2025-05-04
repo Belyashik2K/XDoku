@@ -129,6 +129,7 @@ add_executable(XDoku
         src/presenters/HowToPlayPresenter.cpp
         include/presenters/HowToPlayPresenter.h
         include/views/imgui/how_to_play/ImguiHowToPlayView.h
+        include/models/UserStats.h
 )
 
 target_include_directories(XDoku PRIVATE
