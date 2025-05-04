@@ -4,6 +4,8 @@
 
 #ifndef LEADERBOARDPRESENTER_H
 #define LEADERBOARDPRESENTER_H
+#include <memory>
+
 #include "core/EventBus.h"
 #include "core/IPresenter.h"
 #include "core/database/repositories/IRatingRepository.h"
@@ -12,8 +14,9 @@
 using LeaderboardPlaces = std::optional<std::vector<LeaderboardPlace>>;
 
 class LeaderboardPresenter final : public IPresenter {
-    EventBus *eventBus = nullptr;
-    IRatingRepository *ratingRepository = nullptr;
+    std::shared_ptr<EventBus> eventBus;
+    std::shared_ptr<IRatingRepository> ratingRepository;
+
     bool isLoading = false;
     LeaderboardPlaces leaderboardPlaces = std::nullopt;
 
@@ -22,8 +25,8 @@ class LeaderboardPresenter final : public IPresenter {
 
 public:
     explicit LeaderboardPresenter(
-        EventBus *eventBus,
-        IRatingRepository *ratingRepository
+        const std::shared_ptr<EventBus> &eventBus,
+        const std::shared_ptr<IRatingRepository> &ratingRepository
     ) : eventBus(eventBus), ratingRepository(ratingRepository) {
         subscribeToEvents();
     }

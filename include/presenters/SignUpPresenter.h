@@ -4,6 +4,8 @@
 
 #ifndef SIGNUPPRESENTER_H
 #define SIGNUPPRESENTER_H
+#include <memory>
+
 #include "core/EventBus.h"
 #include "core/IPresenter.h"
 #include "core/database/repositories/IUserRepository.h"
@@ -21,8 +23,8 @@ enum SignUpError {
 };
 
 class SignUpPresenter final : public IPresenter {
-    EventBus *eventBus = nullptr;
-    IUserRepository *userRepository = nullptr;
+    std::shared_ptr<EventBus> eventBus;
+    std::shared_ptr<IUserRepository> userRepository;
 
     char username[128] = "";
     char email[128] = "";
@@ -46,8 +48,8 @@ class SignUpPresenter final : public IPresenter {
 
 public:
     SignUpPresenter(
-        EventBus *eventBus,
-        IUserRepository *userRepository
+        const std::shared_ptr<EventBus> &eventBus,
+        const std::shared_ptr<IUserRepository> &userRepository
     ) : eventBus(eventBus), userRepository(userRepository) {
     }
 

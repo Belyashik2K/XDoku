@@ -5,6 +5,7 @@
 #ifndef LOGINPRESENTER_H
 #define LOGINPRESENTER_H
 
+#include <memory>
 #include <string>
 
 #include "core/EventBus.h"
@@ -12,8 +13,8 @@
 #include "core/database/repositories/IUserRepository.h"
 
 class SignInPresenter final : public IPresenter {
-    EventBus *eventBus = nullptr;
-    IUserRepository *userRepository = nullptr;
+    std::shared_ptr<EventBus> eventBus;
+    std::shared_ptr<IUserRepository> userRepository;
 
     char username[128] = "";
     char password[128] = "";
@@ -25,7 +26,10 @@ class SignInPresenter final : public IPresenter {
 
     bool authorizeUser(const std::string &username, const std::string &password) const;
 public:
-    explicit SignInPresenter(EventBus *eventBus, IUserRepository *userRepository) : eventBus(eventBus), userRepository(userRepository) {}
+    explicit SignInPresenter(
+        const std::shared_ptr<EventBus> &eventBus,
+        const std::shared_ptr<IUserRepository> &userRepository
+        ) : eventBus(eventBus), userRepository(userRepository) {}
 
     void onLoginButtonClicked();
     void onSignUpButtonClicked() const;

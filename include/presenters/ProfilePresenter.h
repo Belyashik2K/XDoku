@@ -4,13 +4,15 @@
 
 #ifndef PROFILEPRESENTER_H
 #define PROFILEPRESENTER_H
+#include <memory>
+
 #include "core/EventBus.h"
 #include "core/IPresenter.h"
 
 class ProfilePresenter final : public IPresenter {
-    EventBus* eventBus = nullptr;
+    std::shared_ptr<EventBus> eventBus;
 public:
-    explicit ProfilePresenter(EventBus* eventBus) : eventBus(eventBus) {}
+    explicit ProfilePresenter(const std::shared_ptr<EventBus> &eventBus) : eventBus(eventBus) {}
 };
 
 #endif //PROFILEPRESENTER_H

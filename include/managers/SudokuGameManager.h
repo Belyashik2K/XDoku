@@ -9,20 +9,20 @@
 #include "core/database/repositories/IMoveRepository.h"
 
 class SudokuGameManager {
-    IGameRepository *gameRepository;
-    IMoveRepository *moveRepository;
-    EventBus *eventBus;
+    std::shared_ptr<EventBus> eventBus;
+    std::shared_ptr<IGameRepository> gameRepository;
+    std::shared_ptr<IMoveRepository> moveRepository;
 
+    void getActiveGame() const;
     void subscribeToEvents() const;
 public:
     SudokuGameManager(
-        EventBus *eventBus,
-        IGameRepository *gameRepository,
-        IMoveRepository *moveRepository
-    ) : gameRepository(gameRepository), moveRepository(moveRepository), eventBus(eventBus) {
+        const std::shared_ptr<EventBus> &eventBus,
+        const std::shared_ptr<IGameRepository> &gameRepository,
+        const std::shared_ptr<IMoveRepository> &moveRepository
+    ) : eventBus(eventBus), gameRepository(gameRepository), moveRepository(moveRepository) {
         subscribeToEvents();
     }
-    void getActiveGame() const;
 };
 
 #endif //GAMEMANAGER_H

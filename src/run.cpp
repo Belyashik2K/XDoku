@@ -41,39 +41,37 @@ int main() {
         const auto eventBus = std::make_shared<EventBus>();
         const auto appMediator = std::make_shared<AppMediator>(eventBus);
 
-        const auto sessionManager = std::make_shared<SessionManager>(eventBus.get(), sessionRepository.get());
-        const auto sudokuGameManager = std::make_shared<SudokuGameManager>(
-            eventBus.get(), gameRepository.get(), moveRepository.get());
+        const auto sessionManager = std::make_shared<SessionManager>(eventBus, sessionRepository);
+        const auto sudokuGameManager = std::make_shared<SudokuGameManager>(eventBus, gameRepository, moveRepository);
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
 
         const auto signInView = std::make_shared<ImguiSignInView>();
-        const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus.get(), userRepository.get());
+        const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus, userRepository);
 
         const auto signUpView = std::make_shared<ImguiSignUpView>();
-        const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus.get(), userRepository.get());
+        const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus, userRepository);
 
         const auto mainMenuView = std::make_shared<ImguiMainMenuView>();
-        const auto mainMenuPresenter = std::make_shared<MainMenuPresenter>(eventBus.get());
+        const auto mainMenuPresenter = std::make_shared<MainMenuPresenter>(eventBus);
 
         const auto profileView = std::make_shared<ImguiProfileView>();
-        const auto profilePresenter = std::make_shared<ProfilePresenter>(eventBus.get());
+        const auto profilePresenter = std::make_shared<ProfilePresenter>(eventBus);
 
         const auto howToPlayView = std::make_shared<ImguiHowToPlayView>();
-        const auto howToPlayPresenter = std::make_shared<HowToPlayPresenter>(eventBus.get());
+        const auto howToPlayPresenter = std::make_shared<HowToPlayPresenter>(eventBus);
 
         const auto leaderboardView = std::make_shared<ImguiLeaderboardView>();
-        const auto leaderboardPresenter = std::make_shared<
-            LeaderboardPresenter>(eventBus.get(), ratingRepository.get());
+        const auto leaderboardPresenter = std::make_shared<LeaderboardPresenter>(eventBus, ratingRepository);
 
         const auto sudokuGameDifficultySelectorView = std::make_shared<ImguiSudokuGameDifficultySelectorView>();
         const auto sudokuGameDifficultySelectorPresenter = std::make_shared<SudokuGameDifficultySelectorPresenter>(
-            eventBus.get()
+            eventBus
         );
 
         const auto sudokuGameView = std::make_shared<ImguiSudokuGameView>();
         const auto sudokuGamePresenter = std::make_shared<SudokuGamePresenter>(
-            eventBus.get(), gameRepository.get(), moveRepository.get()
+            eventBus, gameRepository, moveRepository
         );
 
         signInPresenter->setView(signInView.get());

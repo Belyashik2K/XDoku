@@ -4,13 +4,17 @@
 
 #ifndef MAINMENUPRESENTER_H
 #define MAINMENUPRESENTER_H
+#include <memory>
+
 #include "core/EventBus.h"
 #include "core/IPresenter.h"
 
 class MainMenuPresenter final : public IPresenter {
-    EventBus *eventBus = nullptr;
+    std::shared_ptr<EventBus> eventBus;
 public:
-    explicit MainMenuPresenter(EventBus *eventBus) : eventBus(eventBus) {}
+    explicit MainMenuPresenter(
+        const std::shared_ptr<EventBus> &eventBus
+    ) : eventBus(eventBus) {}
 
     void onPlayButtonClicked() const;
 

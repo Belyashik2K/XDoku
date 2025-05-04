@@ -32,7 +32,7 @@ class AppMediator {
 
     void subscribeToEvents();
 public:
-    explicit AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *presenter = nullptr);
+    explicit AppMediator(const std::shared_ptr<EventBus> &eventBus, IPresenter *presenter = nullptr);
 
     void setCurrentPresenter(IPresenter *presenter) {
         currentPresenter = presenter;

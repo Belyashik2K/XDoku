@@ -6,11 +6,14 @@
 #define SUDOKUGAMEDIFFICULTYSELECTORPRESENTER_H
 #include "core/EventBus.h"
 #include "core/IPresenter.h"
+#include <memory>
 
 class SudokuGameDifficultySelectorPresenter final : public IPresenter {
-    EventBus *eventBus = nullptr;
+    std::shared_ptr<EventBus> eventBus;
 public:
-    explicit SudokuGameDifficultySelectorPresenter(EventBus *eventBus) : eventBus(eventBus) {}
+    explicit SudokuGameDifficultySelectorPresenter(
+        const std::shared_ptr<EventBus> &eventBus
+    ) : eventBus(eventBus) {}
 };
 
 #endif //SUDOKUGAMEDIFFICULTYSELECTORPRESENTER_H

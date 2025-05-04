@@ -10,18 +10,19 @@
 #include "core/database/repositories/IMoveRepository.h"
 
 class SudokuGamePresenter final : public IPresenter {
-    EventBus *eventBus = nullptr;
-    IGameRepository *gameRepository = nullptr;
-    IMoveRepository *moveRepository = nullptr;
+    std::shared_ptr<EventBus> eventBus;
+    std::shared_ptr<IGameRepository> gameRepository;
+    std::shared_ptr<IMoveRepository> moveRepository;
+
     std::optional<SudokuGame> currentGame = std::nullopt;
 
     void setCurrentGame(const SudokuGame& game);
     void subscribeToEvents();
 public:
     SudokuGamePresenter(
-        EventBus *eventBus,
-        IGameRepository *gameRepository,
-        IMoveRepository *moveRepository
+        const std::shared_ptr<EventBus> &eventBus,
+        const std::shared_ptr<IGameRepository> &gameRepository,
+        const std::shared_ptr<IMoveRepository> &moveRepository
     ) : eventBus(eventBus), gameRepository(gameRepository), moveRepository(moveRepository) {
         subscribeToEvents();
     }

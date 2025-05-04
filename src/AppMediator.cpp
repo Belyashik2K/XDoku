@@ -14,8 +14,11 @@ void AppMediator::render() const {
     }
 }
 
-AppMediator::AppMediator(std::shared_ptr<EventBus> eventBus, IPresenter *presenter) {
-    this->eventBus = std::move(eventBus);
+AppMediator::AppMediator(
+    const std::shared_ptr<EventBus> &eventBus,
+    IPresenter *presenter
+) {
+    this->eventBus = eventBus;
     this->currentPresenter = presenter;
     subscribeToEvents();
 }
