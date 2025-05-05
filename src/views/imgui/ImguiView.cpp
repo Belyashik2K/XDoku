@@ -10,7 +10,8 @@
 #include "managers/TextureManager.h"
 #include "views/imgui/ImguiStyleColorGuard.h"
 
-void IImguiView::updateBackground(const std::string &filePath) {
+
+void ImguiUtils::updateBackground(const std::string &filePath) {
     const GLuint backgroundTex = TextureManager::getInstance().loadTextureFromFile(filePath);
     const ImVec2 windowPos = ImGui::GetWindowPos();
     const ImVec2 windowSize = ImGui::GetWindowSize();
@@ -27,7 +28,7 @@ void IImguiView::updateBackground(const std::string &filePath) {
     );
 }
 
-void IImguiView::createButton(
+void ImguiUtils::createButton(
     const char *id,
     const char *label,
     const ImVec2 &size,
@@ -49,13 +50,13 @@ void IImguiView::createButton(
     }
 }
 
-void IImguiView::addVerticalSpacing(const int count) {
+void ImguiUtils::addVerticalSpacing(const int count) {
     for (int i = 0; i < count; ++i) {
         ImGui::Spacing();
     }
 }
 
-void IImguiView::printText(
+void ImguiUtils::printText(
     const char *text,
     const ImColor &color,
     const int fontSize,
@@ -75,12 +76,12 @@ void IImguiView::printText(
     ImGui::PopFont();
 }
 
-void IImguiView::centerCursor(const ImVec2 &sizeOfObject) {
+void ImguiUtils::centerCursor(const ImVec2 &sizeOfObject) {
     const float width = ImGui::GetWindowSize().x;
     ImGui::SetCursorPosX((width - sizeOfObject.x) * 0.5f);
 }
 
-void IImguiView::createInputField(
+void ImguiUtils::createInputField(
     const char *id,
     const char *label,
     char *buffer,

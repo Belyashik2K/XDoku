@@ -9,5 +9,5 @@
 void ImguiHowToPlayView::render() {
     ImguiWindow window("How to play",
                        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
-    updateBackground("../assets/textures/menu/background.jpg");
+    ImguiUtils::updateBackground("../assets/textures/menu/background.jpg");
 }

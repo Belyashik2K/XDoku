@@ -11,7 +11,7 @@
 class ImguiSudokuGameView final: public IImguiView {
     SudokuGamePresenter *presenter = nullptr;
 public:
-    void render() override;
+    void render();
     void setPresenter(SudokuGamePresenter *p) { presenter = p; }
 };
 

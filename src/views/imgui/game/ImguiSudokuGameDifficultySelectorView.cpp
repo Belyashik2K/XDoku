@@ -9,5 +9,5 @@
 void ImguiSudokuGameDifficultySelectorView::render() {
     ImguiWindow window("Diff Selector Menu",
                            ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
-    updateBackground("../assets/textures/menu/background.jpg");
+    ImguiUtils::updateBackground("../assets/textures/menu/background.jpg");
 }

@@ -14,7 +14,7 @@
 void ImguiLeaderboardView::render() {
     ImguiWindow window("Leaderboard Menu",
                        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
-    updateBackground("../assets/textures/menu/leaderboard.jpg");
+    ImguiUtils::updateBackground("../assets/textures/menu/leaderboard.jpg");
     printLoader();
     renderLeaderboard();
 }
@@ -23,7 +23,7 @@ void ImguiLeaderboardView::printLoader() const {
     if (!presenter->isOnLoading()) return;
 
     ImGui::SetCursorPosY(ImGui::GetWindowHeight() * 0.45f);
-    printText("Loading...", BLACK, 39, true);
+    ImguiUtils::printText("Loading...", BLACK, 39, true);
 }
 
 void ImguiLeaderboardView::renderLeaderboard() const {
@@ -31,7 +31,7 @@ void ImguiLeaderboardView::renderLeaderboard() const {
 
     const LeaderboardPlaces leaderboardPlaces = presenter->getLeaderboardPlaces();
     if (!leaderboardPlaces.has_value()) {
-        printText("No leaderboard data available :(", BLACK, 39, true);
+        ImguiUtils::printText("No leaderboard data available :(", BLACK, 39, true);
         return;
     }
 
@@ -43,8 +43,8 @@ void ImguiLeaderboardView::renderLeaderboard() const {
         true
     );
 
-    printText("Leaderboard", BLACK, 33, true);
-    addVerticalSpacing(4);
+    ImguiUtils::printText("Leaderboard", BLACK, 33, true);
+    ImguiUtils::addVerticalSpacing(4);
 
     // TODO: Center text in rows
     ImGui::PushFont(FontManager::getInstance().getFont(33));
@@ -64,7 +64,7 @@ void ImguiLeaderboardView::renderLeaderboard() const {
     ImGui::EndTable();
     ImGui::PopFont();
 
-    addVerticalSpacing(4);
+    ImguiUtils::addVerticalSpacing(4);
 
     {
         ImguiStyleVarGuard localVarGuard({
@@ -77,7 +77,7 @@ void ImguiLeaderboardView::renderLeaderboard() const {
              {ImGuiCol_Button, GRAY},
          });
 
-        createButton(
+        ImguiUtils::createButton(
             "refresh_button",
             "Refresh",
             ImVec2(ImGui::GetWindowSize().x, 60),
@@ -85,8 +85,8 @@ void ImguiLeaderboardView::renderLeaderboard() const {
                 presenter->onRefreshButtonClicked();
             }
         );
-        addVerticalSpacing();
-        createButton(
+        ImguiUtils::addVerticalSpacing();
+        ImguiUtils::createButton(
             "back_button",
             "Back to menu",
             ImVec2(ImGui::GetWindowSize().x, 60),

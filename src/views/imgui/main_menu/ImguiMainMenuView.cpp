@@ -13,7 +13,7 @@
 
 void ImguiMainMenuView::render() {
     ImguiWindow window("Main Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
-    updateBackground("../assets/textures/menu/background.jpg");
+    ImguiUtils::updateBackground("../assets/textures/menu/background.jpg");
     renderMainMenu();
 }
 
@@ -63,7 +63,7 @@ void ImguiMainMenuView::renderFormButtons() const {
             {ImGuiCol_Button, GRAY},
     });
     ImGui::PushFont(FontManager::getInstance().getFont(30));
-    createButton(
+    ImguiUtils::createButton(
         "play_button",
         "Play",
         buttonSize,
@@ -71,7 +71,7 @@ void ImguiMainMenuView::renderFormButtons() const {
             presenter->onPlayButtonClicked();
         }
     );
-    createButton(
+    ImguiUtils::createButton(
         "profile_button",
         "Profile",
         buttonSize,
@@ -79,7 +79,7 @@ void ImguiMainMenuView::renderFormButtons() const {
             presenter->onProfileButtonClicked();
         }
     );
-    createButton(
+    ImguiUtils::createButton(
         "leaderboard_button",
         "Leaderboard",
         buttonSize,
@@ -87,7 +87,7 @@ void ImguiMainMenuView::renderFormButtons() const {
             presenter->onLeaderboardButtonClicked();
         }
     );
-    createButton(
+    ImguiUtils::createButton(
         "how_to_play_button",
         "How to play",
         buttonSize,
@@ -95,7 +95,7 @@ void ImguiMainMenuView::renderFormButtons() const {
             presenter->onHowToPlayButtonClicked();
         }
     );
-    createButton(
+    ImguiUtils::createButton(
         "exit_button",
         "Exit",
         buttonSize,

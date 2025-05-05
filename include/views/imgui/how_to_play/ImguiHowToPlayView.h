@@ -10,7 +10,7 @@
 class ImguiHowToPlayView final : public IImguiView {
     HowToPlayPresenter *presenter = nullptr;
 public:
-    void render() override;
+    void render();
     void setPresenter(HowToPlayPresenter *p) { presenter = p; }
 };
 

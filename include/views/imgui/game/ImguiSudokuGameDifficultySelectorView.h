@@ -11,7 +11,7 @@
 class ImguiSudokuGameDifficultySelectorView final : public IImguiView {
     SudokuGameDifficultySelectorPresenter *presenter = nullptr;
 public:
-    void render() override;
+    void render();
     void setPresenter(SudokuGameDifficultySelectorPresenter *p) { presenter = p; }
 };
 

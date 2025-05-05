@@ -8,5 +8,5 @@
 
 void ImguiProfileView::render() {
     ImguiWindow window("Profile", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
-    updateBackground("../assets/textures/menu/background.jpg");
+    ImguiUtils::updateBackground("../assets/textures/menu/background.jpg");
 }

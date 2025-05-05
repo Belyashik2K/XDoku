@@ -10,7 +10,7 @@
 class ImguiLeaderboardView final : public IImguiView {
     LeaderboardPresenter* presenter = nullptr;
 public:
-    void render() override;
+    void render();
     void printLoader() const;
     void renderLeaderboard() const;
     void setPresenter(LeaderboardPresenter *p) { presenter = p; } // TODO: Move it to abstract class with T

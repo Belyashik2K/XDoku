@@ -9,5 +9,5 @@
 void ImguiSudokuGameView::render() {
     ImguiWindow window("Game Menu",
                        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
-    updateBackground("../assets/textures/menu/background.jpg");
+    ImguiUtils::updateBackground("../assets/textures/menu/background.jpg");
 }

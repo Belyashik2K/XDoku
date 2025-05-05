@@ -10,7 +10,7 @@
 class ImguiProfileView final : public IImguiView {
     ProfilePresenter *presenter = nullptr;
 public:
-    void render() override;
+    void render();
     void setPresenter(ProfilePresenter *p) { presenter = p; }
 };
 

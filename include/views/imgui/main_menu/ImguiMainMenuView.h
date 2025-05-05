@@ -5,9 +5,10 @@
 #ifndef IMGUIMAINMENUVIEW_H
 #define IMGUIMAINMENUVIEW_H
 #include "presenters/MainMenuPresenter.h"
+#include "views/IMainMenuView.h"
 #include "views/imgui/ImguiView.h"
 
-class ImguiMainMenuView final : public IImguiView {
+class ImguiMainMenuView final : public IMainMenuView {
     MainMenuPresenter *presenter = nullptr;
 public:
     void render() override;

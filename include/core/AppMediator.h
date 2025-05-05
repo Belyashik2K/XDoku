@@ -18,7 +18,7 @@
 #include "presenters/game/SudokuGamePresenter.h"
 
 class AppMediator {
-    IPresenter *currentPresenter = nullptr;
+    IBasePresenter *currentPresenter = nullptr;
     std::shared_ptr<EventBus> eventBus;
 
     SignUpPresenter *signUpPresenter = nullptr;
@@ -32,9 +32,9 @@ class AppMediator {
 
     void subscribeToEvents();
 public:
-    explicit AppMediator(const std::shared_ptr<EventBus> &eventBus, IPresenter *presenter = nullptr);
+    explicit AppMediator(const std::shared_ptr<EventBus> &eventBus, IBasePresenter *presenter = nullptr);
 
-    void setCurrentPresenter(IPresenter *presenter) {
+    void setCurrentPresenter(IBasePresenter *presenter) {
         currentPresenter = presenter;
     }
     void setSignUpPresenter(SignUpPresenter *presenter) {

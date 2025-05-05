@@ -11,8 +11,10 @@
 #include "core/EventBus.h"
 #include "core/IPresenter.h"
 #include "core/database/repositories/IUserRepository.h"
+#include "views/ISignInView.h"
 
-class SignInPresenter final : public IPresenter {
+class SignInPresenter final : public IPresenter<ISignInView, SignInPresenter>,
+                              public std::enable_shared_from_this<SignInPresenter> {
     std::shared_ptr<EventBus> eventBus;
     std::shared_ptr<IUserRepository> userRepository;
 
@@ -22,22 +24,31 @@ class SignInPresenter final : public IPresenter {
     bool incorrectLogin = false;
 
     static bool isPasswordValid(const std::string &password, const std::string &hash);
+
     void setIncorrectLogin(const bool incorrect) { incorrectLogin = incorrect; }
 
     bool authorizeUser(const std::string &username, const std::string &password) const;
+
 public:
     explicit SignInPresenter(
         const std::shared_ptr<EventBus> &eventBus,
         const std::shared_ptr<IUserRepository> &userRepository
-        ) : eventBus(eventBus), userRepository(userRepository) {}
+    ) : eventBus(eventBus), userRepository(userRepository) {
+    }
 
     void onLoginButtonClicked();
+
     void onSignUpButtonClicked() const;
 
     char *getUsername() { return username; }
     char *getPassword() { return password; }
     bool isIncorrectLogin() const { return incorrectLogin; }
     int getBufferSize() const { return sizeof(username); }
+
+    void init(std::unique_ptr<ISignInView> &&view) override {
+        this->setSelf(weak_from_this());
+        this->setView(std::move(view));
+    }
 };
 
 #endif //LOGINPRESENTER_H

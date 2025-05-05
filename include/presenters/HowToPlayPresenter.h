@@ -8,14 +8,22 @@
 
 #include "core/EventBus.h"
 #include "core/IPresenter.h"
+#include "views/IHowToPlayView.h"
 
-class HowToPlayPresenter final : public IPresenter {
+class HowToPlayPresenter final :
+        public IPresenter<IHowToPlayView, HowToPlayPresenter>,
+        public std::enable_shared_from_this<HowToPlayPresenter> {
     std::shared_ptr<EventBus> eventBus;
 
 public:
     explicit HowToPlayPresenter(
         const std::shared_ptr<EventBus> &eventBus
     ) : eventBus(eventBus) {
+    }
+
+    void init(std::unique_ptr<IHowToPlayView> &&view) override {
+        this->setSelf(weak_from_this());
+        this->setView(std::move(view));
     }
 };
 

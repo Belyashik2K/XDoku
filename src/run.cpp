@@ -46,11 +46,13 @@ int main() {
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
 
-        const auto signInView = std::make_shared<ImguiSignInView>();
+        auto signInView = std::make_unique<ImguiSignInView>();
         const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus, userRepository);
+        signInPresenter->init(std::move(signInView));
 
-        const auto signUpView = std::make_shared<ImguiSignUpView>();
+        auto signUpView = std::make_unique<ImguiSignUpView>();
         const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus, userRepository);
+        signUpPresenter->init(std::move(signUpView));
 
         const auto mainMenuView = std::make_shared<ImguiMainMenuView>();
         const auto mainMenuPresenter = std::make_shared<MainMenuPresenter>(eventBus);
@@ -74,39 +76,38 @@ int main() {
             eventBus, gameRepository, moveRepository
         );
 
-        signInPresenter->setView(signInView.get());
-        signInView->setPresenter(signInPresenter.get());
 
-        signUpPresenter->setView(signUpView.get());
-        signUpView->setPresenter(signUpPresenter.get());
 
-        mainMenuPresenter->setView(mainMenuView.get());
-        mainMenuView->setPresenter(mainMenuPresenter.get());
-
-        profilePresenter->setView(profileView.get());
-        profileView->setPresenter(profilePresenter.get());
-
-        leaderboardPresenter->setView(leaderboardView.get());
-        leaderboardView->setPresenter(leaderboardPresenter.get());
-
-        howToPlayPresenter->setView(howToPlayView.get());
-        howToPlayView->setPresenter(howToPlayPresenter.get());
-
-        sudokuGameDifficultySelectorPresenter->setView(sudokuGameDifficultySelectorView.get());
-        sudokuGameDifficultySelectorView->setPresenter(sudokuGameDifficultySelectorPresenter.get());
-
-        sudokuGamePresenter->setView(sudokuGameView.get());
-        sudokuGameView->setPresenter(sudokuGamePresenter.get());
+        // signUpPresenter->setView(signUpView.get());
+        // signUpView->setPresenter(signUpPresenter.get());
+        //
+        // mainMenuPresenter->setView(mainMenuView.get());
+        // mainMenuView->setPresenter(mainMenuPresenter.get());
+        //
+        // profilePresenter->setView(profileView.get());
+        // profileView->setPresenter(profilePresenter.get());
+        //
+        // leaderboardPresenter->setView(leaderboardView.get());
+        // leaderboardView->setPresenter(leaderboardPresenter.get());
+        //
+        // howToPlayPresenter->setView(howToPlayView.get());
+        // howToPlayView->setPresenter(howToPlayPresenter.get());
+        //
+        // sudokuGameDifficultySelectorPresenter->setView(sudokuGameDifficultySelectorView.get());
+        // sudokuGameDifficultySelectorView->setPresenter(sudokuGameDifficultySelectorPresenter.get());
+        //
+        // sudokuGamePresenter->setView(sudokuGameView.get());
+        // sudokuGameView->setPresenter(sudokuGamePresenter.get());
 
         appMediator->setCurrentPresenter(signInPresenter.get()); // TODO: Encapsulate this logic in AppMediator
         appMediator->setSignUpPresenter(signUpPresenter.get());
         appMediator->setSignInPresenter(signInPresenter.get());
-        appMediator->setMainMenuPresenter(mainMenuPresenter.get());
-        appMediator->setProfilePresenter(profilePresenter.get());
-        appMediator->setLeaderboardPresenter(leaderboardPresenter.get());
-        appMediator->setHowToPlayPresenter(howToPlayPresenter.get());
-        appMediator->setSudokuGamePresenter(sudokuGamePresenter.get());
-        appMediator->setSudokuGameDifficultySelectorPresenter(sudokuGameDifficultySelectorPresenter.get());
+        // appMediator->setMainMenuPresenter(mainMenuPresenter.get());
+        // appMediator->setProfilePresenter(profilePresenter.get());
+        // appMediator->setLeaderboardPresenter(leaderboardPresenter.get());
+        // appMediator->setHowToPlayPresenter(howToPlayPresenter.get());
+        // appMediator->setSudokuGamePresenter(sudokuGamePresenter.get());
+        // appMediator->setSudokuGameDifficultySelectorPresenter(sudokuGameDifficultySelectorPresenter.get());
 
         const Application app(std::move(frameHandler), appMediator.get(), eventBus.get());
         app.start();

@@ -6,10 +6,9 @@
 #define IMGUISIGNUPVIEW_H
 
 #include "presenters/SignUpPresenter.h"
-#include "views/imgui/ImguiView.h"
+#include "views/ISignUpView.h"
 
-class ImguiSignUpView final : public IImguiView {
-    SignUpPresenter *presenter = nullptr;
+class ImguiSignUpView final : public ISignUpView {
 public:
     void render() override;
 
@@ -22,8 +21,6 @@ public:
     void renderFormInputs() const;
 
     void renderFormButtons() const;
-
-    void setPresenter(SignUpPresenter *p) { presenter = p; }
 };
 
 #endif //IMGUISIGNUPVIEW_H
