@@ -1,30 +1,27 @@
 #include <iostream>
 
-#include "core/Application.h"
-#include "core/AppMediator.h"
-#include "core/EventBus.h"
+#include "application/Application.h"
+#include "application/AppMediator.h"
+#include "application/EventBus.h"
+#include "application/managers/SessionManager.h"
+#include "application/managers/SudokuGameManager.h"
 
-#include "managers/SudokuGameManager.h"
-#include "managers/SessionManager.h"
+#include "infrastructure/database/PostgreSQL/PostgreSQLDatabase.h"
+#include "infrastructure/database/PostgreSQL/repositories/PostgreSQLGameRepository.h"
+#include "infrastructure/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h"
+#include "infrastructure/database/PostgreSQL/repositories/PostgreSQLRatingRepository.h"
+#include "infrastructure/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h"
+#include "infrastructure/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
 
-#include "models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h"
-#include "models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
-#include "models/database/PostgreSQL/repositories/PostgreSQLRatingRepository.h"
-#include "models/database/PostgreSQL/repositories/PostgreSQLGameRepository.h"
-#include "models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h"
-
-#include "presenters/MainMenuPresenter.h"
-#include "presenters/SignInPresenter.h"
-
-#include "views/imgui/ImguiFrameHandler.h"
-#include "views/imgui/game/ImguiSudokuGameDifficultySelectorView.h"
-#include "views/imgui/game/ImguiSudokuGameView.h"
-#include "views/imgui/how_to_play/ImguiHowToPlayView.h"
-#include "views/imgui/leaderboard/ImguiLeaderboardView.h"
-#include "views/imgui/main_menu/ImguiMainMenuView.h"
-#include "views/imgui/profile/ImguiProfileView.h"
-#include "views/imgui/sign_in/ImguiSignInView.h"
-#include "views/imgui/sign_up/ImguiSignUpView.h"
+#include "presentation/imgui/ImguiFrameHandler.h"
+#include "presentation/imgui/views/game/ImguiSudokuGameDifficultySelectorView.h"
+#include "presentation/imgui/views/game/ImguiSudokuGameView.h"
+#include "presentation/imgui/views/how_to_play/ImguiHowToPlayView.h"
+#include "presentation/imgui/views/leaderboard/ImguiLeaderboardView.h"
+#include "presentation/imgui/views/main_menu/ImguiMainMenuView.h"
+#include "presentation/imgui/views/profile/ImguiProfileView.h"
+#include "presentation/imgui/views/sign_in/ImguiSignInView.h"
+#include "presentation/imgui/views/sign_up/ImguiSignUpView.h"
 
 int main() {
     try {
