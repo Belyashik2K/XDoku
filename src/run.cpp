@@ -1,30 +1,27 @@
 #include <iostream>
 
-#include "core/Application.h"
-#include "core/AppMediator.h"
-#include "core/EventBus.h"
+#include "application/Application.h"
+#include "application/AppMediator.h"
+#include "application/EventBus.h"
+#include "application/managers/SessionManager.h"
+#include "application/managers/SudokuGameManager.h"
 
-#include "managers/SudokuGameManager.h"
-#include "managers/SessionManager.h"
+#include "infrastructure/database/PostgreSQL/PostgreSQLDatabase.h"
+#include "infrastructure/database/PostgreSQL/repositories/PostgreSQLGameRepository.h"
+#include "infrastructure/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h"
+#include "infrastructure/database/PostgreSQL/repositories/PostgreSQLRatingRepository.h"
+#include "infrastructure/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h"
+#include "infrastructure/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
 
-#include "models/database/PostgreSQL/repositories/PostgreSQLSessionRepository.h"
-#include "models/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
-#include "models/database/PostgreSQL/repositories/PostgreSQLRatingRepository.h"
-#include "models/database/PostgreSQL/repositories/PostgreSQLGameRepository.h"
-#include "models/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h"
-
-#include "presenters/MainMenuPresenter.h"
-#include "presenters/SignInPresenter.h"
-
-#include "views/imgui/ImguiFrameHandler.h"
-#include "views/imgui/game/ImguiSudokuGameDifficultySelectorView.h"
-#include "views/imgui/game/ImguiSudokuGameView.h"
-#include "views/imgui/how_to_play/ImguiHowToPlayView.h"
-#include "views/imgui/leaderboard/ImguiLeaderboardView.h"
-#include "views/imgui/main_menu/ImguiMainMenuView.h"
-#include "views/imgui/profile/ImguiProfileView.h"
-#include "views/imgui/sign_in/ImguiSignInView.h"
-#include "views/imgui/sign_up/ImguiSignUpView.h"
+#include "presentation/imgui/ImguiFrameHandler.h"
+#include "presentation/imgui/views/game/ImguiSudokuGameDifficultySelectorView.h"
+#include "presentation/imgui/views/game/ImguiSudokuGameView.h"
+#include "presentation/imgui/views/how_to_play/ImguiHowToPlayView.h"
+#include "presentation/imgui/views/leaderboard/ImguiLeaderboardView.h"
+#include "presentation/imgui/views/main_menu/ImguiMainMenuView.h"
+#include "presentation/imgui/views/profile/ImguiProfileView.h"
+#include "presentation/imgui/views/sign_in/ImguiSignInView.h"
+#include "presentation/imgui/views/sign_up/ImguiSignUpView.h"
 
 int main() {
     try {
@@ -41,64 +38,46 @@ int main() {
         const auto eventBus = std::make_shared<EventBus>();
         const auto appMediator = std::make_shared<AppMediator>(eventBus);
 
-        const auto sessionManager = std::make_shared<SessionManager>(eventBus.get(), sessionRepository.get());
-        const auto sudokuGameManager = std::make_shared<SudokuGameManager>(
-            eventBus.get(), gameRepository.get(), moveRepository.get());
+        const auto sessionManager = std::make_shared<SessionManager>(eventBus, sessionRepository);
+        const auto sudokuGameManager = std::make_shared<SudokuGameManager>(eventBus, gameRepository, moveRepository);
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
 
-        const auto signInView = std::make_shared<ImguiSignInView>();
-        const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus.get(), userRepository.get());
+        auto signInView = std::make_unique<ImguiSignInView>();
+        const auto signInPresenter = std::make_shared<SignInPresenter>(eventBus, userRepository);
+        signInPresenter->init(std::move(signInView));
 
-        const auto signUpView = std::make_shared<ImguiSignUpView>();
-        const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus.get(), userRepository.get());
+        auto signUpView = std::make_unique<ImguiSignUpView>();
+        const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus, userRepository);
+        signUpPresenter->init(std::move(signUpView));
 
-        const auto mainMenuView = std::make_shared<ImguiMainMenuView>();
-        const auto mainMenuPresenter = std::make_shared<MainMenuPresenter>(eventBus.get());
+        auto mainMenuView = std::make_unique<ImguiMainMenuView>();
+        const auto mainMenuPresenter = std::make_shared<MainMenuPresenter>(eventBus);
+        mainMenuPresenter->init(std::move(mainMenuView));
 
-        const auto profileView = std::make_shared<ImguiProfileView>();
-        const auto profilePresenter = std::make_shared<ProfilePresenter>(eventBus.get());
+        auto profileView = std::make_unique<ImguiProfileView>();
+        const auto profilePresenter = std::make_shared<ProfilePresenter>(eventBus);
+        profilePresenter->init(std::move(profileView));
 
-        const auto howToPlayView = std::make_shared<ImguiHowToPlayView>();
-        const auto howToPlayPresenter = std::make_shared<HowToPlayPresenter>(eventBus.get());
+        auto howToPlayView = std::make_unique<ImguiHowToPlayView>();
+        const auto howToPlayPresenter = std::make_shared<HowToPlayPresenter>(eventBus);
+        howToPlayPresenter->init(std::move(howToPlayView));
 
-        const auto leaderboardView = std::make_shared<ImguiLeaderboardView>();
-        const auto leaderboardPresenter = std::make_shared<
-            LeaderboardPresenter>(eventBus.get(), ratingRepository.get());
+        auto leaderboardView = std::make_unique<ImguiLeaderboardView>();
+        const auto leaderboardPresenter = std::make_shared<LeaderboardPresenter>(eventBus, ratingRepository);
+        leaderboardPresenter->init(std::move(leaderboardView));
 
-        const auto sudokuGameDifficultySelectorView = std::make_shared<ImguiSudokuGameDifficultySelectorView>();
+        auto sudokuGameDifficultySelectorView = std::make_unique<ImguiSudokuGameDifficultySelectorView>();
         const auto sudokuGameDifficultySelectorPresenter = std::make_shared<SudokuGameDifficultySelectorPresenter>(
-            eventBus.get()
+            eventBus
         );
+        sudokuGameDifficultySelectorPresenter->init(std::move(sudokuGameDifficultySelectorView));
 
-        const auto sudokuGameView = std::make_shared<ImguiSudokuGameView>();
+        auto sudokuGameView = std::make_unique<ImguiSudokuGameView>();
         const auto sudokuGamePresenter = std::make_shared<SudokuGamePresenter>(
-            eventBus.get(), gameRepository.get(), moveRepository.get()
+            eventBus, gameRepository, moveRepository
         );
-
-        signInPresenter->setView(signInView.get());
-        signInView->setPresenter(signInPresenter.get());
-
-        signUpPresenter->setView(signUpView.get());
-        signUpView->setPresenter(signUpPresenter.get());
-
-        mainMenuPresenter->setView(mainMenuView.get());
-        mainMenuView->setPresenter(mainMenuPresenter.get());
-
-        profilePresenter->setView(profileView.get());
-        profileView->setPresenter(profilePresenter.get());
-
-        leaderboardPresenter->setView(leaderboardView.get());
-        leaderboardView->setPresenter(leaderboardPresenter.get());
-
-        howToPlayPresenter->setView(howToPlayView.get());
-        howToPlayView->setPresenter(howToPlayPresenter.get());
-
-        sudokuGameDifficultySelectorPresenter->setView(sudokuGameDifficultySelectorView.get());
-        sudokuGameDifficultySelectorView->setPresenter(sudokuGameDifficultySelectorPresenter.get());
-
-        sudokuGamePresenter->setView(sudokuGameView.get());
-        sudokuGameView->setPresenter(sudokuGamePresenter.get());
+        sudokuGamePresenter->init(std::move(sudokuGameView));
 
         appMediator->setCurrentPresenter(signInPresenter.get()); // TODO: Encapsulate this logic in AppMediator
         appMediator->setSignUpPresenter(signUpPresenter.get());
