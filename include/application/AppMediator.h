@@ -33,9 +33,9 @@ class AppMediator {
     void subscribeToEvents();
 public:
     explicit AppMediator(const std::shared_ptr<EventBus> &eventBus,
-                         const std::shared_ptr<IBasePresenter> &presenter);
+                         const std::shared_ptr<IBasePresenter> &presenter = nullptr);
 
-    void setCurrentPresenter(const std::shared_ptr<IBasePresenter> &presenter = nullptr) {
+    void setCurrentPresenter(const std::shared_ptr<IBasePresenter> &presenter) {
         currentPresenter = presenter;
     }
     void setSignUpPresenter(const std::shared_ptr<SignUpPresenter> &presenter) {
