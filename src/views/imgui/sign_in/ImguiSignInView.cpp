@@ -12,6 +12,8 @@
 #include "views/imgui/ImguiWindow.h"
 #include "views/imgui/sign_in/ImguiSignInView.h"
 
+#include "presenters/SignInPresenter.h"
+
 void ImguiSignInView::render() {
     ImguiWindow window("Sign In Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove); {
         ImguiUtils::updateBackground("../assets/textures/auth/background.jpg");
@@ -45,6 +47,9 @@ void ImguiSignInView::renderFormHeader() {
 }
 
 void ImguiSignInView::renderFormInputs() const {
+    const auto sp = getPresenter();
+    if (!sp) return;
+
     ImguiStyleColorGuard localColorGuard({
         {ImGuiCol_Text, WHITE},
         {ImGuiCol_Border, LIGHT_GRAY},
@@ -61,28 +66,26 @@ void ImguiSignInView::renderFormInputs() const {
 
     ImguiUtils::printText("Username", BLACK, 23, false);
     ImguiUtils::addVerticalSpacing();
-    if (const auto &sp = presenter.lock() ) {
-        ImguiUtils::createInputField(
-            "username_input",
-            "Username",
-            sp->getUsername(),
-            sp->getBufferSize(),
-            inputSize,
-            ImGuiInputTextFlags_CharsNoBlank,
-            false
-        );
-        ImguiUtils::addVerticalSpacing();
-        ImguiUtils::printText("Password", BLACK, 23, false);
-        ImguiUtils::createInputField(
-            "password_input",
-            "Password",
-            sp->getPassword(),
-            sp->getBufferSize(),
-            inputSize,
-            ImGuiInputTextFlags_Password,
-            false
-        );
-    }
+    ImguiUtils::createInputField(
+        "username_input",
+        "Username",
+        sp->getUsername(),
+        sp->getBufferSize(),
+        inputSize,
+        ImGuiInputTextFlags_CharsNoBlank,
+        false
+    );
+    ImguiUtils::addVerticalSpacing();
+    ImguiUtils::printText("Password", BLACK, 23, false);
+    ImguiUtils::createInputField(
+        "password_input",
+        "Password",
+        sp->getPassword(),
+        sp->getBufferSize(),
+        inputSize,
+        ImGuiInputTextFlags_Password,
+        false
+    );
     ImguiUtils::addVerticalSpacing(6);
 }
 
@@ -106,9 +109,9 @@ void ImguiSignInView::renderFormButtons() const {
             "Sign in",
             buttonSize,
             [this] {
-                if (const auto &sp = presenter.lock()) {
-                    sp->onLoginButtonClicked();
-                }
+                const auto sp = getPresenter();
+                if (!sp) return;
+                sp->onLoginButtonClicked();
             }
         );
     }
@@ -126,19 +129,20 @@ void ImguiSignInView::renderFormButtons() const {
             "Don't have an account? Sign up",
             buttonSize,
             [this] {
-                if (const auto &sp = presenter.lock()) {
-                    sp->onSignUpButtonClicked();
-                }
+                const auto sp = getPresenter();
+                if (!sp) return;
+                sp->onSignUpButtonClicked();
             }
         );
     }
 }
 
 void ImguiSignInView::renderLoginError() const {
-    if (const auto &sp = presenter.lock()) {
-        if (sp->isIncorrectLogin()) {
-            ImguiUtils::addVerticalSpacing(3);
-            ImguiUtils::printText("Invalid username or password", RED, 22, true);
-        }
+    const auto sp = getPresenter();
+    if (!sp) return;
+
+    if (sp->isIncorrectLogin()) {
+        ImguiUtils::addVerticalSpacing(3);
+        ImguiUtils::printText("Invalid username or password", RED, 22, true);
     }
 }

@@ -4,14 +4,11 @@
 
 #ifndef IMGUIHOWTOPLAYVIEW_H
 #define IMGUIHOWTOPLAYVIEW_H
-#include "presenters/HowToPlayPresenter.h"
-#include "views/imgui/ImguiView.h"
+#include "views/IHowToPlayView.h"
 
-class ImguiHowToPlayView final : public IImguiView {
-    HowToPlayPresenter *presenter = nullptr;
+class ImguiHowToPlayView final : public IHowToPlayView {
 public:
-    void render();
-    void setPresenter(HowToPlayPresenter *p) { presenter = p; }
+    void render() override;
 };
 
 #endif //IMGUIHOWTOPLAYVIEW_H

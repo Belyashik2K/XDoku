@@ -4,6 +4,7 @@
 
 #include "views/imgui/how_to_play/ImguiHowToPlayView.h"
 
+#include "views/imgui/ImguiView.h"
 #include "views/imgui/ImguiWindow.h"
 
 void ImguiHowToPlayView::render() {

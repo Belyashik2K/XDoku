@@ -4,15 +4,11 @@
 
 #ifndef IMGUISUDOKUGAMEVIEW_H
 #define IMGUISUDOKUGAMEVIEW_H
+#include "views/game/ISudokuGameView.h"
 
-#include "views/imgui/ImguiView.h"
-#include "presenters/game/SudokuGamePresenter.h"
-
-class ImguiSudokuGameView final: public IImguiView {
-    SudokuGamePresenter *presenter = nullptr;
+class ImguiSudokuGameView final: public ISudokuGameView {
 public:
-    void render();
-    void setPresenter(SudokuGamePresenter *p) { presenter = p; }
+    void render() override;
 };
 
 #endif //IMGUISUDOKUGAMEVIEW_H

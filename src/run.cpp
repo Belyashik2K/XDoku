@@ -54,60 +54,43 @@ int main() {
         const auto signUpPresenter = std::make_shared<SignUpPresenter>(eventBus, userRepository);
         signUpPresenter->init(std::move(signUpView));
 
-        const auto mainMenuView = std::make_shared<ImguiMainMenuView>();
+        auto mainMenuView = std::make_unique<ImguiMainMenuView>();
         const auto mainMenuPresenter = std::make_shared<MainMenuPresenter>(eventBus);
+        mainMenuPresenter->init(std::move(mainMenuView));
 
-        const auto profileView = std::make_shared<ImguiProfileView>();
+        auto profileView = std::make_unique<ImguiProfileView>();
         const auto profilePresenter = std::make_shared<ProfilePresenter>(eventBus);
+        profilePresenter->init(std::move(profileView));
 
-        const auto howToPlayView = std::make_shared<ImguiHowToPlayView>();
+        auto howToPlayView = std::make_unique<ImguiHowToPlayView>();
         const auto howToPlayPresenter = std::make_shared<HowToPlayPresenter>(eventBus);
+        howToPlayPresenter->init(std::move(howToPlayView));
 
-        const auto leaderboardView = std::make_shared<ImguiLeaderboardView>();
+        auto leaderboardView = std::make_unique<ImguiLeaderboardView>();
         const auto leaderboardPresenter = std::make_shared<LeaderboardPresenter>(eventBus, ratingRepository);
+        leaderboardPresenter->init(std::move(leaderboardView));
 
-        const auto sudokuGameDifficultySelectorView = std::make_shared<ImguiSudokuGameDifficultySelectorView>();
+        auto sudokuGameDifficultySelectorView = std::make_unique<ImguiSudokuGameDifficultySelectorView>();
         const auto sudokuGameDifficultySelectorPresenter = std::make_shared<SudokuGameDifficultySelectorPresenter>(
             eventBus
         );
+        sudokuGameDifficultySelectorPresenter->init(std::move(sudokuGameDifficultySelectorView));
 
-        const auto sudokuGameView = std::make_shared<ImguiSudokuGameView>();
+        auto sudokuGameView = std::make_unique<ImguiSudokuGameView>();
         const auto sudokuGamePresenter = std::make_shared<SudokuGamePresenter>(
             eventBus, gameRepository, moveRepository
         );
-
-
-
-        // signUpPresenter->setView(signUpView.get());
-        // signUpView->setPresenter(signUpPresenter.get());
-        //
-        // mainMenuPresenter->setView(mainMenuView.get());
-        // mainMenuView->setPresenter(mainMenuPresenter.get());
-        //
-        // profilePresenter->setView(profileView.get());
-        // profileView->setPresenter(profilePresenter.get());
-        //
-        // leaderboardPresenter->setView(leaderboardView.get());
-        // leaderboardView->setPresenter(leaderboardPresenter.get());
-        //
-        // howToPlayPresenter->setView(howToPlayView.get());
-        // howToPlayView->setPresenter(howToPlayPresenter.get());
-        //
-        // sudokuGameDifficultySelectorPresenter->setView(sudokuGameDifficultySelectorView.get());
-        // sudokuGameDifficultySelectorView->setPresenter(sudokuGameDifficultySelectorPresenter.get());
-        //
-        // sudokuGamePresenter->setView(sudokuGameView.get());
-        // sudokuGameView->setPresenter(sudokuGamePresenter.get());
+        sudokuGamePresenter->init(std::move(sudokuGameView));
 
         appMediator->setCurrentPresenter(signInPresenter.get()); // TODO: Encapsulate this logic in AppMediator
         appMediator->setSignUpPresenter(signUpPresenter.get());
         appMediator->setSignInPresenter(signInPresenter.get());
-        // appMediator->setMainMenuPresenter(mainMenuPresenter.get());
-        // appMediator->setProfilePresenter(profilePresenter.get());
-        // appMediator->setLeaderboardPresenter(leaderboardPresenter.get());
-        // appMediator->setHowToPlayPresenter(howToPlayPresenter.get());
-        // appMediator->setSudokuGamePresenter(sudokuGamePresenter.get());
-        // appMediator->setSudokuGameDifficultySelectorPresenter(sudokuGameDifficultySelectorPresenter.get());
+        appMediator->setMainMenuPresenter(mainMenuPresenter.get());
+        appMediator->setProfilePresenter(profilePresenter.get());
+        appMediator->setLeaderboardPresenter(leaderboardPresenter.get());
+        appMediator->setHowToPlayPresenter(howToPlayPresenter.get());
+        appMediator->setSudokuGamePresenter(sudokuGamePresenter.get());
+        appMediator->setSudokuGameDifficultySelectorPresenter(sudokuGameDifficultySelectorPresenter.get());
 
         const Application app(std::move(frameHandler), appMediator.get(), eventBus.get());
         app.start();

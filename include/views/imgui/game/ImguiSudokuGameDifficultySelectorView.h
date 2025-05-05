@@ -4,15 +4,11 @@
 
 #ifndef IMGUISUDOKUGAMEDIFFICULTYSELECTORVIEW_H
 #define IMGUISUDOKUGAMEDIFFICULTYSELECTORVIEW_H
+#include "views/game/ISudokuGameDifficultySelectorView.h"
 
-#include "views/imgui/ImguiView.h"
-#include "presenters/game/SudokuGameDifficultySelectorPresenter.h"
-
-class ImguiSudokuGameDifficultySelectorView final : public IImguiView {
-    SudokuGameDifficultySelectorPresenter *presenter = nullptr;
+class ImguiSudokuGameDifficultySelectorView final : public ISudokuGameDifficultySelectorView {
 public:
-    void render();
-    void setPresenter(SudokuGameDifficultySelectorPresenter *p) { presenter = p; }
+    void render() override;
 };
 
 #endif //IMGUISUDOKUGAMEDIFFICULTYSELECTORVIEW_H

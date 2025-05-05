@@ -4,6 +4,7 @@
 
 #include "views/imgui/profile/ImguiProfileView.h"
 
+#include "views/imgui/ImguiView.h"
 #include "views/imgui/ImguiWindow.h"
 
 void ImguiProfileView::render() {

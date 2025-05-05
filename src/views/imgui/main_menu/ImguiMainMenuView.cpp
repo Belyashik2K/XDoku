@@ -6,10 +6,12 @@
 #include "views/imgui/main_menu/ImguiMainMenuView.h"
 
 #include "managers/FontManager.h"
+#include "presenters/MainMenuPresenter.h"
 #include "views/imgui/ImguiChildWindow.h"
 #include "views/imgui/ImguiColors.h"
 #include "views/imgui/ImguiStyleColorGuard.h"
 #include "views/imgui/ImguiStyleVarGuard.h"
+#include "views/imgui/ImguiView.h"
 
 void ImguiMainMenuView::render() {
     ImguiWindow window("Main Menu", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
@@ -68,7 +70,9 @@ void ImguiMainMenuView::renderFormButtons() const {
         "Play",
         buttonSize,
         [this] {
-            presenter->onPlayButtonClicked();
+            const auto sp = getPresenter();
+            if (!sp) return;
+            sp->onPlayButtonClicked();
         }
     );
     ImguiUtils::createButton(
@@ -76,7 +80,9 @@ void ImguiMainMenuView::renderFormButtons() const {
         "Profile",
         buttonSize,
         [this] {
-            presenter->onProfileButtonClicked();
+            const auto sp = getPresenter();
+            if (!sp) return;
+            sp->onProfileButtonClicked();
         }
     );
     ImguiUtils::createButton(
@@ -84,7 +90,9 @@ void ImguiMainMenuView::renderFormButtons() const {
         "Leaderboard",
         buttonSize,
         [this] {
-            presenter->onLeaderboardButtonClicked();
+            const auto sp = getPresenter();
+            if (!sp) return;
+            sp->onLeaderboardButtonClicked();
         }
     );
     ImguiUtils::createButton(
@@ -92,7 +100,9 @@ void ImguiMainMenuView::renderFormButtons() const {
         "How to play",
         buttonSize,
         [this] {
-            presenter->onHowToPlayButtonClicked();
+            const auto sp = getPresenter();
+            if (!sp) return;
+            sp->onHowToPlayButtonClicked();
         }
     );
     ImguiUtils::createButton(
@@ -100,7 +110,9 @@ void ImguiMainMenuView::renderFormButtons() const {
         "Exit",
         buttonSize,
         [this] {
-            presenter->onExitButtonClicked();
+            const auto sp = getPresenter();
+            if (!sp) return;
+            sp->onExitButtonClicked();
         }
     );
     ImGui::PopFont();

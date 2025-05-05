@@ -4,14 +4,11 @@
 
 #ifndef IMGUIPROFILEVIEW_H
 #define IMGUIPROFILEVIEW_H
-#include "presenters/ProfilePresenter.h"
-#include "views/imgui/ImguiView.h"
+#include "views/IProfileView.h"
 
-class ImguiProfileView final : public IImguiView {
-    ProfilePresenter *presenter = nullptr;
+class ImguiProfileView final : public IProfileView {
 public:
-    void render();
-    void setPresenter(ProfilePresenter *p) { presenter = p; }
+    void render() override;
 };
 
 #endif //IMGUIPROFILEVIEW_H

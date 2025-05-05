@@ -4,6 +4,7 @@
 
 #include "views/imgui/game/ImguiSudokuGameDifficultySelectorView.h"
 
+#include "views/imgui/ImguiView.h"
 #include "views/imgui/ImguiWindow.h"
 
 void ImguiSudokuGameDifficultySelectorView::render() {

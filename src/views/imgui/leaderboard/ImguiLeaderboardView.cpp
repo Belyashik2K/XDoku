@@ -5,10 +5,12 @@
 #include "views/imgui/leaderboard/ImguiLeaderboardView.h"
 
 #include "managers/FontManager.h"
+#include "presenters/LeaderboardPresenter.h"
 #include "views/imgui/ImguiChildWindow.h"
 #include "views/imgui/ImguiColors.h"
 #include "views/imgui/ImguiStyleColorGuard.h"
 #include "views/imgui/ImguiStyleVarGuard.h"
+#include "views/imgui/ImguiView.h"
 #include "views/imgui/ImguiWindow.h"
 
 void ImguiLeaderboardView::render() {
@@ -20,16 +22,20 @@ void ImguiLeaderboardView::render() {
 }
 
 void ImguiLeaderboardView::printLoader() const {
-    if (!presenter->isOnLoading()) return;
+    const auto sp = getPresenter();
+    if (!sp) return;
+    if (!sp->isOnLoading()) return;
 
     ImGui::SetCursorPosY(ImGui::GetWindowHeight() * 0.45f);
     ImguiUtils::printText("Loading...", BLACK, 39, true);
 }
 
 void ImguiLeaderboardView::renderLeaderboard() const {
-    if (presenter->isOnLoading()) return;
+    const auto sp = getPresenter();
+    if (!sp) return;
+    if (sp->isOnLoading()) return;
 
-    const LeaderboardPlaces leaderboardPlaces = presenter->getLeaderboardPlaces();
+    const LeaderboardPlaces leaderboardPlaces = sp->getLeaderboardPlaces();
     if (!leaderboardPlaces.has_value()) {
         ImguiUtils::printText("No leaderboard data available :(", BLACK, 39, true);
         return;
@@ -82,7 +88,9 @@ void ImguiLeaderboardView::renderLeaderboard() const {
             "Refresh",
             ImVec2(ImGui::GetWindowSize().x, 60),
             [this] {
-                presenter->onRefreshButtonClicked();
+                const auto sp = getPresenter();
+                if (!sp) return;
+                sp->onRefreshButtonClicked();
             }
         );
         ImguiUtils::addVerticalSpacing();
@@ -91,7 +99,9 @@ void ImguiLeaderboardView::renderLeaderboard() const {
             "Back to menu",
             ImVec2(ImGui::GetWindowSize().x, 60),
             [this] {
-                presenter->onBackButtonClicked();
+                const auto sp = getPresenter();
+                if (!sp) return;
+                sp->onBackButtonClicked();
             }
         );
     }

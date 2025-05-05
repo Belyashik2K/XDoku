@@ -4,6 +4,7 @@
 
 #include "views/imgui/sign_up/ImguiSignUpView.h"
 
+#include "presenters/SignUpPresenter.h"
 #include "views/imgui/ImguiChildWindow.h"
 #include "views/imgui/ImguiColors.h"
 #include "views/imgui/ImguiStyleColorGuard.h"
@@ -44,6 +45,9 @@ void ImguiSignUpView::renderFormHeader() {
 }
 
 void ImguiSignUpView::renderFormInputs() const {
+    const auto sp = getPresenter();
+    if (!sp) return;
+
     ImguiStyleColorGuard localColorGuard({
         {ImGuiCol_Text, WHITE},
         {ImGuiCol_Border, WHITE},
@@ -60,50 +64,49 @@ void ImguiSignUpView::renderFormInputs() const {
 
     ImguiUtils::printText("Username", BLACK, 23, false);
 
-    if (const auto &sp = presenter.lock()) {
-        ImguiUtils::createInputField(
-            "username_input",
-            "Username",
-            sp->getUsername(),
-            sp->getBufferSize(),
-            inputSize,
-            ImGuiInputTextFlags_CharsNoBlank,
-            false
-        );
-        ImguiUtils::addVerticalSpacing();
-        ImguiUtils::printText("Email", BLACK, 23, false);
-        ImguiUtils::createInputField(
-            "email_input",
-            "Email",
-            sp->getEmail(),
-            sp->getBufferSize(),
-            inputSize,
-            ImGuiInputTextFlags_CharsNoBlank,
-            false
-        );
-        ImguiUtils::addVerticalSpacing();
-        ImguiUtils::printText("Password", BLACK, 23, false);
-        ImguiUtils::createInputField(
-            "password_input",
-            "Password",
-            sp->getPassword(),
-            sp->getBufferSize(),
-            inputSize,
-            ImGuiInputTextFlags_Password,
-            false
-        );
-        ImguiUtils::addVerticalSpacing();
-        ImguiUtils::printText("Repeat Password", BLACK, 23, false);
-        ImguiUtils::createInputField(
-            "repeat_password_input",
-            "Repeat password",
-            sp->getConfirmPassword(),
-            sp->getBufferSize(),
-            inputSize,
-            ImGuiInputTextFlags_Password,
-            false
-        );
-    }
+    ImguiUtils::createInputField(
+        "username_input",
+        "Username",
+        sp->getUsername(),
+        sp->getBufferSize(),
+        inputSize,
+        ImGuiInputTextFlags_CharsNoBlank,
+        false
+    );
+    ImguiUtils::addVerticalSpacing();
+    ImguiUtils::printText("Email", BLACK, 23, false);
+    ImguiUtils::createInputField(
+        "email_input",
+        "Email",
+        sp->getEmail(),
+        sp->getBufferSize(),
+        inputSize,
+        ImGuiInputTextFlags_CharsNoBlank,
+        false
+    );
+    ImguiUtils::addVerticalSpacing();
+    ImguiUtils::printText("Password", BLACK, 23, false);
+    ImguiUtils::createInputField(
+        "password_input",
+        "Password",
+        sp->getPassword(),
+        sp->getBufferSize(),
+        inputSize,
+        ImGuiInputTextFlags_Password,
+        false
+    );
+    ImguiUtils::addVerticalSpacing();
+    ImguiUtils::printText("Repeat Password", BLACK, 23, false);
+    ImguiUtils::createInputField(
+        "repeat_password_input",
+        "Repeat password",
+        sp->getConfirmPassword(),
+        sp->getBufferSize(),
+        inputSize,
+        ImGuiInputTextFlags_Password,
+        false
+    );
+
     ImguiUtils::addVerticalSpacing(6);
 }
 
@@ -126,9 +129,9 @@ void ImguiSignUpView::renderFormButtons() const {
             "Sign up",
             buttonSize,
             [this] {
-                if (const auto &sp = presenter.lock()) {
-                    sp->onSignUpButtonClicked();
-                }
+                const auto sp = getPresenter();
+                if (!sp) return;
+                sp->onSignUpButtonClicked();
             }
         );
     }
@@ -146,20 +149,20 @@ void ImguiSignUpView::renderFormButtons() const {
             "Back to sign in",
             buttonSize,
             [this] {
-                if (const auto &sp = presenter.lock()) {
-                    sp->onBackButtonClicked();
-                }
+                const auto sp = getPresenter();
+                if (!sp) return;
+                sp->onBackButtonClicked();
             }
         );
     }
 }
 
 void ImguiSignUpView::renderSignUpError() const {
-    if (const auto &sp = presenter.lock()) {
-        if (const std::string errorMessage = sp->getErrorMessage(); !errorMessage.empty()) {
-            ImguiUtils::addVerticalSpacing(3);
-            ImguiUtils::printText(sp->getErrorMessage().c_str(), RED, 23, true);
-        }
-    }
+    const auto sp = getPresenter();
+    if (!sp) return;
 
+    if (const std::string errorMessage = sp->getErrorMessage(); !errorMessage.empty()) {
+        ImguiUtils::addVerticalSpacing(3);
+        ImguiUtils::printText(sp->getErrorMessage().c_str(), RED, 23, true);
+    }
 }

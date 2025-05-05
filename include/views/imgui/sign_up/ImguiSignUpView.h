@@ -4,8 +4,6 @@
 
 #ifndef IMGUISIGNUPVIEW_H
 #define IMGUISIGNUPVIEW_H
-
-#include "presenters/SignUpPresenter.h"
 #include "views/ISignUpView.h"
 
 class ImguiSignUpView final : public ISignUpView {

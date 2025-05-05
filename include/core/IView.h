@@ -18,6 +18,10 @@ public:
     void setPresenter(const std::weak_ptr<PresenterType> &p) {
         presenter = p;
     }
+
+    std::shared_ptr<PresenterType> getPresenter() const {
+        return presenter.lock();
+    }
 };
 
 #endif //IVIEW_H

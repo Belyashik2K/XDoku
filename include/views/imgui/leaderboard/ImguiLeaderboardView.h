@@ -4,16 +4,13 @@
 
 #ifndef IMGUILEADERBOARDVIEW_H
 #define IMGUILEADERBOARDVIEW_H
-#include "presenters/LeaderboardPresenter.h"
-#include "views/imgui/ImguiView.h"
+#include "views/ILeaderboardView.h"
 
-class ImguiLeaderboardView final : public IImguiView {
-    LeaderboardPresenter* presenter = nullptr;
+class ImguiLeaderboardView final : public ILeaderboardView {
 public:
-    void render();
+    void render() override;
     void printLoader() const;
     void renderLeaderboard() const;
-    void setPresenter(LeaderboardPresenter *p) { presenter = p; } // TODO: Move it to abstract class with T
 };
 
 #endif //IMGUILEADERBOARDVIEW_H
