@@ -3,7 +3,6 @@
 //
 
 #include "application/Application.h"
-
 #include "application/app_events/ApplicationEvents.h"
 
 Application::Application(
@@ -25,7 +24,7 @@ void Application::start() const {
     });
 }
 
-void Application::subscribeToEvents() const {
+void Application::subscribeToEvents() const { // TODO: weak_ptr instead of this
     printf("[Application] Subscribing to events...\n");
     this->eventBus->subscribe<OnApplicationShutdown>([this](const OnApplicationShutdown &) {
         this->frameHandler->shutdown();
