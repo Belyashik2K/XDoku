@@ -134,6 +134,7 @@ add_executable(XDoku
         include/interfaces/views/IHowToPlayView.h
         include/interfaces/views/game/ISudokuGameView.h
         include/interfaces/views/game/ISudokuGameDifficultySelectorView.h
+        src/application/presenters/ProfilePresenter.cpp
 )
 
 target_include_directories(XDoku PRIVATE

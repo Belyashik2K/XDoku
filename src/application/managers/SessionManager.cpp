@@ -7,6 +7,7 @@
 
 #include "application/managers/SessionManager.h"
 #include "application/app_events/ApplicationEvents.h"
+#include "application/app_events/ButtonEvents.h"
 
 std::optional<std::string> SessionManager::getDeviceHWID() {
     // TODO: Implement a more secure way to get the HWID on different platforms
@@ -88,6 +89,23 @@ bool SessionManager::isSessionExpired(const Timestamp &expiredAt) {
     return Timestamp::now() > expiredAt;
 }
 
+void SessionManager::logout() const {
+    printf("[SessionManager] Logging out...\n");
+    const std::optional<std::string> HWID = getDeviceHWID();
+    if (!HWID.has_value()) {
+        printf("[SessionManager] HWID is not available, skipping logout...\n");
+        return;
+    }
+    const bool result = sessionRepository->deleteSession(HWID.value());
+    if (result) {
+        printf("[SessionManager] Session deleted successfully\n");
+    } else {
+        printf("[SessionManager] Failed to delete session\n");
+    }
+    eventBus->publish(OnUserLoggedOut());
+}
+
+
 void SessionManager::subscribeToEvents() const {
     printf("[SessionManager] Subscribing to events...\n");
     eventBus->subscribe<OnApplicationStartup>([this](const OnApplicationStartup &) {
@@ -95,5 +113,8 @@ void SessionManager::subscribeToEvents() const {
     });
     eventBus->subscribe<OnUserLoggedIn>([this](const OnUserLoggedIn &event) {
         createSession(event);
+    });
+    eventBus->subscribe<OnLogoutButtonClicked>([this](const OnLogoutButtonClicked &) {
+        logout();
     });
 }

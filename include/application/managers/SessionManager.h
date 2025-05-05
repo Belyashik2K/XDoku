@@ -27,6 +27,8 @@ class SessionManager {
 
     void subscribeToEvents() const;
 
+    void logout() const;
+
 public:
     SessionManager(
         const std::shared_ptr<EventBus> &eventBus,

@@ -13,6 +13,7 @@ public:
     int userId;
     explicit OnUserLoggedIn(const int userId) : userId(userId) {}
 };
+class OnUserLoggedOut : public IEvent {};
 
 class OnActiveSudokuGameFound : public IEvent {
 public:

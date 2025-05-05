@@ -6,6 +6,8 @@
 #define PROFILEPRESENTER_H
 #include <memory>
 
+#include "application/EventBus.h"
+#include "interfaces/IPresenter.h"
 #include "interfaces/views/IProfileView.h"
 
 class ProfilePresenter final :
@@ -15,6 +17,9 @@ class ProfilePresenter final :
 public:
     explicit ProfilePresenter(const std::shared_ptr<EventBus> &eventBus) : eventBus(eventBus) {
     }
+
+    void onLogoutButtonClicked() const;
+    void onBackButtonClicked() const;
 
     void init(std::unique_ptr<IProfileView> &&view) override {
         this->setSelf(weak_from_this());

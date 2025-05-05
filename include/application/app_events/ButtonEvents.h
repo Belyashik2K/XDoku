@@ -13,5 +13,6 @@ class OnMainMenuButtonClicked : public IEvent {};
 class OnPlayButtonClicked : public IEvent {};
 class OnProfileButtonClicked : public IEvent {};
 class OnHowToPlayButtonClicked : public IEvent {};
+class OnLogoutButtonClicked : public IEvent {};
 
 #endif //BUTTONS_H

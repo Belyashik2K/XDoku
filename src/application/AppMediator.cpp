@@ -70,4 +70,9 @@ void AppMediator::subscribeToEvents() {
             this->currentPresenter = howToPlayPresenter;
         }
     });
+    eventBus->subscribe<OnUserLoggedOut>([this](const OnUserLoggedOut &) {
+        if (signInPresenter) {
+            this->currentPresenter = signInPresenter;
+        }
+    });
 }
