@@ -15,7 +15,7 @@ void AppMediator::render() const {
 
 AppMediator::AppMediator(
     const std::shared_ptr<EventBus> &eventBus,
-    IBasePresenter *presenter
+    const std::shared_ptr<IBasePresenter> &presenter
 ) {
     this->eventBus = eventBus;
     this->currentPresenter = presenter;

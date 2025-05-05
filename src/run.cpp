@@ -79,17 +79,21 @@ int main() {
         );
         sudokuGamePresenter->init(std::move(sudokuGameView));
 
-        appMediator->setCurrentPresenter(signInPresenter.get()); // TODO: Encapsulate this logic in AppMediator
-        appMediator->setSignUpPresenter(signUpPresenter.get());
-        appMediator->setSignInPresenter(signInPresenter.get());
-        appMediator->setMainMenuPresenter(mainMenuPresenter.get());
-        appMediator->setProfilePresenter(profilePresenter.get());
-        appMediator->setLeaderboardPresenter(leaderboardPresenter.get());
-        appMediator->setHowToPlayPresenter(howToPlayPresenter.get());
-        appMediator->setSudokuGamePresenter(sudokuGamePresenter.get());
-        appMediator->setSudokuGameDifficultySelectorPresenter(sudokuGameDifficultySelectorPresenter.get());
+        appMediator->setCurrentPresenter(signInPresenter); // TODO: Encapsulate this logic in AppMediator
+        appMediator->setSignUpPresenter(signUpPresenter);
+        appMediator->setSignInPresenter(signInPresenter);
+        appMediator->setMainMenuPresenter(mainMenuPresenter);
+        appMediator->setProfilePresenter(profilePresenter);
+        appMediator->setLeaderboardPresenter(leaderboardPresenter);
+        appMediator->setHowToPlayPresenter(howToPlayPresenter);
+        appMediator->setSudokuGamePresenter(sudokuGamePresenter);
+        appMediator->setSudokuGameDifficultySelectorPresenter(sudokuGameDifficultySelectorPresenter);
 
-        const Application app(std::move(frameHandler), appMediator.get(), eventBus.get());
+        const Application app(
+            std::move(frameHandler),
+            appMediator,
+            eventBus
+        );
         app.start();
     } catch (const std::exception &e) {
         printf("Oops! An error occurred: %s\n", e.what());

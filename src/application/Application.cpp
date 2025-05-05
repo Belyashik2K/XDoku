@@ -6,9 +6,13 @@
 
 #include "application/app_events/ApplicationEvents.h"
 
-Application::Application(std::unique_ptr<IFrameHandler> handler, AppMediator *mediator, EventBus *eventBus) {
-    this->frameHandler = std::move(handler);
-    this->appMediator = mediator;
+Application::Application(
+    std::unique_ptr<IFrameHandler> frameHandler,
+    const std::shared_ptr<AppMediator> &appMediator,
+    const std::shared_ptr<EventBus> &eventBus
+) {
+    this->appMediator = appMediator;
+    this->frameHandler = std::move(frameHandler);
     this->eventBus = eventBus;
 }
 
@@ -31,4 +35,3 @@ void Application::subscribeToEvents() const {
 Application::~Application() {
     printf("[Application] Shutting down application...\n");
 }
-
