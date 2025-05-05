@@ -18,24 +18,24 @@
 #include "presenters/game/SudokuGamePresenter.h"
 
 class AppMediator {
-    std::shared_ptr<IBasePresenter> currentPresenter = nullptr;
+    std::shared_ptr<IBasePresenter> currentPresenter;
     std::shared_ptr<EventBus> eventBus;
 
-    std::shared_ptr<SignUpPresenter> signUpPresenter = nullptr;
-    std::shared_ptr<SignInPresenter> signInPresenter = nullptr;
-    std::shared_ptr<MainMenuPresenter> mainMenuPresenter = nullptr;
-    std::shared_ptr<ProfilePresenter> profilePresenter = nullptr;
-    std::shared_ptr<LeaderboardPresenter> leaderboardPresenter = nullptr;
-    std::shared_ptr<HowToPlayPresenter> howToPlayPresenter = nullptr;
-    std::shared_ptr<SudokuGamePresenter> sudokuGamePresenter = nullptr;
-    std::shared_ptr<SudokuGameDifficultySelectorPresenter> sudokuGameDifficultySelectorPresenter = nullptr;
+    std::shared_ptr<SignUpPresenter> signUpPresenter;
+    std::shared_ptr<SignInPresenter> signInPresenter;
+    std::shared_ptr<MainMenuPresenter> mainMenuPresenter;
+    std::shared_ptr<ProfilePresenter> profilePresenter;
+    std::shared_ptr<LeaderboardPresenter> leaderboardPresenter;
+    std::shared_ptr<HowToPlayPresenter> howToPlayPresenter;
+    std::shared_ptr<SudokuGamePresenter> sudokuGamePresenter;
+    std::shared_ptr<SudokuGameDifficultySelectorPresenter> sudokuGameDifficultySelectorPresenter;
 
     void subscribeToEvents();
 public:
     explicit AppMediator(const std::shared_ptr<EventBus> &eventBus,
-                         const std::shared_ptr<IBasePresenter> &presenter = nullptr);
+                         const std::shared_ptr<IBasePresenter> &presenter);
 
-    void setCurrentPresenter(const std::shared_ptr<IBasePresenter> &presenter) {
+    void setCurrentPresenter(const std::shared_ptr<IBasePresenter> &presenter = nullptr) {
         currentPresenter = presenter;
     }
     void setSignUpPresenter(const std::shared_ptr<SignUpPresenter> &presenter) {
