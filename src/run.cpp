@@ -89,12 +89,12 @@ int main() {
         appMediator->setSudokuGamePresenter(sudokuGamePresenter);
         appMediator->setSudokuGameDifficultySelectorPresenter(sudokuGameDifficultySelectorPresenter);
 
-        const Application app(
+        const Application XDoku(
             std::move(frameHandler),
             appMediator,
             eventBus
         );
-        app.start();
+        XDoku.start();
     } catch (const std::exception &e) {
         printf("Oops! An error occurred: %s\n", e.what());
     }
