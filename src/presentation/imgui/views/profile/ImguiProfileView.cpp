@@ -5,12 +5,18 @@
 #include "presentation/imgui/views/profile/ImguiProfileView.h"
 
 #include "application/presenters/ProfilePresenter.h"
+#include "presentation/imgui/ImguiColors.h"
 #include "presentation/imgui/ImguiUtils.h"
 #include "presentation/imgui/guards/ImguiWindowGuard.h"
 
 void ImguiProfileView::render() {
     ImguiWindowGuard window("Profile", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
     ImguiUtils::updateBackground("../assets/textures/menu/background.jpg");
+
+    auto sp = getPresenter();
+    if (!sp) return;
+    auto user = sp->getCurrentUser();
+    ImguiUtils::printText(user->getUsername().c_str(), BLACK, 30, true);
 
     const auto &buttonSize = ImVec2(ImGui::GetWindowSize().x, 70);
     ImguiUtils::createButton(

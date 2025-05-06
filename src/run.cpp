@@ -38,7 +38,7 @@ int main() {
         const auto eventBus = std::make_shared<EventBus>();
         const auto appMediator = std::make_shared<AppMediator>(eventBus);
 
-        const auto sessionManager = std::make_shared<SessionManager>(eventBus, sessionRepository);
+        const auto sessionManager = std::make_shared<SessionManager>(eventBus, sessionRepository, userRepository);
         const auto sudokuGameManager = std::make_shared<SudokuGameManager>(eventBus, gameRepository, moveRepository);
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
@@ -56,7 +56,7 @@ int main() {
         mainMenuPresenter->init(std::move(mainMenuView));
 
         auto profileView = std::make_unique<ImguiProfileView>();
-        const auto profilePresenter = std::make_shared<ProfilePresenter>(eventBus);
+        const auto profilePresenter = std::make_shared<ProfilePresenter>(eventBus, sessionManager);
         profilePresenter->init(std::move(profileView));
 
         auto howToPlayView = std::make_unique<ImguiHowToPlayView>();
