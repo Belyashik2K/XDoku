@@ -100,21 +100,18 @@ void ImguiFrameHandler::init() {
     }
 
     ImGuiStyle &style = ImGui::GetStyle();
-    // {ImGuiCol_Text, WHITE},
-    // {
-    //     ImGuiCol_Border, WHITE
-    // }
-    // , {
-    //     ImGuiCol_Button, GRAY
-    // }
+
+    style.Colors[ImGuiCol_Text] = WHITE;
+    style.Colors[ImGuiCol_Border] = WHITE;
     style.Colors[ImGuiCol_Button] = GRAY;
     style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.64f, 0.64f, 0.64f, 1.00f);
     style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.160f, 0.160f, 0.160f, 1.00f);
 
-    style.Colors[ImGuiCol_Border] = WHITE;
-    style.Colors[ImGuiCol_Text] = WHITE;
     style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.44f, 0.44f, 0.44f, 1.00f);
     style.Colors[ImGuiCol_FrameBg] = GRAY;
+
+    style.FrameRounding = 10.0f;
+    style.FrameBorderSize = 1.0f;
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 130");

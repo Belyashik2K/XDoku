@@ -99,7 +99,7 @@ void SessionManager::logout() {
     } else {
         printf("[SessionManager] Failed to delete session\n");
     }
-    currentUser.reset();
+    clearCurrentUser();
     eventBus->publish(OnUserLoggedOut());
 }
 
@@ -116,6 +116,15 @@ void SessionManager::subscribeToEvents() {
         logout();
     });
 }
+
+std::unique_ptr<User> SessionManager::getUserById(const int userId) const {
+    std::optional<User> user = userRepository->get(userId);
+    if (!user.has_value()) {
+        return nullptr;
+    }
+    return std::make_unique<User>(user.value());
+}
+
 
 void SessionManager::updateCurrentUser(const int userId) {
     std::unique_ptr<User> user = getUserById(userId);

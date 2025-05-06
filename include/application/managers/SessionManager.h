@@ -35,13 +35,7 @@ class SessionManager {
 
     void updateCurrentUser(int userId);
 
-    std::unique_ptr<User> getUserById(const int userId) const {
-        std::optional<User> user = userRepository->get(userId);
-        if (!user.has_value()) {
-            return nullptr;
-        }
-        return std::make_unique<User>(user.value());
-    }
+    std::unique_ptr<User> getUserById(const int userId) const;
 
     void setCurrentUser(std::unique_ptr<User> user) {
         currentUser = std::move(user);
