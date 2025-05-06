@@ -12,7 +12,8 @@
 #include "presentation/imgui/guards/ImguiWindowGuard.h"
 
 void ImguiProfileView::render() {
-    ImguiWindowGuard window("Profile", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
+    ImguiWindowGuard window(
+        "Profile", ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
     ImguiUtils::updateBackground("../assets/textures/menu/background.jpg");
 
     const ImVec2 windowSize = ImGui::GetWindowSize();
@@ -25,11 +26,9 @@ void ImguiProfileView::render() {
         menuAreaSize,
         ImGuiChildFlags_AutoResizeX | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AlwaysAutoResize,
         false
-    );
-
-    {
+    ); {
         const ImVec2 menuSize = ImGui::GetWindowSize();
-        const float childWidth = menuSize.x * 0.75f;
+        const float childWidth = menuSize.x * 0.5f;
         const float childHeight = menuSize.y * 0.43f;
         const ImVec2 childSize(childWidth, childHeight);
 
@@ -51,16 +50,22 @@ void ImguiProfileView::renderStatistics() const {
 
     const User *user = sp->getCurrentUser();
 
-    ImguiUtils::printText("Profile", BLACK, 30, true);
+    const auto header = "Profile";
+    const std::string  playerID = std::format(R"(Your ID: {})", user->getId());
+    const std::string username = std::format(R"(Username: @{})", user->getUsername());
+    const std::string email = std::format(R"(Email: {})", user->getEmail());
+    const std::string rating = std::format(R"(Current rating: {} points)", user->getRating());
+
+    ImguiUtils::printText(header, BLACK, 38, true);
     ImguiUtils::addVerticalSpacing(6);
-    ImguiUtils::printText(std::format("ID: {}", user->getId()).c_str(), BLACK, 35, true);
+    ImguiUtils::printText(playerID.c_str(), BLACK, 35, false);
     ImguiUtils::addVerticalSpacing();
-    ImguiUtils::printText(("Username: " + user->getUsername()).c_str(), BLACK, 35, true);
+    ImguiUtils::printText(username.c_str(), BLACK, 35, false);
     ImguiUtils::addVerticalSpacing();
-    ImguiUtils::printText(("Email: " + user->getEmail()).c_str(), BLACK, 35, true);
+    ImguiUtils::printText(email.c_str(), BLACK, 35, false);
     ImguiUtils::addVerticalSpacing();
-    ImguiUtils::printText(("Current rating: " + std::to_string(user->getRating())).c_str(), BLACK, 35, true);
-    ImguiUtils::addVerticalSpacing();
+    ImguiUtils::printText(rating.c_str(), BLACK, 35, false);
+    ImguiUtils::addVerticalSpacing(6);
 }
 
 void ImguiProfileView::renderButtons() const {
