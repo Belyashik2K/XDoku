@@ -11,6 +11,8 @@
 #include <presentation/imgui/ImguiFrameHandler.h>
 #include <presentation/imgui/managers/ImguiFontManager.h>
 
+#include "presentation/imgui/ImguiColors.h"
+
 bool loaded = false;
 
 ImguiFrameHandler::ImguiFrameHandler(
@@ -98,14 +100,21 @@ void ImguiFrameHandler::init() {
     }
 
     ImGuiStyle &style = ImGui::GetStyle();
-    style.Colors[ImGuiCol_Button] = ImVec4(0.196f, 0.196f, 0.196f, 1.00f);
+    // {ImGuiCol_Text, WHITE},
+    // {
+    //     ImGuiCol_Border, WHITE
+    // }
+    // , {
+    //     ImGuiCol_Button, GRAY
+    // }
+    style.Colors[ImGuiCol_Button] = GRAY;
     style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.64f, 0.64f, 0.64f, 1.00f);
     style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.160f, 0.160f, 0.160f, 1.00f);
 
-    style.Colors[ImGuiCol_Border] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-    style.Colors[ImGuiCol_Text] = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+    style.Colors[ImGuiCol_Border] = WHITE;
+    style.Colors[ImGuiCol_Text] = WHITE;
     style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.44f, 0.44f, 0.44f, 1.00f);
-    style.Colors[ImGuiCol_FrameBg] = ImVec4(0.196f, 0.196f, 0.196f, 1.00f);
+    style.Colors[ImGuiCol_FrameBg] = GRAY;
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 130");

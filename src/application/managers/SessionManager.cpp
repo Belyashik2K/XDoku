@@ -77,12 +77,7 @@ void SessionManager::onActiveSessionFound(const int userId) const {
 
 void SessionManager::onExpiredSessionFound(const std::string &sessionId) const {
     printf("[SessionManager] Session expired, deleting...\n");
-    const bool result = sessionRepository->deleteSession(sessionId);
-    if (result) {
-        printf("[SessionManager] Session deleted successfully\n");
-    } else {
-        printf("[SessionManager] Failed to delete session\n");
-    }
+    logout();
 }
 
 bool SessionManager::isSessionExpired(const Timestamp &expiredAt) {

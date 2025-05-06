@@ -91,7 +91,7 @@ void User::setUsername(std::string username) {
 }
 
 bool User::validateEmail(const std::string &email) {
-    const std::regex emailRegex(R"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)");
+    const std::regex emailRegex(R"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]{2,}$)");
     return std::regex_match(email, emailRegex);
 }
 
