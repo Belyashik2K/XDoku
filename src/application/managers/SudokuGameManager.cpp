@@ -11,6 +11,17 @@ void SudokuGameManager::loadActiveGame() {
     const User *currentUser = sessionManager->getCurrentUser();
 
     std::optional<SudokuGame> game = gameRepository->getUserCurrentGame(currentUser->getId());
+    std::optional<std::vector<SudokuMove>> moves = moveRepository->getMovesByGameId(game->getId());
+    if (moves.has_value()) {
+        printf("[SudokuGameManager] Found %zu moves for game with ID: %d\n", moves->size(), game->getId());
+        for (const auto &move : *moves) {
+            auto [fst, snd] = move.coords();
+            game->createMove(fst, snd, move.getValue());
+            printf("[SudokuGameManager] Move: (%d, %d) = %d\n", fst, snd, move.getValue());
+        }
+    } else {
+        printf("[SudokuGameManager] No moves found for game with ID: %d\n", game->getId());
+    }
     if (game.has_value()) {
         printf("[SudokuGameManager] Found active game for user %d\n", currentUser->getId());
         setCurrentGame(std::make_unique<SudokuGame>(game.value()));
@@ -19,6 +30,7 @@ void SudokuGameManager::loadActiveGame() {
         printf("[SudokuGameManager] No active game found for user %d\n", currentUser->getId());
         eventBus->publish(OnActiveSudokuGameNotFound());
     }
+    actualizeCurrentGrid();
 }
 
 void SudokuGameManager::createSudokuGame(const SudokuDifficultyEnum &difficulty) {
@@ -32,8 +44,26 @@ void SudokuGameManager::createSudokuGame(const SudokuDifficultyEnum &difficulty)
         eventBus->publish(OnSudokuGameCreated());
     } else {
         printf("[SudokuGameManager] Failed to create new sudoku game for user %d\n", currentUser->getId());
-        // eventBus->publish(OnSudokuGameCreationFailed());
     }
+}
+
+bool SudokuGameManager::createMove(const int selected_row, const int selected_col, const int value) const {
+    printf("[SudokuGameManager] Creating move (row: %d, col: %d, value: %d) in game with ID: %d\n",
+           selected_row, selected_col, value, currentGame->getId());
+    const SudokuMove move = currentGame->createMove(selected_row, selected_col, value);
+    moveRepository->createMove(move);
+    printf("[SudokuGameManager] Move created successfully\n");
+    actualizeCurrentGrid();
+    return move.isValidMove();
+}
+
+void SudokuGameManager::actualizeCurrentGrid() const {
+    if (!currentGame) {
+        printf("[SudokuGameManager] No current game found, skipping actualization...\n");
+        return;
+    }
+    printf("[SudokuGameManager] Actualizing current grid...\n");
+    currentGame->actualizeCurrentGrid();
 }
 
 void SudokuGameManager::subscribeToEvents() {

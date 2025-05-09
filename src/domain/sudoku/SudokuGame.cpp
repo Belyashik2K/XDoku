@@ -163,12 +163,27 @@ SudokuGame SudokuGame::loadGame(
     );
 }
 
-bool SudokuGame::addMove(const SudokuMove &move) {
+SudokuMove SudokuGame::createMove(
+    const int row,
+    const int column,
+    const int value
+) {
+    if (!id) {
+        throw std::runtime_error("Game ID is not set");
+    }
+
     if (!moves.has_value()) {
         moves = std::vector<SudokuMove>();
     }
+
+    SudokuGrid solutionGrid = this->solutionGrid;
+    const bool isValid = solutionGrid.getCells()[row][column].getValue() == value;
+    if (!isValid) {
+        mistakesCount++;
+    }
+    const SudokuMove move(id.value(), row, column, value, isValid);
     moves.value().push_back(move);
-    return true;
+    return move;
 }
 
 void SudokuGame::actualizeCurrentGrid() {

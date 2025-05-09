@@ -97,7 +97,7 @@ void ImguiSudokuGameView::drawCells(
     const auto sp = getPresenter();
     if (!sp) return;
 
-    const auto cells = sp->getCurrentGame()->getGrid()->getCells();
+    const auto cells = sp->getCurrentGame()->getCurrentGrid()->getCells();
     auto [selectedRow, selectedCol] = sp->getSelectedCell();
 
     for (int row = 0; row < 9; ++row) {
@@ -186,6 +186,7 @@ void ImguiSudokuGameView::handleKeyboardInput() const {
             if (ImGui::IsKeyPressed(static_cast<ImGuiKey>(key))) {
                 const int value = key - ImGuiKey_0;
                 printf("Key pressed: %d on cell (%d, %d)\n", value, selectedRow, selectedCol);
+                sp->onNewMove(value);
             }
         }
 

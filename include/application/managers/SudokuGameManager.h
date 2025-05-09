@@ -44,9 +44,13 @@ public:
         subscribeToEvents();
     }
 
-    const SudokuGame *getCurrentGame() const {
+    [[nodiscard]] const SudokuGame *getCurrentGame() const {
         return currentGame.get();
     }
+
+    bool createMove(int selected_row, int selected_col, int value) const;
+
+    void actualizeCurrentGrid() const;
 };
 
 #endif //GAMEMANAGER_H

@@ -23,8 +23,10 @@ class SudokuGamePresenter final :
     std::shared_ptr<SudokuGameManager> gameManager;
 
     GameLoadingStatus loadingStatus = LOADING;
+
     int selectedRow = -1;
     int selectedCol = -1;
+    bool validMove = false;
 public:
     SudokuGamePresenter(
         const std::shared_ptr<EventBus> &eventBus,
@@ -48,6 +50,14 @@ public:
         return loadingStatus;
     }
 
+    bool isValidMove() const {
+        return validMove;
+    }
+
+    void updateMoveStatus(const bool isValid) {
+        validMove = isValid;
+    }
+
     const SudokuGame *getCurrentGame() const {
         return gameManager->getCurrentGame();
     }
@@ -60,6 +70,8 @@ public:
     std::pair<int, int> getSelectedCell() const {
         return std::make_pair(selectedRow, selectedCol);
     }
+
+    void onNewMove(int value);
 };
 
 #endif //SUDOKUGAMEPRESENTER_H
