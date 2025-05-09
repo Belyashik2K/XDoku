@@ -7,7 +7,7 @@
 #include "application/app_events/UserEvents.h"
 
 void SudokuGameManager::getActiveGame() const {
-    std::optional<SudokuGame> game = gameRepository->getGame(16); // TODO: make it dynamic for current user
+    std::optional<SudokuGame> game = gameRepository->getGame(111); // TODO: make it dynamic for current user
     if (game.has_value()) {
         printf("[SudokuGameManager] Found active game\n");
         eventBus->publish(OnActiveSudokuGameFound(game.value()));

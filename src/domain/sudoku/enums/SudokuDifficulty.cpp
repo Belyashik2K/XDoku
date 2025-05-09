@@ -4,7 +4,6 @@
 
 #include "domain/sudoku/enums/SudokuDifficulty.h"
 
-#include <map>
 #include <stdexcept>
 
 #define EASY_CELLS_COUNT 40
@@ -47,14 +46,7 @@ SudokuDifficultySettings SudokuDifficulty::getSettings(const SudokuDifficultyEnu
 }
 
 SudokuDifficultyEnum SudokuDifficulty::fromString(const std::string &difficulty) {
-    static const std::map<std::string, SudokuDifficultyEnum> difficultyMap = {
-        {"easy", SudokuDifficultyEnum::EASY},
-        {"medium", SudokuDifficultyEnum::MEDIUM},
-        {"hard", SudokuDifficultyEnum::HARD},
-        {"expert", SudokuDifficultyEnum::EXPERT}
-    };
-
-    if (const auto it = difficultyMap.find(difficulty); it != difficultyMap.end()) {
+    if (const auto it = sudokuDifficultyMap.find(difficulty); it != sudokuDifficultyMap.end()) {
         return it->second;
     }
     throw std::invalid_argument("Invalid SudokuDifficultyEnum string value");

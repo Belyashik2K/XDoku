@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "application/EventBus.h"
+#include "domain/sudoku/enums/SudokuDifficulty.h"
 #include "interfaces/IPresenter.h"
 #include "interfaces/views/game/ISudokuGameDifficultySelectorView.h"
 
@@ -25,6 +26,10 @@ public:
         this->setSelf(weak_from_this());
         this->setView(std::move(view));
     }
+
+    void onDifficultySelected(const SudokuDifficultyEnum difficulty);
+
+    void onBackButtonClicked();
 };
 
 #endif //SUDOKUGAMEDIFFICULTYSELECTORPRESENTER_H

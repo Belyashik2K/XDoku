@@ -4,7 +4,10 @@
 
 #ifndef SUDOKUDIFFICULTY_H
 #define SUDOKUDIFFICULTY_H
+#include <map>
 #include <string>
+#include <unordered_map>
+#include <vector>
 
 enum class SudokuDifficultyEnum { EASY, MEDIUM, HARD, EXPERT };
 
@@ -13,11 +16,28 @@ struct SudokuDifficultySettings {
     std::string difficultyName;
 };
 
+const std::unordered_map<std::string, SudokuDifficultyEnum> sudokuDifficultyMap = {
+    {"easy", SudokuDifficultyEnum::EASY},
+    {"medium", SudokuDifficultyEnum::MEDIUM},
+    {"hard", SudokuDifficultyEnum::HARD},
+    {"expert", SudokuDifficultyEnum::EXPERT}
+};
+
 class SudokuDifficulty {
 public:
+
     static SudokuDifficultySettings getSettings(SudokuDifficultyEnum level);
     static SudokuDifficultyEnum fromString(const std::string &difficulty);
+    static std::vector<std::string> getDifficultyNames() {
+        return {
+            "easy",
+            "medium",
+            "hard",
+            "expert"
+        };
+    }
 private:
+
     static int getOpenCellsCount(SudokuDifficultyEnum level);
     static std::string getDifficultyName(SudokuDifficultyEnum level);
 };
