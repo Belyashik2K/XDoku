@@ -75,7 +75,7 @@ int main() {
 
         auto sudokuGameView = std::make_unique<ImguiSudokuGameView>();
         const auto sudokuGamePresenter = std::make_shared<SudokuGamePresenter>(
-            eventBus, gameRepository, moveRepository
+            eventBus, sudokuGameManager
         );
         sudokuGamePresenter->init(std::move(sudokuGameView));
 

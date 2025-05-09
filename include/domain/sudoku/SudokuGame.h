@@ -32,6 +32,8 @@ public:
     std::pair<nlohmann::json, nlohmann::json> getGridsAsJson() const;
     std::string getDifficultyAsString() const;
     bool addMove(const SudokuMove &move);
+
+    const SudokuGrid *getGrid() const { return &grid; }
 private:
     SudokuGame(
         int userId,

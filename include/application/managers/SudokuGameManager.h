@@ -17,10 +17,23 @@ class SudokuGameManager {
     std::shared_ptr<IMoveRepository> moveRepository;
     std::shared_ptr<SessionManager> sessionManager;
 
-    void getActiveGame();
+    std::unique_ptr<SudokuGame> currentGame = nullptr;
+
+    void loadActiveGame();
+
     void createSudokuGame(const SudokuDifficultyEnum &difficulty);
 
     void subscribeToEvents();
+
+    void clearCurrentGame() {
+        currentGame.reset();
+    }
+
+    void setCurrentGame(std::unique_ptr<SudokuGame> game) {
+        currentGame = std::move(game);
+    }
+
+
 public:
     SudokuGameManager(
         const std::shared_ptr<EventBus> &eventBus,
@@ -29,6 +42,10 @@ public:
         const std::shared_ptr<SessionManager> &sessionManager
     ) : eventBus(eventBus), gameRepository(gameRepository), moveRepository(moveRepository), sessionManager(sessionManager) {
         subscribeToEvents();
+    }
+
+    const SudokuGame *getCurrentGame() const {
+        return currentGame.get();
     }
 };
 

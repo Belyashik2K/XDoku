@@ -6,14 +6,15 @@
 #include "application/app_events/ButtonEvents.h"
 #include "application/app_events/UserEvents.h"
 
-void SudokuGameManager::getActiveGame() {
+void SudokuGameManager::loadActiveGame() {
     printf("[SudokuGameManager] Getting active game...\n");
     const User *currentUser = sessionManager->getCurrentUser();
 
     std::optional<SudokuGame> game = gameRepository->getUserCurrentGame(currentUser->getId());
     if (game.has_value()) {
         printf("[SudokuGameManager] Found active game for user %d\n", currentUser->getId());
-        eventBus->publish(OnActiveSudokuGameFound(game.value()));
+        setCurrentGame(std::make_unique<SudokuGame>(game.value()));
+        eventBus->publish(OnActiveSudokuGameFound());
     } else {
         printf("[SudokuGameManager] No active game found for user %d\n", currentUser->getId());
         eventBus->publish(OnActiveSudokuGameNotFound());
@@ -27,6 +28,7 @@ void SudokuGameManager::createSudokuGame(const SudokuDifficultyEnum &difficulty)
     std::optional<SudokuGame> createdGame = gameRepository->createGame(currentUser->getId(), game);
     if (createdGame.has_value()) {
         printf("[SudokuGameManager] Created new sudoku game for user %d\n", currentUser->getId());
+        setCurrentGame(std::make_unique<SudokuGame>(createdGame.value()));
         eventBus->publish(OnSudokuGameCreated());
     } else {
         printf("[SudokuGameManager] Failed to create new sudoku game for user %d\n", currentUser->getId());
@@ -37,7 +39,7 @@ void SudokuGameManager::createSudokuGame(const SudokuDifficultyEnum &difficulty)
 void SudokuGameManager::subscribeToEvents() {
     printf("[SudokuGameManager] Subscribing to events...\n");
     eventBus->subscribe<OnPlayButtonClicked>([this](const OnPlayButtonClicked &) {
-        this->getActiveGame();
+        this->loadActiveGame();
     });
     eventBus->subscribe<OnSudokuDifficultySelected> (
         [this](const OnSudokuDifficultySelected &event) {

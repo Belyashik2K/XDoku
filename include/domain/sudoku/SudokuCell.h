@@ -16,6 +16,7 @@ public:
     int getValue() const;
     void setValid(bool valid);
     bool isValid() const;
+    bool isEmpty() const;
 private:
     int value;
     bool is_fixed;

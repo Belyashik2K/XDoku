@@ -15,6 +15,7 @@ class SessionManager {
     std::shared_ptr<EventBus> eventBus;
     std::shared_ptr<IUserRepository> userRepository;
     std::shared_ptr<ISessionRepository> sessionRepository;
+
     std::unique_ptr<User> currentUser = nullptr;
 
     static std::optional<std::string> getDeviceHWID();

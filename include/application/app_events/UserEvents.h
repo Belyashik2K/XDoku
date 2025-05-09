@@ -15,11 +15,7 @@ public:
 };
 class OnUserLoggedOut : public IEvent {};
 
-class OnActiveSudokuGameFound : public IEvent {
-public:
-    SudokuGame game;
-    explicit OnActiveSudokuGameFound(const SudokuGame &game) : game(game) {}
-};
+class OnActiveSudokuGameFound : public IEvent {};
 class OnActiveSudokuGameNotFound : public IEvent {};
 
 class OnSudokuDifficultySelected : public IEvent {

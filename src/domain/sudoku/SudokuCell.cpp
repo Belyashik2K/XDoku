@@ -53,3 +53,7 @@ bool SudokuCell::givenValueInCandidates(const int value) const {
 void SudokuCell::setValid(const bool valid) {
     is_valid = valid;
 }
+
+bool SudokuCell::isEmpty() const {
+    return value == 0;
+}
