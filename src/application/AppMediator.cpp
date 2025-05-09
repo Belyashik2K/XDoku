@@ -75,4 +75,9 @@ void AppMediator::subscribeToEvents() {
             this->currentPresenter = signInPresenter;
         }
     });
+    eventBus->subscribe<OnSudokuGameCreated>([this](const OnSudokuGameCreated &) {
+        if (sudokuGamePresenter) {
+            this->currentPresenter = sudokuGamePresenter;
+        }
+    });
 }

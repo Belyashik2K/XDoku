@@ -17,6 +17,7 @@ public:
         SudokuGame game
     ) = 0;
     virtual std::optional<SudokuGame> getGame(int gameId) = 0;
+    virtual std::optional<SudokuGame> getUserCurrentGame(int userId) = 0;
 };
 
 #endif //IGAMEREPOSITORY_H

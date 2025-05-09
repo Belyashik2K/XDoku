@@ -6,6 +6,7 @@
 #define GAMEMANAGER_H
 #include <memory>
 
+#include "SessionManager.h"
 #include "application/EventBus.h"
 #include "interfaces/database/repositories/IGameRepository.h"
 #include "interfaces/database/repositories/IMoveRepository.h"
@@ -14,15 +15,19 @@ class SudokuGameManager {
     std::shared_ptr<EventBus> eventBus;
     std::shared_ptr<IGameRepository> gameRepository;
     std::shared_ptr<IMoveRepository> moveRepository;
+    std::shared_ptr<SessionManager> sessionManager;
 
-    void getActiveGame() const;
-    void subscribeToEvents() const;
+    void getActiveGame();
+    void createSudokuGame(const SudokuDifficultyEnum &difficulty);
+
+    void subscribeToEvents();
 public:
     SudokuGameManager(
         const std::shared_ptr<EventBus> &eventBus,
         const std::shared_ptr<IGameRepository> &gameRepository,
-        const std::shared_ptr<IMoveRepository> &moveRepository
-    ) : eventBus(eventBus), gameRepository(gameRepository), moveRepository(moveRepository) {
+        const std::shared_ptr<IMoveRepository> &moveRepository,
+        const std::shared_ptr<SessionManager> &sessionManager
+    ) : eventBus(eventBus), gameRepository(gameRepository), moveRepository(moveRepository), sessionManager(sessionManager) {
         subscribeToEvents();
     }
 };

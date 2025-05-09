@@ -35,7 +35,7 @@ class SessionManager {
 
     void updateCurrentUser(int userId);
 
-    std::unique_ptr<User> getUserById(const int userId) const;
+    [[nodiscard]] std::unique_ptr<User> getUserById(int userId) const;
 
     void setCurrentUser(std::unique_ptr<User> user) {
         currentUser = std::move(user);
@@ -50,7 +50,7 @@ public:
         const std::shared_ptr<EventBus> &eventBus,
         const std::shared_ptr<ISessionRepository> &sessionRepository,
         const std::shared_ptr<IUserRepository> &userRepository
-    ) : eventBus(eventBus), sessionRepository(sessionRepository), userRepository(userRepository) {
+    ) : eventBus(eventBus), userRepository(userRepository), sessionRepository(sessionRepository) {
         subscribeToEvents();
     }
 

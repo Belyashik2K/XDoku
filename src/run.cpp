@@ -39,7 +39,7 @@ int main() {
         const auto appMediator = std::make_shared<AppMediator>(eventBus);
 
         const auto sessionManager = std::make_shared<SessionManager>(eventBus, sessionRepository, userRepository);
-        const auto sudokuGameManager = std::make_shared<SudokuGameManager>(eventBus, gameRepository, moveRepository);
+        const auto sudokuGameManager = std::make_shared<SudokuGameManager>(eventBus, gameRepository, moveRepository, sessionManager);
 
         auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");
 

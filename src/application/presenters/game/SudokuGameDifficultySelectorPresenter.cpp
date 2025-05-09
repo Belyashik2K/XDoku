@@ -5,9 +5,10 @@
 #include "application/presenters/game/SudokuGameDifficultySelectorPresenter.h"
 
 #include "application/app_events/ButtonEvents.h"
+#include "application/app_events/UserEvents.h"
 
-void SudokuGameDifficultySelectorPresenter::onDifficultySelected(const SudokuDifficultyEnum difficulty) {
-    printf("[SudokuGameDifficultySelectorPresenter] Difficulty selected: %d\n", difficulty);
+void SudokuGameDifficultySelectorPresenter::onDifficultySelected(const SudokuDifficultyEnum difficulty) const {
+    eventBus->publish(OnSudokuDifficultySelected(difficulty));
 }
 
 void SudokuGameDifficultySelectorPresenter::onBackButtonClicked() {

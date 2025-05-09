@@ -27,7 +27,7 @@ public:
         this->setView(std::move(view));
     }
 
-    void onDifficultySelected(const SudokuDifficultyEnum difficulty);
+    void onDifficultySelected(SudokuDifficultyEnum difficulty) const;
 
     void onBackButtonClicked();
 };

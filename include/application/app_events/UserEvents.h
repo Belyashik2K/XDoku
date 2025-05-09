@@ -22,4 +22,12 @@ public:
 };
 class OnActiveSudokuGameNotFound : public IEvent {};
 
+class OnSudokuDifficultySelected : public IEvent {
+public:
+    SudokuDifficultyEnum difficulty;
+    explicit OnSudokuDifficultySelected(const SudokuDifficultyEnum &difficulty) : difficulty(difficulty) {}
+};
+
+class OnSudokuGameCreated : public IEvent {};
+
 #endif //USEREVENTS_H
