@@ -50,7 +50,7 @@ public:
 
     bool createMove(int selected_row, int selected_col, int value) const;
 
-    void actualizeCurrentGrid() const;
+    void findActiveGame() const;
 };
 
 #endif //GAMEMANAGER_H

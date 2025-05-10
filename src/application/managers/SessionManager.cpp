@@ -3,7 +3,7 @@
 //
 
 #include <fstream>
-
+#include <memory>
 
 #include "application/managers/SessionManager.h"
 #include "application/app_events/ApplicationEvents.h"

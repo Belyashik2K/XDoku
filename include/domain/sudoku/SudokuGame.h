@@ -11,8 +11,6 @@
 #include "enums/SudokuGameStatus.h"
 #include "domain/custom_types/Timestamp.h"
 
-#include "json.hpp"
-
 class SudokuGame {
 public:
     SudokuGame(
@@ -35,11 +33,17 @@ public:
     );
 
     SudokuMove createMove(int row, int column, int value);
+    bool isSudokuSolved() const;
 
     [[nodiscard]] const SudokuGrid &getCurrentGrid() const { return grid; }
     [[nodiscard]] const SudokuGrid &getSolutionGrid() const { return solutionGrid; }
     [[nodiscard]] const SudokuDifficultyEnum &getDifficulty() const { return difficulty; }
-    [[nodiscard]] const SudokuGameStatusEnum &getStatus() const { return status; }
+    // [[nodiscard]] const SudokuGameStatusEnum &getStatus() const { return status; }
+    // [[nodiscard]] const std::optional<Timestamp> &getStartTime() const { return startTime; }
+    // [[nodiscard]] const std::optional<Timestamp> &getEndTime() const { return endTime; }
+    [[nodiscard]] int getMistakesCount() const { return mistakesCount; }
+    // [[nodiscard]] int getUserId() const { return userId; }
+    // [[nodiscard]] const std::vector<SudokuMove> &getMoves() const { return moves; }
     [[nodiscard]] int getId() const { return id.value(); }
 private:
 

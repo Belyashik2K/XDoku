@@ -20,7 +20,7 @@ std::optional<SudokuGame> PostgreSQLGameRepository::createGame(const int userId,
     PostgreSQLQuery query(R"(
         INSERT INTO games (user_id, board, solution, difficulty)
         VALUES ($1, $2, $3, $4)
-        RETURNING id, start_time, end_time, mistakes_count, status, exited_while_solved
+        RETURNING id, start_time, end_time, status
     )");
     query.addParameter(std::to_string(userId));
     nlohmann::json current = SudokuGridSerializer::saveGridToJson(game.getCurrentGrid());
@@ -43,9 +43,8 @@ std::optional<SudokuGame> PostgreSQLGameRepository::createGame(const int userId,
     } else {
         endTime = row["end_time"].as<std::string>();
     }
-    const int mistakesCount = row["mistakes_count"].as<int>();
+    constexpr int mistakesCount = 0;
     const auto status = row["status"].as<std::string>();
-    // const bool exitedWhileSolved = row["exited_while_solved"].as<bool>();
 
     return SudokuGameLoader::loadGame(
         id,
@@ -66,8 +65,8 @@ std::optional<SudokuGame> PostgreSQLGameRepository::getGame(int gameId) {
     }
 
     PostgreSQLQuery query(R"(
-        SELECT id, user_id, board, solution, difficulty, mistakes_count,
-               start_time, end_time, status, exited_while_solved
+        SELECT id, user_id, board, solution, difficulty,
+               start_time, end_time, status
         FROM games
         WHERE id = $1
     )");
@@ -84,7 +83,7 @@ std::optional<SudokuGame> PostgreSQLGameRepository::getGame(int gameId) {
     const auto grid = row["board"].as<std::string>();
     const auto solutionGrid = row["solution"].as<std::string>();
     const auto difficulty = row["difficulty"].as<std::string>();
-    const int mistakesCount = row["mistakes_count"].as<int>();
+    constexpr int mistakesCount = 0;
     const auto startTime = row["start_time"].as<std::string>();
 
     std::optional<std::string> endTime;
@@ -95,7 +94,6 @@ std::optional<SudokuGame> PostgreSQLGameRepository::getGame(int gameId) {
     }
 
     const auto status = row["status"].as<std::string>();
-    // const bool exitedWhileSolved = row["exited_while_solved"].as<bool>();
 
     return SudokuGameLoader::loadGame(
         id,
@@ -116,8 +114,8 @@ std::optional<SudokuGame> PostgreSQLGameRepository::getUserCurrentGame(int userI
     }
 
     PostgreSQLQuery query(R"(
-        SELECT id, user_id, board, solution, difficulty, mistakes_count,
-               start_time, end_time, status, exited_while_solved
+        SELECT id, user_id, board, solution, difficulty,
+               start_time, end_time, status
         FROM games
         WHERE user_id = $1
         AND status = $2
@@ -136,7 +134,7 @@ std::optional<SudokuGame> PostgreSQLGameRepository::getUserCurrentGame(int userI
     const auto grid = row["board"].as<std::string>();
     const auto solutionGrid = row["solution"].as<std::string>();
     const auto difficulty = row["difficulty"].as<std::string>();
-    const int mistakesCount = row["mistakes_count"].as<int>();
+    constexpr int mistakesCount = 0;
     const auto startTime = row["start_time"].as<std::string>();
 
     std::optional<std::string> endTime;
@@ -147,7 +145,8 @@ std::optional<SudokuGame> PostgreSQLGameRepository::getUserCurrentGame(int userI
     }
 
     const auto status = row["status"].as<std::string>();
-    // const bool exitedWhileSolved = row["exited_while_solved"].as<bool>();
+
+    printf("[PostgreSQLGameRepository] Found game with ID: %d for user ID: %d\n", id, finalUserId);
 
     return SudokuGameLoader::loadGame(
         id,

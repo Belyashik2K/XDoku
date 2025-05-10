@@ -24,7 +24,6 @@
 #include "presentation/imgui/views/sign_up/ImguiSignUpView.h"
 
 int main() {
-    try {
         const std::string connectionString =
                 "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku";
 
@@ -95,9 +94,6 @@ int main() {
             eventBus
         );
         XDoku.start();
-    } catch (const std::exception &e) {
-        printf("Oops! An error occurred: %s\n", e.what());
-    }
 
     return 0;
 }

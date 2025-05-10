@@ -113,11 +113,7 @@ void ImguiSudokuGameView::drawCells(
                 ImVec2(cellSize, cellSize)
             );
             if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0)) {
-                if (sp->getCurrentGame()->getCurrentGrid().isCellEditable(row, col)) {
-                    sp->setSelectedCell(row, col);
-                } else {
-                    sp->setSelectedCell(-1, -1);
-                }
+                sp->setSelectedCell(row, col);
             }
 
             if (row == selectedRow && col == selectedCol) {
@@ -204,5 +200,28 @@ void ImguiSudokuGameView::handleKeyboardInput() const {
 }
 
 void ImguiSudokuGameView::renderStatistics() const {
+    const auto sp = getPresenter();
+    if (!sp) return;
+    ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.45f);
     ImguiUtils::printText("Statistics", BLACK, 30, true);
+    ImguiUtils::addVerticalSpacing(3);
+
+    const std::string difficulty = std::format(
+        "Difficulty: {}",
+        sp->getGameStatus()
+    );
+    const std::string mistakes = std::format(
+        "Mistakes: {}",
+        sp->getMistakesCount()
+    );
+    const std::string elapsedTime = std::format(
+        "Elapsed time: {}",
+        sp->getElapsedTime()
+    );
+
+    ImguiUtils::printText(difficulty.c_str(), BLACK, 20, true);
+    ImguiUtils::addVerticalSpacing(3);
+    ImguiUtils::printText(mistakes.c_str(), BLACK, 20, true);
+    ImguiUtils::addVerticalSpacing(3);
+    ImguiUtils::printText(elapsedTime.c_str(), BLACK, 20, true);
 }

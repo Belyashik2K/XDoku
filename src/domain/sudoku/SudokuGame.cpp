@@ -56,8 +56,8 @@ SudokuMove SudokuGame::createMove(
     }
 
     if (grid.getCellValue(row, column) == solutionGrid.getCellValue(row, column)) {
-        grid.lockCell(row, column);
         move.setValid(true);
+        grid.lockCell(row, column);
     } else {
         move.setValid(false);
         mistakesCount++;
@@ -65,4 +65,15 @@ SudokuMove SudokuGame::createMove(
 
     moves.push_back(move);
     return move;
+}
+
+bool SudokuGame::isSudokuSolved() const {
+    for (int row = 0; row < 9; ++row) {
+        for (int col = 0; col < 9; ++col) {
+            if (grid.getCellValue(row, col) != solutionGrid.getCellValue(row, col)) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
