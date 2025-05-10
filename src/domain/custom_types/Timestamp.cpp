@@ -31,3 +31,19 @@ bool Timestamp::operator>(const Timestamp &other) const {
     return std::difftime(std::mktime(const_cast<std::tm *>(&timestamp)), std::mktime(const_cast<std::tm *>(&other.timestamp))) > 0;
 }
 
+std::string Timestamp::operator-(const Timestamp &other) const {
+    std::tm thisTm = timestamp;
+    std::tm otherTm = other.timestamp;
+
+    const auto thisTimeT = std::mktime(&thisTm);
+    const auto otherTimeT = std::mktime(&otherTm);
+
+    const auto diff = std::difftime(thisTimeT, otherTimeT);
+
+    printf("[Timestamp] Difference: %f\n", diff);
+    const int hours = static_cast<int>(diff) / 3600;
+    const int minutes = static_cast<int>(diff) % 3600 / 60;
+    const int seconds = static_cast<int>(diff) % 60;
+    std::string diffStr = std::to_string(hours) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+    return diffStr;
+}

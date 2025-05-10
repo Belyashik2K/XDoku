@@ -2,12 +2,10 @@
 
 #include <random>
 #include <chrono>
-#include <iostream>
 #include <optional>
 
 #define EMPTY 0
 
-// Вспомогательная функция для поиска следующей пустой ячейки
 std::optional<std::pair<int, int>> findEmptyCell(const SudokuGrid& grid) {
     for (int row = 0; row < 9; ++row) {
         for (int col = 0; col < 9; ++col) {
@@ -33,21 +31,18 @@ bool SudokuGenerator::hasUniqueSolution(SudokuGrid &grid) {
 }
 
 bool SudokuGenerator::isValid(const SudokuGrid& grid, int row, int col, int num) {
-    // Проверка строки
     for (int i = 0; i < 9; ++i) {
         if (grid.getCellValue(row, i) == num) {
             return false;
         }
     }
 
-    // Проверка столбца
     for (int i = 0; i < 9; ++i) {
         if (grid.getCellValue(i, col) == num) {
             return false;
         }
     }
 
-    // Проверка блока
     const int boxRow = row / 3 * 3;
     const int boxCol = col / 3 * 3;
     for (int i = boxRow; i < boxRow + 3; ++i) {
@@ -63,14 +58,14 @@ bool SudokuGenerator::isValid(const SudokuGrid& grid, int row, int col, int num)
 bool SudokuGenerator::solve(SudokuGrid& grid) {
     auto emptyCell = findEmptyCell(grid);
     if (!emptyCell.has_value()) {
-        return true;  // Решение найдено
+        return true;
     }
 
     auto [row, col] = emptyCell.value();
-    std::vector<int> nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::vector nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     shuffle(nums);
 
-    for (int num : nums) {
+    for (const int num : nums) {
         if (isValid(grid, row, col, num)) {
             grid.setCellValue(row, col, num);
             
@@ -78,7 +73,7 @@ bool SudokuGenerator::solve(SudokuGrid& grid) {
                 return true;
             }
             
-            grid.setCellValue(row, col, EMPTY);  // Откат
+            grid.setCellValue(row, col, EMPTY);
         }
     }
     return false;
@@ -94,10 +89,10 @@ void SudokuGenerator::solveWithCount(SudokuGrid& grid, int &count, const int lim
     }
 
     auto [row, col] = emptyCell.value();
-    std::vector<int> nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::vector nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     shuffle(nums);
 
-    for (int num : nums) {
+    for (const int num : nums) {
         if (isValid(grid, row, col, num)) {
             grid.setCellValue(row, col, num);
             solveWithCount(grid, count, limit);
@@ -107,7 +102,6 @@ void SudokuGenerator::solveWithCount(SudokuGrid& grid, int &count, const int lim
     }
 }
 
-// Возвращает уникальный кандидат для ячейки, если он существует
 int SudokuGenerator::getUniqueCandidate(const SudokuGrid& grid, int row, int col) {
     std::set<int> candidates;
     for (int num = 1; num <= 9; ++num) {
@@ -119,7 +113,6 @@ int SudokuGenerator::getUniqueCandidate(const SudokuGrid& grid, int row, int col
     for (const int num : candidates) {
         bool uniqueInRow = true, uniqueInCol = true, uniqueInBlock = true;
 
-        // Проверка уникальности в строке
         for (int c = 0; c < 9; ++c) {
             if (c != col && grid.getCellValue(row, c) == EMPTY && isValid(grid, row, c, num)) {
                 uniqueInRow = false;
@@ -127,7 +120,6 @@ int SudokuGenerator::getUniqueCandidate(const SudokuGrid& grid, int row, int col
             }
         }
 
-        // Проверка уникальности в столбце
         for (int r = 0; r < 9; ++r) {
             if (r != row && grid.getCellValue(r, col) == EMPTY && isValid(grid, r, col, num)) {
                 uniqueInCol = false;
@@ -135,7 +127,6 @@ int SudokuGenerator::getUniqueCandidate(const SudokuGrid& grid, int row, int col
             }
         }
 
-        // Проверка уникальности в блоке
         const int boxRow = row / 3 * 3;
         const int boxCol = col / 3 * 3;
         for (int r = boxRow; r < boxRow + 3; ++r) {
@@ -160,7 +151,6 @@ bool SudokuGenerator::solveByHumanLogic(SudokuGrid& grid) {
     while (progress) {
         progress = false;
 
-        // Простые кандидаты (только одно возможное значение)
         for (int row = 0; row < 9; ++row) {
             for (int col = 0; col < 9; ++col) {
                 if (grid.getCellValue(row, col) != EMPTY) continue;
@@ -181,12 +171,11 @@ bool SudokuGenerator::solveByHumanLogic(SudokuGrid& grid) {
 
         if (!progress) break;
 
-        // Скрытые одиночки (уникальные кандидаты в строке/столбце/блоке)
         for (int row = 0; row < 9; ++row) {
             for (int col = 0; col < 9; ++col) {
                 if (grid.getCellValue(row, col) != EMPTY) continue;
 
-                if (int unique = getUniqueCandidate(grid, row, col); unique != 0) {
+                if (const int unique = getUniqueCandidate(grid, row, col); unique != 0) {
                     grid.setCellValue(row, col, unique);
                     progress = true;
                 }
@@ -194,7 +183,6 @@ bool SudokuGenerator::solveByHumanLogic(SudokuGrid& grid) {
         }
     }
 
-    // Проверка завершения
     for (int row = 0; row < 9; ++row) {
         for (int col = 0; col < 9; ++col) {
             if (grid.getCellValue(row, col) == EMPTY) {
@@ -225,8 +213,7 @@ void SudokuGenerator::removeNumbers(SudokuGrid &grid, const int countOfOpenCells
         const int backup = grid.getCellValue(row, col);
         grid.setCellValue(row, col, EMPTY);
 
-        SudokuGrid tempGrid = grid;
-        if (!hasUniqueSolution(tempGrid) || !solveByHumanLogic(tempGrid)) {
+        if (SudokuGrid tempGrid = grid; !hasUniqueSolution(tempGrid) || !solveByHumanLogic(tempGrid)) {
             grid.setCellValue(row, col, backup);
         } else {
             removed++;
@@ -237,10 +224,8 @@ void SudokuGenerator::removeNumbers(SudokuGrid &grid, const int countOfOpenCells
 SudokuGrid SudokuGenerator::generateFullGrid() {
     SudokuGrid grid;
 
-    // Используем случайный порядок чисел при генерации
     std::vector nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-    // Перемешиваем для большего разнообразия
     shuffle(nums);
 
     if (!fillGridRandomly(grid, nums)) {
@@ -253,7 +238,7 @@ SudokuGrid SudokuGenerator::generateFullGrid() {
 bool SudokuGenerator::fillGridRandomly(SudokuGrid& grid, const std::vector<int>& nums) {
     auto emptyCell = findEmptyCell(grid);
     if (!emptyCell.has_value()) {
-        return true; // Все ячейки заполнены
+        return true;
     }
 
     auto [row, col] = emptyCell.value();
@@ -261,7 +246,7 @@ bool SudokuGenerator::fillGridRandomly(SudokuGrid& grid, const std::vector<int>&
     std::vector<int> shuffledNums = nums;
     shuffle(shuffledNums);
 
-    for (int num : shuffledNums) {
+    for (const int num : shuffledNums) {
         if (isValid(grid, row, col, num)) {
             grid.setCellValue(row, col, num);
 
@@ -269,7 +254,7 @@ bool SudokuGenerator::fillGridRandomly(SudokuGrid& grid, const std::vector<int>&
                 return true;
             }
 
-            grid.setCellValue(row, col, EMPTY); // Откат
+            grid.setCellValue(row, col, EMPTY);
         }
     }
 
@@ -285,7 +270,7 @@ SudokuGrid SudokuGenerator::generate(const SudokuDifficultyEnum difficulty) {
 
 SudokuGrid SudokuGenerator::getSolutionGrid(SudokuGrid grid) {
     if (solve(grid)) {
-        return grid;  // Решение уже сохраняется в оригинальной сетке
+        return grid;
     }
     throw std::runtime_error("Не удалось найти решение судоку");
 }

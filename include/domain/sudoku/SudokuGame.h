@@ -39,7 +39,7 @@ public:
     [[nodiscard]] const SudokuGrid &getSolutionGrid() const { return solutionGrid; }
     [[nodiscard]] const SudokuDifficultyEnum &getDifficulty() const { return difficulty; }
     // [[nodiscard]] const SudokuGameStatusEnum &getStatus() const { return status; }
-    // [[nodiscard]] const std::optional<Timestamp> &getStartTime() const { return startTime; }
+    [[nodiscard]] const std::optional<Timestamp> &getStartTime() const { return startTime; }
     // [[nodiscard]] const std::optional<Timestamp> &getEndTime() const { return endTime; }
     [[nodiscard]] int getMistakesCount() const { return mistakesCount; }
     // [[nodiscard]] int getUserId() const { return userId; }

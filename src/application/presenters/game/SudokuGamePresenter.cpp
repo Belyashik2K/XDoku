@@ -47,7 +47,8 @@ std::string SudokuGamePresenter::getMistakesCount() const {
 }
 
 std::string SudokuGamePresenter::getElapsedTime() const {
-    return "not implemented yet";
+    std::string elapsedTime = Timestamp::now() - getCurrentGame()->getStartTime().value();
+    return elapsedTime;
 }
 
 void SudokuGamePresenter::onBackButtonClicked() const {
