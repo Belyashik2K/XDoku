@@ -7,6 +7,10 @@
 void SudokuGamePresenter::onNewMove(const int value){
     const bool isValid = gameManager->createMove(selectedRow, selectedCol, value);
     updateMoveStatus(isValid);
+    if (isValid) {
+        selectedRow = NOT_SELECTED;
+        selectedCol = NOT_SELECTED;
+    }
 }
 
 void SudokuGamePresenter::setSelectedCell(const int row, const int col) {

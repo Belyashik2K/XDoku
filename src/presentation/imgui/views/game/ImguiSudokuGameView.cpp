@@ -202,7 +202,7 @@ void ImguiSudokuGameView::handleKeyboardInput() const {
 void ImguiSudokuGameView::renderStatistics() const {
     const auto sp = getPresenter();
     if (!sp) return;
-    ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.45f);
+    ImGui::SetCursorPosY(ImGui::GetWindowHeight() * 0.45f);
     ImguiUtils::printText("Statistics", BLACK, 30, true);
     ImguiUtils::addVerticalSpacing(3);
 
@@ -219,9 +219,9 @@ void ImguiSudokuGameView::renderStatistics() const {
         sp->getElapsedTime()
     );
 
-    ImguiUtils::printText(difficulty.c_str(), BLACK, 20, true);
+    ImguiUtils::printText(difficulty.c_str(), BLACK, 28, true);
     ImguiUtils::addVerticalSpacing(3);
-    ImguiUtils::printText(mistakes.c_str(), BLACK, 20, true);
+    ImguiUtils::printText(mistakes.c_str(), BLACK, 28, true);
     ImguiUtils::addVerticalSpacing(3);
-    ImguiUtils::printText(elapsedTime.c_str(), BLACK, 20, true);
+    ImguiUtils::printText(elapsedTime.c_str(), BLACK, 28, true);
 }
