@@ -51,16 +51,7 @@ std::string SudokuGamePresenter::getMistakesCount() const {
 }
 
 std::string SudokuGamePresenter::getElapsedTime() const {
-    const int elapsedTime = Timestamp::now() - getCurrentGame()->getStartTime().value();
-    int hours = elapsedTime / 3600;
-    int minutes = elapsedTime % 3600 / 60;
-    int seconds = elapsedTime % 60;
-    std::string elapsed;
-    if (hours) elapsed += std::format("{:02d}:", hours);
-    elapsed += std::format("{:02d}:", minutes);
-    elapsed += std::format("{:02d}", seconds);
-    if (elapsed.empty()) elapsed = "00:00";
-    return elapsed;
+    return getCurrentGame()->getElapsedTimeAsString();
 }
 
 void SudokuGamePresenter::onBackButtonClicked() const {

@@ -72,3 +72,34 @@ bool SudokuGame::isSudokuSolved() const {
     }
     return true;
 }
+
+int SudokuGame::getElapsedTime() const {
+    if (endTime) {
+        return endTime.value() - getStartTime().value();
+    }
+    return Timestamp::now() - getStartTime().value();
+}
+
+std::string SudokuGame::getElapsedTimeAsString() const {
+    const int elapsedTime = getElapsedTime();
+    int hours = elapsedTime / 3600;
+    int minutes = elapsedTime % 3600 / 60;
+    int seconds = elapsedTime % 60;
+    std::string elapsed;
+    if (hours) elapsed += std::format("{:02d}:", hours);
+    elapsed += std::format("{:02d}:", minutes);
+    elapsed += std::format("{:02d}", seconds);
+    if (elapsed.empty()) elapsed = "00:00";
+    return elapsed;
+}
+
+void SudokuGame::finish() {
+    status = SudokuGameStatusEnum::FINISHED;
+    endTime = Timestamp::now();
+}
+
+void SudokuGame::surrender() {
+    status = SudokuGameStatusEnum::SURRENDERED;
+    endTime = Timestamp::now();
+}
+

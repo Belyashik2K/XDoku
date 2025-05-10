@@ -70,15 +70,16 @@ int SudokuGameManager::calculateRating() const {
         return 0;
     }
 
+    if (currentGame->getStatus() == SudokuGameStatusEnum::SURRENDERED) {
+        return -100;
+    }
+
     constexpr int maxRating = 1000;
     constexpr float minRating = 0.0f;
     constexpr int mistakesMultiplier = 50;
     constexpr int timeMultiplier = 2;
     const float difficultyMultiplier = SudokuDifficulty::getSettings(currentGame->getDifficulty()).ratingMultiplier;
-
-    const Timestamp startTime = currentGame->getStartTime().value();
-    const Timestamp now = Timestamp::now();
-    const int elapsedTime = now - startTime;
+    const int elapsedTime = currentGame->getElapsedTime();
 
     const int mistakes = currentGame->getMistakesCount();
     float rating = maxRating - (mistakes * mistakesMultiplier) - (elapsedTime * timeMultiplier) * difficultyMultiplier;
@@ -99,6 +100,7 @@ void SudokuGameManager::finishGame() const {
         printf("[SudokuGameManager] No active game to finish\n");
         return;
     }
+    currentGame->finish();
     const bool result = gameRepository->updateGame(
         currentGame->getId(),
         SudokuGameStatusEnum::FINISHED,
@@ -106,9 +108,7 @@ void SudokuGameManager::finishGame() const {
     );
     if (result) {
         printf("[SudokuGameManager] Game with ID: %d finished successfully\n", currentGame->getId());
-        updateRating(calculateRating(), "Game " + std::to_string(currentGame->getId()) + " finished");
-        // clearCurrentGame();
-        // eventBus->publish(OnSudokuGameFinished());
+        updateRating(calculateRating(), "Game №" + std::to_string(currentGame->getId()) + " finished");
     } else {
         printf("[SudokuGameManager] Failed to finish game with ID: %d\n", currentGame->getId());
     }
@@ -119,6 +119,7 @@ void SudokuGameManager::surrenderGame() const {
         printf("[SudokuGameManager] No active game to surrender\n");
         return;
     }
+    currentGame->surrender();
     const bool result = gameRepository->updateGame(
         currentGame->getId(),
         SudokuGameStatusEnum::SURRENDERED,
@@ -126,9 +127,7 @@ void SudokuGameManager::surrenderGame() const {
     );
     if (result) {
         printf("[SudokuGameManager] Game with ID: %d surrendered successfully\n", currentGame->getId());
-        updateRating(-100, "Game " + std::to_string(currentGame->getId()) + " surrendered");
-        // clearCurrentGame();
-        // eventBus->publish(OnSudokuGameSurrendered());
+        updateRating(calculateRating(), "Game №" + std::to_string(currentGame->getId()) + " surrendered");
     } else {
         printf("[SudokuGameManager] Failed to surrender game with ID: %d\n", currentGame->getId());
     }

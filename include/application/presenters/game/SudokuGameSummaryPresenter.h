@@ -25,6 +25,26 @@ public:
         this->setView(std::move(view));
     }
 
+    const SudokuGame *getCurrentGame() const {
+        return gameManager->getCurrentGame();
+    }
+
+    std::string getDifficulty() const {
+        return SudokuDifficulty::getDifficultyName(getCurrentGame()->getDifficulty());
+    }
+
+    int getMistakesCount() const {
+        return getCurrentGame()->getMistakesCount();
+    }
+
+    std::string getElapsedTime() const {
+        return getCurrentGame()->getElapsedTimeAsString();
+    }
+
+    int getGainedRating() const {
+        return gameManager->calculateRating();
+    }
+
     void onFinishGameButtonClicked() const;
 };
 

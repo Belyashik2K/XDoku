@@ -38,9 +38,9 @@ class SudokuGameManager {
         currentGame = std::move(game);
     }
 
-    [[nodiscard]] int calculateRating() const;
-
     void findActiveGame() const;
+
+    void updateRating(int ratingChange, const std::string &message) const;
 
 public:
     SudokuGameManager(
@@ -67,9 +67,9 @@ public:
 
     void surrenderGame() const;
 
-    void updateRating(int ratingChange, const std::string &message) const;
-
     void finishGame() const;
+
+    [[nodiscard]] int calculateRating() const;
 };
 
 #endif //GAMEMANAGER_H
