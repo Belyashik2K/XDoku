@@ -42,7 +42,7 @@ std::string SudokuDifficulty::getDifficultyName(const SudokuDifficultyEnum level
 }
 
 SudokuDifficultySettings SudokuDifficulty::getSettings(const SudokuDifficultyEnum level) {
-    return SudokuDifficultySettings({getOpenCellsCount(level), getDifficultyName(level)});
+    return SudokuDifficultySettings({getOpenCellsCount(level), getDifficultyName(level), getRatingMultiplier(level)});
 }
 
 SudokuDifficultyEnum SudokuDifficulty::fromString(const std::string &difficulty) {
@@ -50,4 +50,19 @@ SudokuDifficultyEnum SudokuDifficulty::fromString(const std::string &difficulty)
         return it->second;
     }
     throw std::invalid_argument("Invalid SudokuDifficultyEnum string value");
+}
+
+float SudokuDifficulty::getRatingMultiplier(const SudokuDifficultyEnum level) {
+    switch (level) {
+        case SudokuDifficultyEnum::EASY:
+            return 1;
+        case SudokuDifficultyEnum::MEDIUM:
+            return 1.5;
+        case SudokuDifficultyEnum::HARD:
+            return 2;
+        case SudokuDifficultyEnum::EXPERT:
+            return 2.5;
+        default:
+            throw std::invalid_argument("Invalid difficulty level");
+    }
 }

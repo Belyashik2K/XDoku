@@ -263,7 +263,7 @@ bool SudokuGenerator::fillGridRandomly(SudokuGrid& grid, const std::vector<int>&
 
 SudokuGrid SudokuGenerator::generate(const SudokuDifficultyEnum difficulty) {
     SudokuGrid grid = generateFullGrid();
-    const auto [openCellsCount, strRepr] = SudokuDifficulty::getSettings(difficulty);
+    const auto [openCellsCount, strRepr, ratingMult] = SudokuDifficulty::getSettings(difficulty);
     removeNumbers(grid, openCellsCount);
     return grid;
 }

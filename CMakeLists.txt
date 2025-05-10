@@ -141,6 +141,11 @@ add_executable(XDoku
         src/domain/sudoku/utils/SudokuFactory.cpp
         src/domain/sudoku/utils/SudokuLoader.cpp
         src/domain/sudoku/utils/SudokuSerializer.cpp
+        include/application/presenters/game/SudokuGameSummaryPresenter.h
+        include/interfaces/views/game/ISudokuGameSummaryView.h
+        src/presentation/imgui/views/game/ImguiSudokuGameSummaryView.cpp
+        src/application/presenters/game/SudokuGameSummaryPresenter.cpp
+        include/presentation/imgui/views/game/ImguiSudokuGameSummaryView.h
 )
 
 target_include_directories(XDoku PRIVATE

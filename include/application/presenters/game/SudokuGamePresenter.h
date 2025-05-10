@@ -80,7 +80,7 @@ public:
 
     void onBackButtonClicked() const;
 
-    void onSurrenderButtonClicked();
+    void onSurrenderButtonClicked() const;
 };
 
 #endif //SUDOKUGAMEPRESENTER_H

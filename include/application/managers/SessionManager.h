@@ -62,6 +62,8 @@ public:
     [[nodiscard]] const User *getCurrentUser() const {
         return currentUser.get();
     }
+
+    void addRating(int ratingChange) const;
 };
 
 #endif //SESSIONMANAGER_H

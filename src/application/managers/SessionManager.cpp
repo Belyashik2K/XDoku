@@ -136,3 +136,13 @@ void SessionManager::updateCurrentUser(const int userId) {
     setCurrentUser(std::move(user));
 }
 
+void SessionManager::addRating(const int ratingChange) const {
+    if (!currentUser) {
+        printf("[SessionManager] No active user found, skipping rating update...\n");
+        return;
+    }
+    const int current = currentUser->getRating();
+    currentUser->setRating(current + ratingChange);
+}
+
+

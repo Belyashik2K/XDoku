@@ -13,6 +13,7 @@ enum class SudokuDifficultyEnum { EASY, MEDIUM, HARD, EXPERT };
 struct SudokuDifficultySettings {
     int openCellsCount;
     std::string difficultyName;
+    float ratingMultiplier;
 };
 
 const std::unordered_map<std::string, SudokuDifficultyEnum> sudokuDifficultyMap = {
@@ -38,6 +39,7 @@ public:
     static std::string getDifficultyName(SudokuDifficultyEnum level);
 private:
     static int getOpenCellsCount(SudokuDifficultyEnum level);
+    static float getRatingMultiplier(SudokuDifficultyEnum level);
 };
 
 #endif //SUDOKUDIFFICULTY_H

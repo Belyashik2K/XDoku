@@ -64,6 +64,98 @@ bool SudokuGameManager::createMove(const int selected_row, const int selected_co
     return move.isValidMove();
 }
 
+int SudokuGameManager::calculateRating() const {
+    // Рейтинг = max(0, (1000 - (ошибки × 50) - (время_сек × 2)) × коэф_сложности + бонус_за_идеал)
+    if (!currentGame) {
+        return 0;
+    }
+
+    constexpr int maxRating = 1000;
+    constexpr float minRating = 0.0f;
+    constexpr int mistakesMultiplier = 50;
+    constexpr int timeMultiplier = 2;
+    const float difficultyMultiplier = SudokuDifficulty::getSettings(currentGame->getDifficulty()).ratingMultiplier;
+
+    const Timestamp startTime = currentGame->getStartTime().value();
+    const Timestamp now = Timestamp::now();
+    const int elapsedTime = now - startTime;
+
+    const int mistakes = currentGame->getMistakesCount();
+    float rating = maxRating - (mistakes * mistakesMultiplier) - (elapsedTime * timeMultiplier) * difficultyMultiplier;
+    if (!mistakes) {
+        constexpr int bonus = 200;
+        rating += bonus;
+    }
+
+    return std::max(minRating, rating);
+}
+
+bool SudokuGameManager::isGridComplete() const {
+    return getCurrentGame()->isSudokuSolved();
+}
+
+void SudokuGameManager::finishGame() const {
+    if (!currentGame) {
+        printf("[SudokuGameManager] No active game to finish\n");
+        return;
+    }
+    const bool result = gameRepository->updateGame(
+        currentGame->getId(),
+        SudokuGameStatusEnum::FINISHED,
+        Timestamp::now()
+    );
+    if (result) {
+        printf("[SudokuGameManager] Game with ID: %d finished successfully\n", currentGame->getId());
+        updateRating(calculateRating(), "Game " + std::to_string(currentGame->getId()) + " finished");
+        // clearCurrentGame();
+        // eventBus->publish(OnSudokuGameFinished());
+    } else {
+        printf("[SudokuGameManager] Failed to finish game with ID: %d\n", currentGame->getId());
+    }
+}
+
+void SudokuGameManager::surrenderGame() const {
+    if (!currentGame) {
+        printf("[SudokuGameManager] No active game to surrender\n");
+        return;
+    }
+    const bool result = gameRepository->updateGame(
+        currentGame->getId(),
+        SudokuGameStatusEnum::SURRENDERED,
+        Timestamp::now()
+    );
+    if (result) {
+        printf("[SudokuGameManager] Game with ID: %d surrendered successfully\n", currentGame->getId());
+        updateRating(-100, "Game " + std::to_string(currentGame->getId()) + " surrendered");
+        // clearCurrentGame();
+        // eventBus->publish(OnSudokuGameSurrendered());
+    } else {
+        printf("[SudokuGameManager] Failed to surrender game with ID: %d\n", currentGame->getId());
+    }
+}
+
+void SudokuGameManager::updateRating(
+    const int ratingChange,
+    const std::string &message
+) const {
+    if (!currentGame) {
+        printf("[SudokuGameManager] No active game to update rating\n");
+        return;
+    }
+    const User *currentUser = sessionManager->getCurrentUser();
+    const int newRating = ratingRepository->createRatingHistoryRecord(
+        currentUser->getId(),
+        currentGame->getId(),
+        ratingChange,
+        message
+    );
+    if (newRating) {
+        sessionManager->addRating(ratingChange);
+        printf("[SudokuGameManager] Rating history record created successfully\n");
+    } else {
+        printf("[SudokuGameManager] Failed to create rating history record\n");
+    }
+}
 void SudokuGameManager::findActiveGame() const {
     printf("[SudokuGameManager] Finding active game...\n");
     if (currentGame) {
@@ -89,7 +181,16 @@ void SudokuGameManager::subscribeToEvents() {
         this->findActiveGame();
     });
     eventBus->subscribe<OnSudokuDifficultySelected>([this](const OnSudokuDifficultySelected &event) {
-            this->createSudokuGame(event.difficulty);
-        }
+        this->createSudokuGame(event.difficulty);
+    }
     );
+    eventBus->subscribe<OnSummaryViewClosed>([this](const OnSummaryViewClosed &) {
+        this->clearCurrentGame();
+    });
+    eventBus->subscribe<OnSudokuGameFinished>([this](const OnSudokuGameFinished &) {
+        this->finishGame();
+    });
+    eventBus->subscribe<OnSudokuGameSurrendered>([this](const OnSudokuGameSurrendered &) {
+        this->surrenderGame();
+    });
 }

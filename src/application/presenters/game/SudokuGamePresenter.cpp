@@ -12,6 +12,11 @@ void SudokuGamePresenter::onNewMove(const int value) {
         selectedRow = NOT_SELECTED;
         selectedCol = NOT_SELECTED;
     }
+
+    if (gameManager->isGridComplete()) {
+        // gameManager->finishGame();
+        eventBus->publish(OnSudokuGameFinished());
+    }
 }
 
 void SudokuGamePresenter::OnEscapeButtonClicked() {
@@ -62,6 +67,6 @@ void SudokuGamePresenter::onBackButtonClicked() const {
     eventBus->publish(OnMainMenuButtonClicked());
 }
 
-void SudokuGamePresenter::onSurrenderButtonClicked() {
-    ;
+void SudokuGamePresenter::onSurrenderButtonClicked() const {
+    eventBus->publish(OnSudokuGameSurrendered());
 }

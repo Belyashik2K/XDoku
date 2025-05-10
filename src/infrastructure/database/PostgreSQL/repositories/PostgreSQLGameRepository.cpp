@@ -160,3 +160,24 @@ std::optional<SudokuGame> PostgreSQLGameRepository::getUserCurrentGame(int userI
         status
     );
 }
+
+bool PostgreSQLGameRepository::updateGame(const int gameId, const SudokuGameStatusEnum status, const std::optional<Timestamp> &endTime) {
+    if (!database->isConnected()) {
+        return false;
+    }
+    PostgreSQLQuery query(R"(
+        UPDATE games
+        SET status = $1,
+            end_time = $2
+        WHERE id = $3
+    )");
+    query.addParameter(SudokuGameStatus::toString(status));
+    if (endTime.has_value()) {
+        query.addParameter(endTime.value().toString());
+    } else {
+        query.addParameter("");
+    }
+    query.addParameter(std::to_string(gameId));
+    const pqxx::result result = database->execute(query);
+    return result.affected_rows() > 0;
+}

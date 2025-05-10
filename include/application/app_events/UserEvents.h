@@ -25,5 +25,8 @@ public:
 };
 
 class OnSudokuGameCreated : public IEvent {};
+class OnSudokuGameFinished : public IEvent {};
+class OnSudokuGameSurrendered : public IEvent {};
+class OnSummaryViewClosed : public IEvent {};
 
 #endif //USEREVENTS_H

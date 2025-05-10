@@ -80,4 +80,19 @@ void AppMediator::subscribeToEvents() {
             this->currentPresenter = sudokuGamePresenter;
         }
     });
+    eventBus->subscribe<OnSudokuGameFinished>([this](const OnSudokuGameFinished &) {
+        if (sudokuGameSummaryPresenter) {
+            this->currentPresenter = sudokuGameSummaryPresenter;
+        }
+    });
+    eventBus->subscribe<OnSudokuGameSurrendered>([this](const OnSudokuGameSurrendered &) {
+        if (sudokuGameSummaryPresenter) {
+            this->currentPresenter = sudokuGameSummaryPresenter;
+        }
+    });
+    eventBus->subscribe<OnSummaryViewClosed>([this](const OnSummaryViewClosed &) {
+        if (mainMenuPresenter) {
+            this->currentPresenter = mainMenuPresenter;
+        }
+    });
 }

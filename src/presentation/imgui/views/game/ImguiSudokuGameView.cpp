@@ -11,8 +11,6 @@
 #include "presentation/imgui/managers/ImguiFontManager.h"
 #include "presentation/imgui/views/game/ImguiSudokuGameView.h"
 
-#include "presentation/imgui/guards/ImguiStyleVarGuard.h"
-
 void ImguiSudokuGameView::render() {
     ImguiWindowGuard window("Game Menu",
                             ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
@@ -20,6 +18,11 @@ void ImguiSudokuGameView::render() {
 
     auto sp = getPresenter();
     if (!sp) return;
+
+    if (!sp->getCurrentGame()) {
+        ImguiUtils::printText("No active game found", BLACK, 30, true);
+        return;
+    }
 
     renderLoading();
     renderGame();
@@ -244,6 +247,7 @@ void ImguiSudokuGameView::renderButtons() const {
 void ImguiSudokuGameView::renderStatistics() const {
     const auto sp = getPresenter();
     if (!sp) return;
+    if (!sp->getCurrentGame()) return;
     ImGui::SetCursorPosY(ImGui::GetWindowSize().y * 0.33f);
     ImguiUtils::printText("Statistics", BLACK, 39, true);
     ImguiUtils::addVerticalSpacing(3);

@@ -16,6 +16,7 @@
 #include "presenters/SignUpPresenter.h"
 #include "presenters/game/SudokuGameDifficultySelectorPresenter.h"
 #include "presenters/game/SudokuGamePresenter.h"
+#include "presenters/game/SudokuGameSummaryPresenter.h"
 
 class AppMediator {
     std::shared_ptr<IBasePresenter> currentPresenter;
@@ -29,6 +30,7 @@ class AppMediator {
     std::shared_ptr<HowToPlayPresenter> howToPlayPresenter;
     std::shared_ptr<SudokuGamePresenter> sudokuGamePresenter;
     std::shared_ptr<SudokuGameDifficultySelectorPresenter> sudokuGameDifficultySelectorPresenter;
+    std::shared_ptr<SudokuGameSummaryPresenter> sudokuGameSummaryPresenter;
 
     void subscribeToEvents();
 public:
@@ -61,6 +63,9 @@ public:
     }
     void setHowToPlayPresenter(const std::shared_ptr<HowToPlayPresenter> &presenter) {
         howToPlayPresenter = presenter;
+    }
+    void setSudokuGameSummaryPresenter(const std::shared_ptr<SudokuGameSummaryPresenter> &presenter) {
+        sudokuGameSummaryPresenter = presenter;
     }
     void render() const;
 };

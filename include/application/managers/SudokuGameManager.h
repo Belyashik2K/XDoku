@@ -10,11 +10,13 @@
 #include "application/EventBus.h"
 #include "interfaces/database/repositories/IGameRepository.h"
 #include "interfaces/database/repositories/IMoveRepository.h"
+#include "interfaces/database/repositories/IRatingRepository.h"
 
 class SudokuGameManager {
     std::shared_ptr<EventBus> eventBus;
     std::shared_ptr<IGameRepository> gameRepository;
     std::shared_ptr<IMoveRepository> moveRepository;
+    std::shared_ptr<IRatingRepository> ratingRepository;
     std::shared_ptr<SessionManager> sessionManager;
 
     std::unique_ptr<SudokuGame> currentGame = nullptr;
@@ -26,6 +28,9 @@ class SudokuGameManager {
     void subscribeToEvents();
 
     void clearCurrentGame() {
+        if (!currentGame) {
+            return;
+        }
         currentGame.reset();
     }
 
@@ -33,14 +38,22 @@ class SudokuGameManager {
         currentGame = std::move(game);
     }
 
+    [[nodiscard]] int calculateRating() const;
+
+    void findActiveGame() const;
 
 public:
     SudokuGameManager(
         const std::shared_ptr<EventBus> &eventBus,
         const std::shared_ptr<IGameRepository> &gameRepository,
         const std::shared_ptr<IMoveRepository> &moveRepository,
+        const std::shared_ptr<IRatingRepository> &ratingRepository,
         const std::shared_ptr<SessionManager> &sessionManager
-    ) : eventBus(eventBus), gameRepository(gameRepository), moveRepository(moveRepository), sessionManager(sessionManager) {
+    ) : eventBus(eventBus),
+        gameRepository(gameRepository),
+        moveRepository(moveRepository),
+        ratingRepository(ratingRepository),
+        sessionManager(sessionManager) {
         subscribeToEvents();
     }
 
@@ -50,7 +63,13 @@ public:
 
     bool createMove(int selected_row, int selected_col, int value) const;
 
-    void findActiveGame() const;
+    bool isGridComplete() const;
+
+    void surrenderGame() const;
+
+    void updateRating(int ratingChange, const std::string &message) const;
+
+    void finishGame() const;
 };
 
 #endif //GAMEMANAGER_H
