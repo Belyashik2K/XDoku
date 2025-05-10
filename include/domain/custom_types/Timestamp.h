@@ -14,7 +14,7 @@ public:
 
     bool operator>(const Timestamp& other) const;
 
-    std::string operator-(const Timestamp &other) const;
+    int operator-(const Timestamp &other) const;
 };
 
 #endif

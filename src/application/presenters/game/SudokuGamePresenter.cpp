@@ -3,10 +3,9 @@
 //
 
 #include "application/presenters/game/SudokuGamePresenter.h"
-
 #include "application/app_events/ButtonEvents.h"
 
-void SudokuGamePresenter::onNewMove(const int value){
+void SudokuGamePresenter::onNewMove(const int value) {
     const bool isValid = gameManager->createMove(selectedRow, selectedCol, value);
     updateMoveStatus(isValid);
     if (isValid) {
@@ -47,8 +46,16 @@ std::string SudokuGamePresenter::getMistakesCount() const {
 }
 
 std::string SudokuGamePresenter::getElapsedTime() const {
-    std::string elapsedTime = Timestamp::now() - getCurrentGame()->getStartTime().value();
-    return elapsedTime;
+    const int elapsedTime = Timestamp::now() - getCurrentGame()->getStartTime().value();
+    int hours = elapsedTime / 3600;
+    int minutes = elapsedTime % 3600 / 60;
+    int seconds = elapsedTime % 60;
+    std::string elapsed;
+    if (hours) elapsed += std::format("{:02d}:", hours);
+    elapsed += std::format("{:02d}:", minutes);
+    elapsed += std::format("{:02d}", seconds);
+    if (elapsed.empty()) elapsed = "00:00";
+    return elapsed;
 }
 
 void SudokuGamePresenter::onBackButtonClicked() const {
@@ -58,5 +65,3 @@ void SudokuGamePresenter::onBackButtonClicked() const {
 void SudokuGamePresenter::onSurrenderButtonClicked() {
     ;
 }
-
-
