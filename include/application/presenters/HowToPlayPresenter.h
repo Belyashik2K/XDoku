@@ -25,6 +25,8 @@ public:
         this->setSelf(weak_from_this());
         this->setView(std::move(view));
     }
+
+    void onBackButtonClicked() const;
 };
 
 #endif //HOWTOPLAYPRESENTER_H

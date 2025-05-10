@@ -3,10 +3,11 @@
 //
 
 #include <fstream>
-
+#include <memory>
 
 #include "application/managers/SessionManager.h"
 #include "application/app_events/ApplicationEvents.h"
+#include "application/app_events/ButtonEvents.h"
 
 std::optional<std::string> SessionManager::getDeviceHWID() {
     // TODO: Implement a more secure way to get the HWID on different platforms
@@ -23,7 +24,7 @@ std::optional<std::string> SessionManager::getDeviceHWID() {
     return hwid;
 }
 
-void SessionManager::findActiveSession() const {
+void SessionManager::findActiveSession() {
     const std::optional<std::string> HWID = getDeviceHWID();
     if (!HWID.has_value()) {
         printf("[SessionManager] HWID is not available, skipping session search...\n");
@@ -49,7 +50,7 @@ void SessionManager::findActiveSession() const {
     }
 }
 
-void SessionManager::createSession(const OnUserLoggedIn &event) const {
+void SessionManager::createSession(const OnUserLoggedIn &event) {
     const std::optional<std::string> HWID = getDeviceHWID();
     if (!HWID.has_value()) {
         printf("[SessionManager] HWID is not available, skipping session creation...\n");
@@ -66,29 +67,44 @@ void SessionManager::createSession(const OnUserLoggedIn &event) const {
     } else {
         printf("[SessionManager] Failed to create session for user ID: %d\n", event.userId);
     }
+    updateCurrentUser(event.userId);
 }
 
 
-void SessionManager::onActiveSessionFound(const int userId) const {
+void SessionManager::onActiveSessionFound(const int userId) {
     printf("[SessionManager] Session active, logging in user ID: %d\n", userId);
+    updateCurrentUser(userId);
     eventBus->publish(OnUserLoggedIn(userId));
 }
 
-void SessionManager::onExpiredSessionFound(const std::string &sessionId) const {
+void SessionManager::onExpiredSessionFound(const std::string &sessionId) {
     printf("[SessionManager] Session expired, deleting...\n");
-    const bool result = sessionRepository->deleteSession(sessionId);
-    if (result) {
-        printf("[SessionManager] Session deleted successfully\n");
-    } else {
-        printf("[SessionManager] Failed to delete session\n");
-    }
+    logout();
 }
 
 bool SessionManager::isSessionExpired(const Timestamp &expiredAt) {
     return Timestamp::now() > expiredAt;
 }
 
-void SessionManager::subscribeToEvents() const {
+void SessionManager::logout() {
+    printf("[SessionManager] Logging out...\n");
+    const std::optional<std::string> HWID = getDeviceHWID();
+    if (!HWID.has_value()) {
+        printf("[SessionManager] HWID is not available, skipping logout...\n");
+        return;
+    }
+    const bool result = sessionRepository->deleteSession(HWID.value());
+    if (result) {
+        printf("[SessionManager] Session deleted successfully\n");
+    } else {
+        printf("[SessionManager] Failed to delete session\n");
+    }
+    clearCurrentUser();
+    eventBus->publish(OnUserLoggedOut());
+}
+
+
+void SessionManager::subscribeToEvents() {
     printf("[SessionManager] Subscribing to events...\n");
     eventBus->subscribe<OnApplicationStartup>([this](const OnApplicationStartup &) {
         findActiveSession();
@@ -96,4 +112,37 @@ void SessionManager::subscribeToEvents() const {
     eventBus->subscribe<OnUserLoggedIn>([this](const OnUserLoggedIn &event) {
         createSession(event);
     });
+    eventBus->subscribe<OnLogoutButtonClicked>([this](const OnLogoutButtonClicked &) {
+        logout();
+    });
 }
+
+std::unique_ptr<User> SessionManager::getUserById(const int userId) const {
+    std::optional<User> user = userRepository->get(userId);
+    if (!user.has_value()) {
+        return nullptr;
+    }
+    return std::make_unique<User>(user.value());
+}
+
+
+void SessionManager::updateCurrentUser(const int userId) {
+    std::unique_ptr<User> user = getUserById(userId);
+    if (!user) {
+        printf("[SessionManager] User not found, logging out...\n");
+        logout();
+        return;
+    }
+    setCurrentUser(std::move(user));
+}
+
+void SessionManager::addRating(const int ratingChange) const {
+    if (!currentUser) {
+        printf("[SessionManager] No active user found, skipping rating update...\n");
+        return;
+    }
+    const int current = currentUser->getRating();
+    currentUser->setRating(current + ratingChange);
+}
+
+

@@ -15,7 +15,7 @@ void AppMediator::render() const {
 
 AppMediator::AppMediator(
     const std::shared_ptr<EventBus> &eventBus,
-    IBasePresenter *presenter
+    const std::shared_ptr<IBasePresenter> &presenter
 ) {
     this->eventBus = eventBus;
     this->currentPresenter = presenter;
@@ -68,6 +68,31 @@ void AppMediator::subscribeToEvents() {
     eventBus->subscribe<OnHowToPlayButtonClicked>([this](const OnHowToPlayButtonClicked &) {
         if (howToPlayPresenter) {
             this->currentPresenter = howToPlayPresenter;
+        }
+    });
+    eventBus->subscribe<OnUserLoggedOut>([this](const OnUserLoggedOut &) {
+        if (signInPresenter) {
+            this->currentPresenter = signInPresenter;
+        }
+    });
+    eventBus->subscribe<OnSudokuGameCreated>([this](const OnSudokuGameCreated &) {
+        if (sudokuGamePresenter) {
+            this->currentPresenter = sudokuGamePresenter;
+        }
+    });
+    eventBus->subscribe<OnSudokuGameFinished>([this](const OnSudokuGameFinished &) {
+        if (sudokuGameSummaryPresenter) {
+            this->currentPresenter = sudokuGameSummaryPresenter;
+        }
+    });
+    eventBus->subscribe<OnSudokuGameSurrendered>([this](const OnSudokuGameSurrendered &) {
+        if (sudokuGameSummaryPresenter) {
+            this->currentPresenter = sudokuGameSummaryPresenter;
+        }
+    });
+    eventBus->subscribe<OnSummaryViewClosed>([this](const OnSummaryViewClosed &) {
+        if (mainMenuPresenter) {
+            this->currentPresenter = mainMenuPresenter;
         }
     });
 }

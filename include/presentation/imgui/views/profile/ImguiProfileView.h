@@ -9,6 +9,10 @@
 class ImguiProfileView final : public IProfileView {
 public:
     void render() override;
+
+    void renderStatistics() const;
+
+    void renderButtons() const;
 };
 
 #endif //IMGUIPROFILEVIEW_H

@@ -13,7 +13,8 @@ public:
     explicit PostgreSQLUserRepository(std::shared_ptr<PostgreSQLDatabase> database);
 
     std::optional<User> create(User newUser) override;
-    std::optional<User> get(const std::string &username) const override;
+    std::optional<User> get(const std::string &username) override;
+    std::optional<User> get(int id) override;
     bool isUsernameTaken(const std::string &username) const override;
     bool isEmailTaken(const std::string &email) const override;
     std::string getHashedPassword(const std::string &username) const override;

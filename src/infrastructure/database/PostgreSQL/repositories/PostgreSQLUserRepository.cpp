@@ -81,7 +81,65 @@ std::string PostgreSQLUserRepository::getHashedPassword(const std::string &usern
     return row["password_hash"].as<std::string>();
 }
 
-std::optional<User> PostgreSQLUserRepository::get(const std::string &username) const {
+std::optional<User> PostgreSQLUserRepository::get(int id) {
+    if (!database->isConnected()) {
+        return std::nullopt;
+    }
+
+    PostgreSQLQuery query(R"(
+        SELECT
+            u.id,
+            u.username,
+            u.email,
+            u.password_hash,
+            u.created_at,
+            rh.new_rating AS rating
+        FROM
+            users u
+        LEFT JOIN (
+            SELECT
+                user_id,
+                new_rating
+            FROM
+                rating_history
+            WHERE
+                (user_id, timestamp) IN (
+                    SELECT
+                        user_id,
+                        MAX(timestamp)
+                    FROM
+                        rating_history
+                    GROUP BY
+                        user_id
+                )
+        ) rh ON u.id = rh.user_id
+        WHERE
+            u.id = $1;
+    )");
+
+    query.addParameter(std::to_string(id));
+
+    const pqxx::result result = database->execute(query);
+    if (result.empty()) {
+        return std::nullopt;
+    }
+
+    const pqxx::row row = result[0];
+
+    int finalId = row["id"].as<int>();
+    const auto finalUsername = row["username"].as<std::string>();
+    const auto email = row["email"].as<std::string>();
+    const auto finalPasswordHash = row["password_hash"].as<std::string>();
+    const auto createdAt = row["created_at"].as<std::string>();
+    const std::optional<int> rating = row["rating"].is_null()
+                                          ? std::nullopt
+                                          : std::make_optional(row["rating"].as<int>());
+
+    return User(finalId, finalUsername, email, finalPasswordHash, rating, createdAt, false);
+}
+
+
+std::optional<User> PostgreSQLUserRepository::get(const std::string &username) {
     if (!database->isConnected()) {
         return std::nullopt;
     }

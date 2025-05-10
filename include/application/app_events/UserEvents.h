@@ -13,12 +13,20 @@ public:
     int userId;
     explicit OnUserLoggedIn(const int userId) : userId(userId) {}
 };
+class OnUserLoggedOut : public IEvent {};
 
-class OnActiveSudokuGameFound : public IEvent {
-public:
-    SudokuGame game;
-    explicit OnActiveSudokuGameFound(const SudokuGame &game) : game(game) {}
-};
+class OnActiveSudokuGameFound : public IEvent {};
 class OnActiveSudokuGameNotFound : public IEvent {};
+
+class OnSudokuDifficultySelected : public IEvent {
+public:
+    SudokuDifficultyEnum difficulty;
+    explicit OnSudokuDifficultySelected(const SudokuDifficultyEnum &difficulty) : difficulty(difficulty) {}
+};
+
+class OnSudokuGameCreated : public IEvent {};
+class OnSudokuGameFinished : public IEvent {};
+class OnSudokuGameSurrendered : public IEvent {};
+class OnSummaryViewClosed : public IEvent {};
 
 #endif //USEREVENTS_H

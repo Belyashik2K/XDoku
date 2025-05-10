@@ -7,6 +7,7 @@
 
 #include <imgui.h>
 
+#define TRANSPARENT ImColor(0, 0, 0, 0)
 #define WHITE ImColor(255, 255, 255)
 #define BLACK ImColor(0, 0, 0)
 #define RED ImColor(255, 0, 0)
@@ -17,5 +18,7 @@
 #define MAGENTA ImColor(255, 0, 255)
 #define GRAY ImColor(35, 35, 36)
 #define LIGHT_GRAY ImColor(25, 25, 26)
+#define VERY_LIGHT_GRAY ImColor(25, 25, 25, 85)
+#define LIGHT_RED ImColor(255, 0, 0, 85)
 
 #endif //IMGUICOLORS_H

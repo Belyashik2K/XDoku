@@ -17,6 +17,12 @@ public:
         SudokuGame game
     ) = 0;
     virtual std::optional<SudokuGame> getGame(int gameId) = 0;
+    virtual std::optional<SudokuGame> getUserCurrentGame(int userId) = 0;
+    virtual bool updateGame(
+        int gameId,
+        SudokuGameStatusEnum status,
+        const std::optional<Timestamp> &endTime
+    ) = 0;
 };
 
 #endif //IGAMEREPOSITORY_H

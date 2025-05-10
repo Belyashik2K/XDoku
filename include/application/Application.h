@@ -11,10 +11,14 @@
 
 class Application {
     std::unique_ptr<IFrameHandler> frameHandler;
-    AppMediator* appMediator;
-    EventBus *eventBus = nullptr;
+    std::shared_ptr<AppMediator> appMediator;
+    std::shared_ptr<EventBus> eventBus;
 public:
-    Application(std::unique_ptr<IFrameHandler> handler, AppMediator* mediator, EventBus *eventBus = nullptr);
+    Application(
+        std::unique_ptr<IFrameHandler> frameHandler,
+        const std::shared_ptr<AppMediator> &appMediator,
+        const std::shared_ptr<EventBus> &eventBus
+    );
     void start() const;
 
     void subscribeToEvents() const;

@@ -3,6 +3,7 @@
 //
 
 
+#include <cstdio>
 #include <presentation/imgui/guards/ImguiChildWindowGuard.h>
 
 ImguiChildWindowGuard::~ImguiChildWindowGuard() {
@@ -24,6 +25,7 @@ ImguiChildWindowGuard::ImguiChildWindowGuard(
     }
     m_Started = ImGui::BeginChild(id, size, flags, ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar);
 }
+
 
 ImguiChildWindowGuard::ImguiChildWindowGuard(
     const char *str_id,

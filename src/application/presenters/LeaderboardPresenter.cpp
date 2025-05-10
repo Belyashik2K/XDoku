@@ -16,6 +16,9 @@ void LeaderboardPresenter::loadLeaderboard() {
 void LeaderboardPresenter::subscribeToEvents() {
     printf("[LeaderboardPresenter] Subscribing to events...\n");
     eventBus->subscribe<OnLeaderboardButtonClicked>([this](const OnLeaderboardButtonClicked &) {
+        if (getLeaderboardPlaces()) {
+            return;
+        }
         loadLeaderboard();
     });
 }

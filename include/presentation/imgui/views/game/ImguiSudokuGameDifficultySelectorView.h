@@ -10,6 +10,9 @@
 class ImguiSudokuGameDifficultySelectorView final : public ISudokuGameDifficultySelectorView {
 public:
     void render() override;
+
+    static void renderHeader();
+    void renderDifficultyButtons() const;
 };
 
 #endif //IMGUISUDOKUGAMEDIFFICULTYSELECTORVIEW_H

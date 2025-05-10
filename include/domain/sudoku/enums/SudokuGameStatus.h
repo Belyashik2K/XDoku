@@ -6,7 +6,7 @@
 #define SUDOKUSTATUS_H
 #include <string>
 
-enum class SudokuGameStatusEnum { IN_PROGRESS, FINISHED, SURRENDERED };
+enum class SudokuGameStatusEnum { IN_PROGRESS, FINISHED, SURRENDERED, EXITED };
 
 class SudokuGameStatus {
 public:

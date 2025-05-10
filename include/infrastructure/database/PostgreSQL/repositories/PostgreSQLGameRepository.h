@@ -17,7 +17,8 @@ public:
         SudokuGame game
     ) override;
     std::optional<SudokuGame> getGame(int gameId) override;
-
+    std::optional<SudokuGame> getUserCurrentGame(int userId) override;
+    bool updateGame(int gameId, SudokuGameStatusEnum status, const std::optional<Timestamp> &endTime) override;
 };
 
 #endif //POSTGRESQLGAMEREPOSITORY_H

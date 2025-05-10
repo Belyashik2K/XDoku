@@ -60,11 +60,11 @@ void ImguiLeaderboardView::renderLeaderboard() const {
     for (const auto &place : leaderboardPlaces.value()) {
         ImGui::TableNextRow();
         ImGui::TableSetColumnIndex(0);
-        ImGui::Text("%d.", place.getPlace());
+        ImGui::TextColored(BLACK, "%d.", place.getPlace());
         ImGui::TableSetColumnIndex(1);
-        ImGui::Text("@%s", place.getUsername().c_str());
+        ImGui::TextColored(BLACK, "@%s", place.getUsername().c_str());
         ImGui::TableSetColumnIndex(2);
-        ImGui::Text("%d points", place.getRating());
+        ImGui::TextColored(BLACK, "%d points", place.getRating());
     }
     ImGui::EndTable();
     ImGui::PopFont();

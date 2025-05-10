@@ -28,14 +28,14 @@ public:
         int gameId,
         int row,
         int column,
-        int value,
-        bool isValid
+        int value
     );
-    std::optional<int> getId() const;
-    int getGameId() const;
-    std::pair<int, int> coords() const;
-    int getValue() const;
-    bool isValidMove() const;
+    [[nodiscard]] std::optional<int> getId() const;
+    [[nodiscard]] int getGameId() const;
+    [[nodiscard]] std::pair<int, int> coords() const;
+    [[nodiscard]] int getValue() const;
+    [[nodiscard]] bool isValidMove() const;
+    void setValid(const bool valid) { isValid = valid; }
 };
 
 #endif //SUDOKUMOVE_H

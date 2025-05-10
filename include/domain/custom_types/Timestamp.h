@@ -13,6 +13,8 @@ public:
     static Timestamp now();
 
     bool operator>(const Timestamp& other) const;
+
+    int operator-(const Timestamp &other) const;
 };
 
 #endif

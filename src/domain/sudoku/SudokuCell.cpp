@@ -7,20 +7,9 @@
 #include <stdexcept>
 
 SudokuCell::SudokuCell(const int value, const bool is_fixed)
-    : value(value), is_fixed(is_fixed), is_valid(true) {
+    : value(value), is_fixed(is_fixed), is_locked(is_fixed) {
     if (value < 0 || value > 9) {
         throw std::invalid_argument("Value must be between 0 and 9");
-    }
-    generateCandidates();
-}
-
-void SudokuCell::generateCandidates() {
-    if (is_fixed) {
-        return;
-    }
-    candidates.clear();
-    for (int i = 1; i <= 9; ++i) {
-        candidates.insert(i);
     }
 }
 
@@ -29,27 +18,28 @@ int SudokuCell::getValue() const {
 }
 
 bool SudokuCell::mayBeEdited() const {
-    return !is_fixed;
-}
-
-bool SudokuCell::isValid() const {
-    return is_valid;
+    return !(is_fixed || is_locked);
 }
 
 void SudokuCell::setValue(const int new_value) {
     if (new_value < 0 || new_value > 9) {
         throw std::invalid_argument("Value must be between 0 and 9");
     }
+    if (!mayBeEdited()) {
+        throw std::runtime_error("Cell is locked or fixed");
+    }
     value = new_value;
+}
+
+bool SudokuCell::isEmpty() const {
+    return value == 0;
+}
+
+void SudokuCell::lock() {
+    is_locked = true;
+}
+
+void SudokuCell::fix() {
     is_fixed = true;
-    is_valid = true;
-    candidates.clear();
-}
-
-bool SudokuCell::givenValueInCandidates(const int value) const {
-    return candidates.contains(value);
-}
-
-void SudokuCell::setValid(const bool valid) {
-    is_valid = valid;
+    is_locked = true;
 }

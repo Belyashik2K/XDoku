@@ -13,9 +13,9 @@ SudokuMove::SudokuMove(
 
 SudokuMove::SudokuMove(
     const int gameId, const int row, const int column,
-    const int value, const bool isValid
+    const int value
 ) : id(std::nullopt), gameId(gameId), row(row), column(column),
-    value(value), isValid(isValid) {
+    value(value), isValid(true) {
 }
 
 std::optional<int> SudokuMove::getId() const {

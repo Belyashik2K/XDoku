@@ -4,7 +4,6 @@
 
 #include "domain/sudoku/enums/SudokuDifficulty.h"
 
-#include <map>
 #include <stdexcept>
 
 #define EASY_CELLS_COUNT 40
@@ -43,19 +42,27 @@ std::string SudokuDifficulty::getDifficultyName(const SudokuDifficultyEnum level
 }
 
 SudokuDifficultySettings SudokuDifficulty::getSettings(const SudokuDifficultyEnum level) {
-    return SudokuDifficultySettings({getOpenCellsCount(level), getDifficultyName(level)});
+    return SudokuDifficultySettings({getOpenCellsCount(level), getDifficultyName(level), getRatingMultiplier(level)});
 }
 
 SudokuDifficultyEnum SudokuDifficulty::fromString(const std::string &difficulty) {
-    static const std::map<std::string, SudokuDifficultyEnum> difficultyMap = {
-        {"easy", SudokuDifficultyEnum::EASY},
-        {"medium", SudokuDifficultyEnum::MEDIUM},
-        {"hard", SudokuDifficultyEnum::HARD},
-        {"expert", SudokuDifficultyEnum::EXPERT}
-    };
-
-    if (const auto it = difficultyMap.find(difficulty); it != difficultyMap.end()) {
+    if (const auto it = sudokuDifficultyMap.find(difficulty); it != sudokuDifficultyMap.end()) {
         return it->second;
     }
     throw std::invalid_argument("Invalid SudokuDifficultyEnum string value");
+}
+
+float SudokuDifficulty::getRatingMultiplier(const SudokuDifficultyEnum level) {
+    switch (level) {
+        case SudokuDifficultyEnum::EASY:
+            return 1;
+        case SudokuDifficultyEnum::MEDIUM:
+            return 1.5;
+        case SudokuDifficultyEnum::HARD:
+            return 2;
+        case SudokuDifficultyEnum::EXPERT:
+            return 2.5;
+        default:
+            throw std::invalid_argument("Invalid difficulty level");
+    }
 }
