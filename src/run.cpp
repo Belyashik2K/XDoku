@@ -15,6 +15,7 @@
 #include "infrastructure/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
 
 #include "presentation/imgui/ImguiFrameHandler.h"
+#include "presentation/imgui/managers/ImguiAudioManager.h"
 #include "presentation/imgui/views/game/ImguiSudokuGameDifficultySelectorView.h"
 #include "presentation/imgui/views/game/ImguiSudokuGameSummaryView.h"
 #include "presentation/imgui/views/game/ImguiSudokuGameView.h"
@@ -42,6 +43,13 @@ int main() {
     const auto sessionManager = std::make_shared<SessionManager>(eventBus, sessionRepository, userRepository);
     const auto sudokuGameManager = std::make_shared<SudokuGameManager>(
         eventBus, gameRepository, moveRepository, ratingRepository, sessionManager
+    );
+    ImguiAudioManager::getInstance().init();
+    ImguiAudioManager::getInstance().loadAudio(
+        "../assets/sounds/correct.wav"
+    );
+    ImguiAudioManager::getInstance().loadAudio(
+        "../assets/sounds/incorrect.wav"
     );
 
     auto frameHandler = std::make_unique<ImguiFrameHandler>("XDoku");

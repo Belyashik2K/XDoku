@@ -5,7 +5,7 @@
 #include "application/presenters/game/SudokuGamePresenter.h"
 #include "application/app_events/ButtonEvents.h"
 
-void SudokuGamePresenter::onNewMove(const int value) {
+bool SudokuGamePresenter::onNewMove(const int value) {
     const bool isValid = gameManager->createMove(selectedRow, selectedCol, value);
     updateMoveStatus(isValid);
     if (isValid) {
@@ -17,6 +17,7 @@ void SudokuGamePresenter::onNewMove(const int value) {
         // gameManager->finishGame();
         eventBus->publish(OnSudokuGameFinished());
     }
+    return isValid;
 }
 
 void SudokuGamePresenter::OnEscapeButtonClicked() {

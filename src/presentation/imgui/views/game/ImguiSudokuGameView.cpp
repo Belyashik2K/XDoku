@@ -11,6 +11,8 @@
 #include "presentation/imgui/managers/ImguiFontManager.h"
 #include "presentation/imgui/views/game/ImguiSudokuGameView.h"
 
+#include "presentation/imgui/managers/ImguiAudioManager.h"
+
 void ImguiSudokuGameView::render() {
     ImguiWindowGuard window("Game Menu",
                             ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
@@ -194,7 +196,11 @@ void ImguiSudokuGameView::handleKeyboardInput() const {
         for (int key = ImGuiKey_1; key <= ImGuiKey_9; ++key) {
             if (ImGui::IsKeyPressed(static_cast<ImGuiKey>(key))) {
                 const int value = key - ImGuiKey_0;
-                sp->onNewMove(value);
+                if (const bool result = sp->onNewMove(value); !result) {
+                    ImguiAudioManager::getInstance().playAudio("../assets/sounds/incorrect.wav");
+                } else {
+                    ImguiAudioManager::getInstance().playAudio("../assets/sounds/correct.wav");
+                }
             }
         }
 
