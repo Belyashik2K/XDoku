@@ -12,6 +12,9 @@ SudokuGrid SudokuGridSerializer::loadGridFromJsonString(const std::string &grid)
         for (int j = 0; j < 9; ++j) {
             const int value = gridJson[i][j].get<int>();
             sudokuGrid.setCellValue(i, j, value);
+            if (value != 0) {
+                sudokuGrid.fixCell(i, j);
+            }
         }
     }
     return sudokuGrid;

@@ -38,3 +38,8 @@ bool SudokuCell::isEmpty() const {
 void SudokuCell::lock() {
     is_locked = true;
 }
+
+void SudokuCell::fix() {
+    is_fixed = true;
+    is_locked = true;
+}

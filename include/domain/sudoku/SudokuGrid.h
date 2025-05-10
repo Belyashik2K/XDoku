@@ -24,6 +24,7 @@ public:
 
     bool setCellValue(int row, int col, int value);
     void lockCell(int row, int col);
+    void fixCell(int row, int col);
 
     [[nodiscard]] const std::vector<std::vector<SudokuCell>>& getCells() const;
 };

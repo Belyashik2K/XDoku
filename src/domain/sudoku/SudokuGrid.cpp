@@ -74,6 +74,9 @@ void SudokuGrid::lockCell(const int row, const int col) {
     cells[row][col].lock();
 }
 
+void SudokuGrid::fixCell(const int row, const int col) {
+    cells[row][col].fix();
+}
 
 SudokuGrid::SudokuGrid() {
     cells.resize(9, std::vector<SudokuCell>(9));

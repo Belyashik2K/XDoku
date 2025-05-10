@@ -16,24 +16,29 @@ public:
     SudokuGrid generate(SudokuDifficultyEnum difficulty);
 
     SudokuGrid getSolutionGrid(SudokuGrid grid);
-    static void print(SudokuGrid &grid);
 private:
     SudokuGrid generateFullGrid();
+
+    bool fillGridRandomly(SudokuGrid &grid, const std::vector<int> &nums);
+
     void removeNumbers(SudokuGrid &grid, int countOfOpenCells);
 
-    static bool hasUniqueSolution(const SudokuGrid &grid);
+    bool hasUniqueSolution(SudokuGrid &grid);
 
 
-    static bool isValid(const std::vector<std::vector<SudokuCell>> &board, int row, int col, int num);
+    bool isValid(const SudokuGrid &grid, int row, int col, int num);
 
     template <typename T>
     void shuffle(std::vector<T> &arr);
 
-    static bool solve(std::vector<std::vector<SudokuCell>> &board);
+    bool solve(SudokuGrid &grid);
 
-    static void solveWithCount(std::vector<std::vector<SudokuCell>> &board, int& count, int limit = 2);
-    static bool solveByHumanLogic(std::vector<std::vector<SudokuCell>> &board);
-    static bool isUniqueCandidate(const std::vector<std::vector<SudokuCell>> &board, int row, int col, const std::set<int> &candidates) ;
+    void solveWithCount(SudokuGrid &grid, int &count, int limit = 2);
+
+    int getUniqueCandidate(const SudokuGrid &grid, int row, int col);
+
+    bool solveByHumanLogic(SudokuGrid &grid);
+    bool isUniqueCandidate(const std::vector<std::vector<SudokuCell>> &board, int row, int col, const std::set<int> &candidates) ;
 };
 
 #endif //SUDOKUGENERATOR_H

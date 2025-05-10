@@ -49,13 +49,8 @@ SudokuMove SudokuGame::createMove(
 
     SudokuMove move(id.value(), row, column, value);
 
-    if (!grid.setCellValue(row, column, value)) {
-        move.setValid(false);
-        mistakesCount++;
-        return move;
-    }
-
-    if (grid.getCellValue(row, column) == solutionGrid.getCellValue(row, column)) {
+    if (value == solutionGrid.getCellValue(row, column)) {
+        grid.setCellValue(row, column, value);
         move.setValid(true);
         grid.lockCell(row, column);
     } else {

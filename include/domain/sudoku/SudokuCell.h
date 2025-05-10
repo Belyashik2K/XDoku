@@ -15,6 +15,8 @@ public:
 
     void setValue(int new_value);
     void lock();
+    void fix();
+
 private:
     int value;
 
