@@ -97,7 +97,7 @@ void ImguiSudokuGameView::drawCells(
     const auto sp = getPresenter();
     if (!sp) return;
 
-    const auto cells = sp->getCurrentGame()->getCurrentGrid()->getCells();
+    const auto grid = sp->getCurrentGame()->getCurrentGrid();
     auto [selectedRow, selectedCol] = sp->getSelectedCell();
 
     for (int row = 0; row < 9; ++row) {
@@ -113,15 +113,19 @@ void ImguiSudokuGameView::drawCells(
                 ImVec2(cellSize, cellSize)
             );
             if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0)) {
-                sp->setSelectedCell(row, col);
+                if (sp->getCurrentGame()->getCurrentGrid().isCellEditable(row, col)) {
+                    sp->setSelectedCell(row, col);
+                } else {
+                    sp->setSelectedCell(-1, -1);
+                }
             }
 
             if (row == selectedRow && col == selectedCol) {
                 drawList->AddRectFilled(cellMin, cellMax, VERY_LIGHT_GRAY);
             }
 
-            if (const auto &cell = cells[row][col]; !cell.isEmpty()) {
-                std::string text = std::to_string(cell.getValue());
+            if (!grid.isCellEmpty(row, col)) {
+                std::string text = std::to_string(grid.getCellValue(row, col));
                 const ImVec2 textSize = ImGui::CalcTextSize(text.c_str());
                 auto textPos = ImVec2(
                     cellMin.x + (cellSize - textSize.x) * 0.5f,

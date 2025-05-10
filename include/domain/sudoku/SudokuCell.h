@@ -5,24 +5,21 @@
 #ifndef SUDOKUCELL_H
 #define SUDOKUCELL_H
 
-#include <unordered_set>
-
 class SudokuCell {
 public:
     explicit SudokuCell(int value = 0, bool is_fixed = false);
-    bool mayBeEdited() const;
-    bool givenValueInCandidates(int value) const;
+
+    [[nodiscard]] bool mayBeEdited() const;
+    [[nodiscard]] int getValue() const;
+    [[nodiscard]] bool isEmpty() const;
+
     void setValue(int new_value);
-    int getValue() const;
-    void setValid(bool valid);
-    bool isValid() const;
-    bool isEmpty() const;
+    void lock();
 private:
     int value;
+
     bool is_fixed;
-    std::unordered_set<int> candidates;
-    bool is_valid;
-    void generateCandidates();
+    bool is_locked;
 };
 
 #endif //SUDOKUCELL_H

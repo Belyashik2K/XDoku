@@ -12,6 +12,7 @@ std::string SudokuGameStatus::toString(const SudokuGameStatusEnum status) {
         case SudokuGameStatusEnum::IN_PROGRESS: return "in_progress";
         case SudokuGameStatusEnum::FINISHED: return "finished";
         case SudokuGameStatusEnum::SURRENDERED: return "surrendered";
+        case SudokuGameStatusEnum::EXITED: return "exited";
         default: throw std::invalid_argument("Invalid SudokuGameStatusEnum value");
     }
 }
@@ -21,6 +22,7 @@ SudokuGameStatusEnum SudokuGameStatus::fromString(const std::string &status) {
         {"in_progress", SudokuGameStatusEnum::IN_PROGRESS},
         {"finished", SudokuGameStatusEnum::FINISHED},
         {"surrendered", SudokuGameStatusEnum::SURRENDERED}
+        , {"exited", SudokuGameStatusEnum::EXITED}
     };
 
     if (const auto it = statusMap.find(status); it != statusMap.end()) {

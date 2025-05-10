@@ -5,6 +5,7 @@
 #include "application/managers/SudokuGameManager.h"
 #include "application/app_events/ButtonEvents.h"
 #include "application/app_events/UserEvents.h"
+#include "domain/sudoku/utils/SudokuFactory.h"
 
 void SudokuGameManager::loadActiveGame() {
     printf("[SudokuGameManager] Getting active game...\n");
@@ -36,7 +37,7 @@ void SudokuGameManager::loadActiveGame() {
 void SudokuGameManager::createSudokuGame(const SudokuDifficultyEnum &difficulty) {
     const User *currentUser = sessionManager->getCurrentUser();
     printf("[SudokuGameManager] Creating new sudoku game for user %d\n", currentUser->getId());
-    const SudokuGame game = SudokuGame::startNewGame(currentUser->getId(), difficulty);
+    const SudokuGame game = SudokuGameFactory::createNewGame(currentUser->getId(), difficulty);
     std::optional<SudokuGame> createdGame = gameRepository->createGame(currentUser->getId(), game);
     if (createdGame.has_value()) {
         printf("[SudokuGameManager] Created new sudoku game for user %d\n", currentUser->getId());
@@ -51,6 +52,7 @@ bool SudokuGameManager::createMove(const int selected_row, const int selected_co
     printf("[SudokuGameManager] Creating move (row: %d, col: %d, value: %d) in game with ID: %d\n",
            selected_row, selected_col, value, currentGame->getId());
     const SudokuMove move = currentGame->createMove(selected_row, selected_col, value);
+    // TODO: Fix bug with fixed cells
     moveRepository->createMove(move);
     printf("[SudokuGameManager] Move created successfully\n");
     actualizeCurrentGrid();
@@ -63,7 +65,6 @@ void SudokuGameManager::actualizeCurrentGrid() const {
         return;
     }
     printf("[SudokuGameManager] Actualizing current grid...\n");
-    currentGame->actualizeCurrentGrid();
 }
 
 void SudokuGameManager::subscribeToEvents() {

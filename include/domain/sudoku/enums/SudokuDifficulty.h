@@ -4,7 +4,6 @@
 
 #ifndef SUDOKUDIFFICULTY_H
 #define SUDOKUDIFFICULTY_H
-#include <map>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -36,10 +35,9 @@ public:
             "expert"
         };
     }
-private:
-
-    static int getOpenCellsCount(SudokuDifficultyEnum level);
     static std::string getDifficultyName(SudokuDifficultyEnum level);
+private:
+    static int getOpenCellsCount(SudokuDifficultyEnum level);
 };
 
 #endif //SUDOKUDIFFICULTY_H

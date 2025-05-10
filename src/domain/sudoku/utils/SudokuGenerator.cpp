@@ -201,19 +201,17 @@ void SudokuGenerator::removeNumbers(SudokuGrid &grid, const int countOfOpenCells
 
     shuffle(positions);
 
-    auto& cells = grid.getCells();
-
     int removed = 0;
     for (auto&[row, col] : positions) {
         if (removed >= to_remove) break;
-        if (cells[row][col].getValue() == EMPTY) continue;
+        if (grid.getCellValue(row, col) == EMPTY) continue;
 
-        const int backup = cells[row][col].getValue();
-        cells[row][col].setValue(EMPTY);
+        const int backup = grid.getCellValue(row, col);
+        grid.setCellValue(row, col, EMPTY);
 
         SudokuGrid tempGrid = grid;
         if (!hasUniqueSolution(tempGrid) /* || !solveByHumanLogic(tempGrid.getCells()) */) {
-            cells[row][col].setValue(backup);
+            grid.setCellValue(row, col, backup);
         } else {
             removed++;
         }
@@ -229,12 +227,13 @@ SudokuGrid SudokuGenerator::generateFullGrid() {
     auto& cells = grid.getCells();
 
     for (int i = 0; i < 9; ++i) {
-        cells[0][i] = SudokuCell(nums[i], true);
+        grid.setCellValue(0, i, nums[i]);
+        // cells[0][i] = SudokuCell(nums[i], true);
     }
 
-    if (!solve(cells)) {
-        throw std::runtime_error("Не удалось сгенерировать сетку");
-    }
+    // if (!solve(cells)) {
+    //     throw std::runtime_error("Не удалось сгенерировать сетку");
+    // }
 
     return grid;
 }
@@ -250,7 +249,11 @@ SudokuGrid SudokuGenerator::generate(const SudokuDifficultyEnum difficulty) {
 SudokuGrid SudokuGenerator::getSolutionGrid(SudokuGrid grid) {
     if (auto cells = grid.getCells(); solve(cells)) {
         SudokuGrid solutionGrid;
-        solutionGrid.setCells(cells);
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                solutionGrid.setCellValue(i, j, cells[i][j].getValue());
+            }
+        }
         return solutionGrid;
     }
     throw std::runtime_error("Не удалось найти решение судоку");
