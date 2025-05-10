@@ -11,7 +11,7 @@
 #include "interfaces/IPresenter.h"
 #include "interfaces/views/game/ISudokuGameView.h"
 
-#define NOT_SELECTED -1
+#define NOT_SELECTED (-1)
 
 enum GameLoadingStatus {
     LOADING,
@@ -28,7 +28,7 @@ class SudokuGamePresenter final :
 
     int selectedRow = NOT_SELECTED;
     int selectedCol = NOT_SELECTED;
-    bool validMove = false;
+    bool validMove = true;
 public:
     SudokuGamePresenter(
         const std::shared_ptr<EventBus> &eventBus,
@@ -64,15 +64,23 @@ public:
         return gameManager->getCurrentGame();
     }
 
+    void unselectCell();
+
     void setSelectedCell(int row, int col);
 
     std::pair<int, int> getSelectedCell() const;
 
     void onNewMove(int value);
 
+    void OnEscapeButtonClicked();
+
     std::string getGameStatus() const;
     std::string getMistakesCount() const;
     std::string getElapsedTime() const;
+
+    void onBackButtonClicked() const;
+
+    void onSurrenderButtonClicked();
 };
 
 #endif //SUDOKUGAMEPRESENTER_H

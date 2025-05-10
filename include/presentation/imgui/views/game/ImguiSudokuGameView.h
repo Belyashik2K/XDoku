@@ -28,6 +28,8 @@ public:
 
     void handleKeyboardInput() const;
 
+    void renderButtons() const;
+
     void renderStatistics() const;
 };
 

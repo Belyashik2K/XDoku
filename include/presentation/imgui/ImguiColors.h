@@ -19,5 +19,6 @@
 #define GRAY ImColor(35, 35, 36)
 #define LIGHT_GRAY ImColor(25, 25, 26)
 #define VERY_LIGHT_GRAY ImColor(25, 25, 25, 85)
+#define LIGHT_RED ImColor(255, 0, 0, 85)
 
 #endif //IMGUICOLORS_H

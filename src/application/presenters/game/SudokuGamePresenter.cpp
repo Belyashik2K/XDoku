@@ -4,6 +4,8 @@
 
 #include "application/presenters/game/SudokuGamePresenter.h"
 
+#include "application/app_events/ButtonEvents.h"
+
 void SudokuGamePresenter::onNewMove(const int value){
     const bool isValid = gameManager->createMove(selectedRow, selectedCol, value);
     updateMoveStatus(isValid);
@@ -13,14 +15,23 @@ void SudokuGamePresenter::onNewMove(const int value){
     }
 }
 
+void SudokuGamePresenter::OnEscapeButtonClicked() {
+    unselectCell();
+}
+
+void SudokuGamePresenter::unselectCell() {
+    selectedRow = NOT_SELECTED;
+    selectedCol = NOT_SELECTED;
+}
+
 void SudokuGamePresenter::setSelectedCell(const int row, const int col) {
     if (getCurrentGame()->getCurrentGrid().isCellEditable(row, col)) {
         selectedRow = row;
         selectedCol = col;
-    } else {
-        selectedRow = NOT_SELECTED;
-        selectedCol = NOT_SELECTED;
+        validMove = true;
+        return;
     }
+    unselectCell();
 }
 
 std::pair<int, int> SudokuGamePresenter::getSelectedCell() const {
@@ -37,6 +48,14 @@ std::string SudokuGamePresenter::getMistakesCount() const {
 
 std::string SudokuGamePresenter::getElapsedTime() const {
     return "not implemented yet";
+}
+
+void SudokuGamePresenter::onBackButtonClicked() const {
+    eventBus->publish(OnMainMenuButtonClicked());
+}
+
+void SudokuGamePresenter::onSurrenderButtonClicked() {
+    ;
 }
 
 
