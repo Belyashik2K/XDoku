@@ -70,7 +70,7 @@ public:
 
     std::pair<int, int> getSelectedCell() const;
 
-    void onNewMove(int value);
+    bool onNewMove(int value);
 
     void OnEscapeButtonClicked();
 

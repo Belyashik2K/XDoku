@@ -146,6 +146,8 @@ add_executable(XDoku
         src/presentation/imgui/views/game/ImguiSudokuGameSummaryView.cpp
         src/application/presenters/game/SudokuGameSummaryPresenter.cpp
         include/presentation/imgui/views/game/ImguiSudokuGameSummaryView.h
+        src/presentation/imgui/managers/ImguiAudioManager.cpp
+        include/presentation/imgui/managers/ImguiAudioManager.h
 )
 
 target_include_directories(XDoku PRIVATE
@@ -155,6 +157,7 @@ target_include_directories(XDoku PRIVATE
         deps/imgui/backends
         deps/nlohmann_json
         deps/stb
+        deps/miniaudio
 )
 
 target_link_libraries(XDoku PRIVATE
