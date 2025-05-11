@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
-enum class SudokuDifficultyEnum { EASY, MEDIUM, HARD, EXPERT };
+enum class SudokuDifficultyEnum { EASY, MEDIUM, HARD, EXPERT, UNKNOWN };
 
 struct SudokuDifficultySettings {
     int openCellsCount;

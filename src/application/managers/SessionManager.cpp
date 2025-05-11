@@ -8,6 +8,7 @@
 #include "application/managers/SessionManager.h"
 #include "application/app_events/ApplicationEvents.h"
 #include "application/app_events/ButtonEvents.h"
+#include "domain/UserStats.h"
 
 std::optional<std::string> SessionManager::getDeviceHWID() {
     // TODO: Implement a more secure way to get the HWID on different platforms
@@ -145,4 +146,10 @@ void SessionManager::addRating(const int ratingChange) const {
     currentUser->setRating(current + ratingChange);
 }
 
-
+UserStats SessionManager::getUserStats() const {
+    if (!currentUser) {
+        printf("[SessionManager] No active user found, returning empty stats...\n");
+        return UserStats();
+    }
+    return userRepository->getUserStats(currentUser->getId());
+}

@@ -64,6 +64,8 @@ public:
     }
 
     void addRating(int ratingChange) const;
+
+    UserStats getUserStats() const;
 };
 
 #endif //SESSIONMANAGER_H
