@@ -25,8 +25,7 @@ void LeaderboardPresenter::subscribeToEvents() {
 
 void LeaderboardPresenter::onBackButtonClicked() const {
     printf("[LeaderboardPresenter] Back button clicked\n");
-    // TODO: Screen stack
-    eventBus->publish(OnMainMenuButtonClicked());
+    eventBus->publish(OnBackButtonClicked());
 }
 
 void LeaderboardPresenter::onRefreshButtonClicked() {

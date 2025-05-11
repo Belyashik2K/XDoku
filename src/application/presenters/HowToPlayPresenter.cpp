@@ -7,5 +7,5 @@
 #include "application/app_events/ButtonEvents.h"
 
 void HowToPlayPresenter::onBackButtonClicked() const {
-    eventBus->publish(OnMainMenuButtonClicked());
+    eventBus->publish(OnBackButtonClicked());
 }

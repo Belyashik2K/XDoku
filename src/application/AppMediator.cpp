@@ -3,7 +3,6 @@
 //
 
 #include "application/AppMediator.h"
-
 #include "application/app_events/ButtonEvents.h"
 #include "application/app_events/UserEvents.h"
 
@@ -19,80 +18,119 @@ AppMediator::AppMediator(
 ) {
     this->eventBus = eventBus;
     this->currentPresenter = presenter;
+    if (presenter) {
+        presenterStack.push(presenter);
+    }
     subscribeToEvents();
 }
 
+void AppMediator::setCurrentPresenter(const std::shared_ptr<IBasePresenter> &presenter) {
+    currentPresenter = presenter;
+    if (presenter) {
+        presenterStack.push(presenter);
+    }
+}
+
+void AppMediator::navigateBack() {
+    if (presenterStack.size() > 1) {
+        presenterStack.pop();
+        currentPresenter = presenterStack.top();
+    }
+}
+
+void AppMediator::navigateTo(const std::shared_ptr<IBasePresenter> &presenter) {
+    if (presenter) {
+        currentPresenter = presenter;
+        presenterStack.push(presenter);
+    }
+}
+
+void AppMediator::resetToRoot() {
+    while (presenterStack.size() > 1) {
+        presenterStack.pop();
+    }
+    if (!presenterStack.empty()) {
+        currentPresenter = presenterStack.top();
+    }
+}
 
 void AppMediator::subscribeToEvents() {
     printf("[AppMediator] Subscribing to events...\n");
     eventBus->subscribe<OnSignUpButtonClicked>([this](const OnSignUpButtonClicked &) {
         if (signUpPresenter) {
-            this->currentPresenter = signUpPresenter;
+            navigateTo(signUpPresenter);
         }
     });
     eventBus->subscribe<OnSignInButtonClicked>([this](const OnSignInButtonClicked &) {
-        if (currentPresenter) {
-            this->currentPresenter = signInPresenter;
+        if (signInPresenter) {
+            navigateTo(signInPresenter);
         }
     });
     eventBus->subscribe<OnUserLoggedIn>([this](const OnUserLoggedIn &) {
         if (mainMenuPresenter) {
-            this->currentPresenter = mainMenuPresenter;
+            resetToRoot();
+            navigateTo(mainMenuPresenter);
         }
     });
     eventBus->subscribe<OnLeaderboardButtonClicked>([this](const OnLeaderboardButtonClicked &) {
         if (leaderboardPresenter) {
-            this->currentPresenter = leaderboardPresenter;
+            navigateTo(leaderboardPresenter);
         }
     });
     eventBus->subscribe<OnMainMenuButtonClicked>([this](const OnMainMenuButtonClicked &) {
         if (mainMenuPresenter) {
-            this->currentPresenter = mainMenuPresenter;
+            resetToRoot();
+            navigateTo(mainMenuPresenter);
         }
     });
     eventBus->subscribe<OnActiveSudokuGameFound>([this](const OnActiveSudokuGameFound &) {
         if (sudokuGamePresenter) {
-            this->currentPresenter = sudokuGamePresenter;
+            navigateTo(sudokuGamePresenter);
         }
     });
     eventBus->subscribe<OnActiveSudokuGameNotFound>([this](const OnActiveSudokuGameNotFound &) {
         if (sudokuGameDifficultySelectorPresenter) {
-            this->currentPresenter = sudokuGameDifficultySelectorPresenter;
+            navigateTo(sudokuGameDifficultySelectorPresenter);
         }
     });
     eventBus->subscribe<OnProfileButtonClicked>([this](const OnProfileButtonClicked &) {
         if (profilePresenter) {
-            this->currentPresenter = profilePresenter;
+            navigateTo(profilePresenter);
         }
     });
     eventBus->subscribe<OnHowToPlayButtonClicked>([this](const OnHowToPlayButtonClicked &) {
         if (howToPlayPresenter) {
-            this->currentPresenter = howToPlayPresenter;
+            navigateTo(howToPlayPresenter);
         }
     });
     eventBus->subscribe<OnUserLoggedOut>([this](const OnUserLoggedOut &) {
         if (signInPresenter) {
-            this->currentPresenter = signInPresenter;
+            resetToRoot();
+            navigateTo(signInPresenter);
         }
     });
     eventBus->subscribe<OnSudokuGameCreated>([this](const OnSudokuGameCreated &) {
         if (sudokuGamePresenter) {
-            this->currentPresenter = sudokuGamePresenter;
+            navigateTo(sudokuGamePresenter);
         }
     });
     eventBus->subscribe<OnSudokuGameFinished>([this](const OnSudokuGameFinished &) {
         if (sudokuGameSummaryPresenter) {
-            this->currentPresenter = sudokuGameSummaryPresenter;
+            navigateTo(sudokuGameSummaryPresenter);
         }
     });
     eventBus->subscribe<OnSudokuGameSurrendered>([this](const OnSudokuGameSurrendered &) {
         if (sudokuGameSummaryPresenter) {
-            this->currentPresenter = sudokuGameSummaryPresenter;
+            navigateTo(sudokuGameSummaryPresenter);
         }
     });
     eventBus->subscribe<OnSummaryViewClosed>([this](const OnSummaryViewClosed &) {
         if (mainMenuPresenter) {
-            this->currentPresenter = mainMenuPresenter;
+            resetToRoot();
+            navigateTo(mainMenuPresenter);
         }
+    });
+    eventBus->subscribe<OnBackButtonClicked>([this](const OnBackButtonClicked &) {
+        navigateBack();
     });
 }

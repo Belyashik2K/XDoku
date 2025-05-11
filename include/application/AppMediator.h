@@ -5,6 +5,7 @@
 #ifndef APPMEDIATOR_H
 #define APPMEDIATOR_H
 #include <memory>
+#include <stack>
 
 #include "EventBus.h"
 #include "interfaces/IPresenter.h"
@@ -19,6 +20,9 @@
 #include "presenters/game/SudokuGameSummaryPresenter.h"
 
 class AppMediator {
+
+    std::stack<std::shared_ptr<IBasePresenter>> presenterStack{};
+
     std::shared_ptr<IBasePresenter> currentPresenter;
     std::shared_ptr<EventBus> eventBus;
 
@@ -32,14 +36,19 @@ class AppMediator {
     std::shared_ptr<SudokuGameDifficultySelectorPresenter> sudokuGameDifficultySelectorPresenter;
     std::shared_ptr<SudokuGameSummaryPresenter> sudokuGameSummaryPresenter;
 
+    void navigateBack();
+
+    void navigateTo(const std::shared_ptr<IBasePresenter> &presenter);
+
+    void resetToRoot();
+
     void subscribeToEvents();
 public:
     explicit AppMediator(const std::shared_ptr<EventBus> &eventBus,
                          const std::shared_ptr<IBasePresenter> &presenter = nullptr);
 
-    void setCurrentPresenter(const std::shared_ptr<IBasePresenter> &presenter) {
-        currentPresenter = presenter;
-    }
+    void setCurrentPresenter(const std::shared_ptr<IBasePresenter> &presenter);
+
     void setSignUpPresenter(const std::shared_ptr<SignUpPresenter> &presenter) {
         signUpPresenter = presenter;
     }

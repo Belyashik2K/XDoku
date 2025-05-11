@@ -29,7 +29,7 @@ public:
 
     void onDifficultySelected(SudokuDifficultyEnum difficulty) const;
 
-    void onBackButtonClicked();
+    void onBackButtonClicked() const;
 };
 
 #endif //SUDOKUGAMEDIFFICULTYSELECTORPRESENTER_H

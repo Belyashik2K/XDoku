@@ -7,7 +7,7 @@
 #include "application/app_events/ButtonEvents.h"
 
 void ProfilePresenter::onBackButtonClicked() const{
-    eventBus->publish(OnMainMenuButtonClicked());
+    eventBus->publish(OnBackButtonClicked());
 }
 
 void ProfilePresenter::onLogoutButtonClicked() const{
