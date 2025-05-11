@@ -2,7 +2,7 @@
 // Created by belyashik2k on 5/11/25.
 //
 
-#include "infrastructure/database/PostgreSQL/repositories/PostgreSQLRepositoryFactory.h"
+#include "infrastructure/database/PostgreSQL/factories/PostgreSQLRepositoryFactory.h"
 #include "infrastructure/database/PostgreSQL/repositories/PostgreSQLGameRepository.h"
 #include "infrastructure/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h"
 #include "infrastructure/database/PostgreSQL/repositories/PostgreSQLRatingRepository.h"

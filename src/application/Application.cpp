@@ -4,8 +4,8 @@
 
 #include "application/Application.h"
 #include "application/app_events/ApplicationEvents.h"
-#include "application/presenters/PresenterFactory.h"
-#include "infrastructure/database/PostgreSQL/repositories/PostgreSQLRepositoryFactory.h"
+#include "application/factories/PresenterFactory.h"
+#include "infrastructure/database/PostgreSQL/factories/PostgreSQLRepositoryFactory.h"
 #include "presentation/imgui/ImguiFrameHandler.h"
 #include "presentation/imgui/managers/ImguiAudioManager.h"
 #include "presentation/imgui/views/game/ImguiSudokuGameDifficultySelectorView.h"
