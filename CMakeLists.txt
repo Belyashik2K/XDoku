@@ -148,6 +148,11 @@ add_executable(XDoku
         include/presentation/imgui/views/game/ImguiSudokuGameSummaryView.h
         src/presentation/imgui/managers/ImguiAudioManager.cpp
         include/presentation/imgui/managers/ImguiAudioManager.h
+        src/infrastructure/database/PostgreSQL/repositories/PostgreSQLRepositoryFactory.cpp
+        include/infrastructure/database/PostgreSQL/repositories/PostgreSQLRepositoryFactory.h
+        include/interfaces/database/repositories/IRepositoryFactory.h
+        include/presentation/imgui/views/ImguiViewFactory.h
+        include/application/presenters/PresenterFactory.h
 )
 
 target_include_directories(XDoku PRIVATE
