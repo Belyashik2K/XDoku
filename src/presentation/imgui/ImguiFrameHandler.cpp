@@ -12,6 +12,7 @@
 #include <presentation/imgui/managers/ImguiFontManager.h>
 
 #include "presentation/imgui/ImguiColors.h"
+#include "presentation/imgui/managers/ImguiAudioManager.h"
 
 bool loaded = false;
 
@@ -91,13 +92,22 @@ void ImguiFrameHandler::init() {
     (void) io;
     ImGui::StyleColorsDark();
 
-    ImguiFontManager::getInstance().setFontPath("../assets/fonts/regular.ttf");
+
     if (!loaded) {
+        ImguiFontManager::getInstance().setFontPath("../assets/fonts/regular.ttf");
         for (int i = 1; i < 40; ++i) {
             ImguiFontManager::getInstance().getFont(i);
-            loaded = true;
         }
+
+        ImguiAudioManager::getInstance().init();
+        ImguiAudioManager::getInstance().loadAudio(
+            "../assets/sounds/correct.wav"
+        );
+        ImguiAudioManager::getInstance().loadAudio(
+            "../assets/sounds/incorrect.wav"
+        );
     }
+    loaded = true;
 
     ImGuiStyle &style = ImGui::GetStyle();
 

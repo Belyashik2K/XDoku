@@ -75,13 +75,6 @@ void Application::initManagers() {
     sudokuGameManager = std::make_shared<SudokuGameManager>(
         eventBus, gameRepository, moveRepository, ratingRepository, sessionManager
     );
-    ImguiAudioManager::getInstance().init();
-    ImguiAudioManager::getInstance().loadAudio(
-        "../assets/sounds/correct.wav"
-    );
-    ImguiAudioManager::getInstance().loadAudio(
-        "../assets/sounds/incorrect.wav"
-    );
     printf("[Application] Managers initialized\n");
 }
 
