@@ -34,6 +34,10 @@ public:
         userStats = sessionManager->getUserStats();
     }
 
+    void clearUserStats() {
+        userStats = std::nullopt;
+    }
+
     void subscribeToEvents() {
         eventBus->subscribe<OnProfileButtonClicked>([this](const OnProfileButtonClicked &event) {
             if (userStats) return;
@@ -44,6 +48,9 @@ public:
         });
         eventBus->subscribe<OnSudokuGameSurrendered>([this](const OnSudokuGameSurrendered &event) {
             loadUserStats();
+        });
+        eventBus->subscribe<OnUserLoggedOut>([this](const OnUserLoggedOut &event) {
+            clearUserStats();
         });
     }
 

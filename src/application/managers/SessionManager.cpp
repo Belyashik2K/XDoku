@@ -143,7 +143,7 @@ void SessionManager::addRating(const int ratingChange) const {
         return;
     }
     const int current = currentUser->getRating();
-    currentUser->setRating(current + ratingChange);
+    currentUser->setRating(std::max(0, current + ratingChange));
 }
 
 UserStats SessionManager::getUserStats() const {

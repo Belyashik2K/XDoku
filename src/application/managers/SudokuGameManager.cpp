@@ -142,14 +142,14 @@ void SudokuGameManager::updateRating(
         return;
     }
     const User *currentUser = sessionManager->getCurrentUser();
+    sessionManager->addRating(ratingChange);
     const int newRating = ratingRepository->createRatingHistoryRecord(
         currentUser->getId(),
         currentGame->getId(),
-        ratingChange,
+        currentUser->getRating() + ratingChange >= 0 ? ratingChange : -currentUser->getRating(),
         message
     );
     if (newRating) {
-        sessionManager->addRating(ratingChange);
         printf("[SudokuGameManager] Rating history record created successfully\n");
     } else {
         printf("[SudokuGameManager] Failed to create rating history record\n");
