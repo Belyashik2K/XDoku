@@ -36,12 +36,15 @@ void ImguiAudioManager::loadAudio(const std::string &path) {
 }
 
 void ImguiAudioManager::playAudio(const std::string &path) {
-    if (auto it = sounds_.find(path); it != sounds_.end()) {
-        if (ma_sound *sound = it->second; ma_sound_start(sound) != MA_SUCCESS) {
+    if (const auto it = sounds_.find(path); it != sounds_.end()) {
+        ma_sound* sound = it->second;
+        ma_sound_stop(sound);
+        ma_sound_seek_to_pcm_frame(sound, 0);
+        if (ma_sound_start(sound) != MA_SUCCESS) {
             std::cerr << "Failed to play audio: " << path << std::endl;
         }
     } else {
         std::cerr << "Audio not loaded: " << path << std::endl;
     }
-};
+}
 
