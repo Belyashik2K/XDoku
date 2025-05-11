@@ -28,7 +28,7 @@
 
 int main() {
     const std::string connectionString =
-            "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@xdoku.belyashik2k.ru:5432/xdoku";
+            "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@localhost:5432/xdoku";
 
     auto database = std::make_shared<PostgreSQLDatabase>(connectionString);
     const auto userRepository = std::make_shared<PostgreSQLUserRepository>(database);

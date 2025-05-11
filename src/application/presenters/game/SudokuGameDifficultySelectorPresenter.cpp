@@ -11,6 +11,6 @@ void SudokuGameDifficultySelectorPresenter::onDifficultySelected(const SudokuDif
     eventBus->publish(OnSudokuDifficultySelected(difficulty));
 }
 
-void SudokuGameDifficultySelectorPresenter::onBackButtonClicked() {
-    eventBus->publish(OnMainMenuButtonClicked());
+void SudokuGameDifficultySelectorPresenter::onBackButtonClicked() const {
+    eventBus->publish(OnBackButtonClicked());
 }

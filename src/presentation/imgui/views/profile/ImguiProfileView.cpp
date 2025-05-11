@@ -29,7 +29,7 @@ void ImguiProfileView::render() {
     ); {
         const ImVec2 menuSize = ImGui::GetWindowSize();
         const float childWidth = menuSize.x * 0.5f;
-        const float childHeight = menuSize.y * 0.43f;
+        const float childHeight = menuSize.y * 0.66f;
         const ImVec2 childSize(childWidth, childHeight);
 
         ImguiChildWindowGuard menuPos(
@@ -51,20 +51,45 @@ void ImguiProfileView::renderStatistics() const {
     const User *user = sp->getCurrentUser();
 
     const auto header = "Profile";
-    const std::string  playerID = std::format(R"(Your ID: {})", user->getId());
+    const std::string playerID = std::format(R"(Your ID: {})", user->getId());
     const std::string username = std::format(R"(Username: @{})", user->getUsername());
     const std::string email = std::format(R"(Email: {})", user->getEmail());
     const std::string rating = std::format(R"(Current rating: {} points)", user->getRating());
 
-    ImguiUtils::printText(header, BLACK, 38, true);
+    const auto stats = "Statistics";
+    const std::string totalGames = std::format(R"(Total games: {})", sp->getGamesCount());
+    const std::string totalWins = std::format(R"(Total finished: {})", sp->getFinishedGamesCount());
+    const std::string totalCompletion = std::format(R"(Total completion: {}%%)", sp->getCompletionRate());
+    const std::string averageTimeValue = sp->getAverageSolutionTime();
+    const std::string averageTime = std::format(R"(Average time: {})", averageTimeValue);
+    const std::string mostCommonDifficulty =
+            std::format(R"(Most common difficulty: {})", sp->getMostCommonDifficulty());
+
+    constexpr int headerPx = 36;
+    constexpr int textPx = 32;
+
+    ImguiUtils::printText(header, BLACK, headerPx, true);
     ImguiUtils::addVerticalSpacing(6);
-    ImguiUtils::printText(playerID.c_str(), BLACK, 35, false);
+    ImguiUtils::printText(playerID.c_str(), BLACK, textPx, false);
     ImguiUtils::addVerticalSpacing();
-    ImguiUtils::printText(username.c_str(), BLACK, 35, false);
+    ImguiUtils::printText(username.c_str(), BLACK, textPx, false);
     ImguiUtils::addVerticalSpacing();
-    ImguiUtils::printText(email.c_str(), BLACK, 35, false);
+    ImguiUtils::printText(email.c_str(), BLACK, textPx, false);
     ImguiUtils::addVerticalSpacing();
-    ImguiUtils::printText(rating.c_str(), BLACK, 35, false);
+    ImguiUtils::printText(rating.c_str(), BLACK, textPx, false);
+    ImguiUtils::addVerticalSpacing(6);
+    ImguiUtils::printText(stats, BLACK, headerPx, true);
+    ImguiUtils::addVerticalSpacing(6);
+    ImguiUtils::addVerticalSpacing();
+    ImguiUtils::printText(totalGames.c_str(), BLACK, textPx, false);
+    ImguiUtils::addVerticalSpacing();
+    ImguiUtils::printText(totalWins.c_str(), BLACK, textPx, false);
+    ImguiUtils::addVerticalSpacing();
+    ImguiUtils::printText(totalCompletion.c_str(), BLACK, textPx, false);
+    ImguiUtils::addVerticalSpacing();
+    ImguiUtils::printText(averageTime.c_str(), BLACK, textPx, false);
+    ImguiUtils::addVerticalSpacing();
+    ImguiUtils::printText(mostCommonDifficulty.c_str(), BLACK, textPx, false);
     ImguiUtils::addVerticalSpacing(6);
 }
 

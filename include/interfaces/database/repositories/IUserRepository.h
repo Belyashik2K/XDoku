@@ -8,6 +8,7 @@
 #include <string>
 
 #include "domain/User.h"
+#include "domain/UserStats.h"
 #include "domain/custom_types/Timestamp.h"
 
 class IUserRepository {
@@ -19,6 +20,7 @@ public:
     virtual std::optional<User> get(int id) = 0;
     virtual bool isUsernameTaken(const std::string& username) const = 0;
     virtual bool isEmailTaken(const std::string& email) const = 0;
+    virtual UserStats getUserStats(int userId) const = 0;
     virtual std::string getHashedPassword(const std::string &username) const = 0;
 };
 

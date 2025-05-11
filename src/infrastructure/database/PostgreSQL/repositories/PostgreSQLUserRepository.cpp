@@ -2,6 +2,9 @@
 #include <utility>
 
 #include "infrastructure/database/PostgreSQL/repositories/PostgreSQLUserRepository.h"
+
+#include "domain/UserStats.h"
+#include "domain/sudoku/enums/SudokuGameStatus.h"
 #include "infrastructure/database/PostgreSQL/PostgreSQLQuery.h"
 
 #define START_RATING 1000
@@ -221,6 +224,71 @@ bool PostgreSQLUserRepository::isEmailTaken(const std::string &email) const {
     }
     const pqxx::row row = result[0];
     return row[0].as<int>() > 0;
+}
+
+UserStats PostgreSQLUserRepository::getUserStats(const int userId) const {
+    if (!database->isConnected()) {
+        return UserStats();
+    }
+
+    PostgreSQLQuery query(R"(
+        WITH game_stats AS (
+            SELECT
+                user_id,
+                COUNT(*) AS total_games,
+                COUNT(*) FILTER (WHERE status = $1) AS finished_games,
+                ROUND(AVG(EXTRACT(EPOCH FROM end_time - start_time)))::int AS avg_solution_time_seconds
+            FROM games
+            WHERE end_time IS NOT NULL AND user_id = $2
+            GROUP BY user_id
+        ),
+        most_common_difficulty AS (
+            SELECT user_id, difficulty
+            FROM (
+                SELECT
+                    user_id,
+                    difficulty,
+                    COUNT(*) AS games_played,
+                    ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY COUNT(*) DESC) AS rn
+                FROM games
+                WHERE user_id = $2
+                GROUP BY user_id, difficulty
+            ) sub
+            WHERE rn = 1
+        )
+        SELECT
+            gs.user_id,
+            gs.total_games,
+            gs.finished_games,
+            gs.avg_solution_time_seconds,
+            mcd.difficulty AS most_common_difficulty
+        FROM game_stats gs
+        LEFT JOIN most_common_difficulty mcd ON gs.user_id = mcd.user_id;
+    )");
+    query.addParameter(SudokuGameStatus::toString(SudokuGameStatusEnum::FINISHED));
+    query.addParameter(std::to_string(userId));
+
+    const pqxx::result result = database->execute(query);
+    if (result.empty()) {
+        return UserStats();
+    }
+
+    const pqxx::row row = result[0];
+    const int totalGames = row["total_games"].as<int>();
+    const int finishedGames = row["finished_games"].as<int>();
+    const int avgSolutionTime = row["avg_solution_time_seconds"].is_null()
+                                    ? 0
+                                    : row["avg_solution_time_seconds"].as<int>();
+    const std::string mostCommonDifficulty = row["most_common_difficulty"].is_null()
+                                            ? ""
+                                            : row["most_common_difficulty"].as<std::string>();
+
+    return UserStats(
+        totalGames,
+        finishedGames,
+        avgSolutionTime,
+        SudokuDifficulty::fromString(mostCommonDifficulty)
+    );
 }
 
 

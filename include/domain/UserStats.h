@@ -4,33 +4,36 @@
 
 #ifndef USERSTATS_H
 #define USERSTATS_H
-#include "User.h"
+#include "sudoku/enums/SudokuDifficulty.h"
 
 class UserStats {
-    User *user;
-    int gamesPlayed = 0;
-    int gamesWon = 0;
-    int gamesSurrendered = 0;
-    int averageScore = 0;
-    int averageTime = 0;
-public:
-    UserStats(
-        User *user,
-        const int gamesPlayed,
-        const int gamesWon,
-        const int gamesSurrendered,
-        const int averageScore,
-        const int averageTime
-    ) : user(user), gamesPlayed(gamesPlayed), gamesWon(gamesWon),
-        gamesSurrendered(gamesSurrendered), averageScore(averageScore),
-        averageTime(averageTime) {}
+    int totalGames = 0;
+    int finishedGames = 0;
+    int averageSolutionTimeSeconds = 0;
+    SudokuDifficultyEnum mostCommonDifficulty = SudokuDifficultyEnum::UNKNOWN;
 
-    User *getUser() const { return user; }
-    int getGamesPlayed() const { return gamesPlayed; }
-    int getGamesWon() const { return gamesWon; }
-    int getGamesSurrendered() const { return gamesSurrendered; }
-    int getAverageScore() const { return averageScore; }
-    int getAverageTime() const { return averageTime; }
+public:
+    UserStats() = default;
+    UserStats(
+        const int totalGames,
+        const int finishedGames,
+        const int averageSolutionTimeSeconds,
+        const SudokuDifficultyEnum mostCommonDifficulty
+    ) :
+        totalGames(totalGames),
+        finishedGames(finishedGames),
+        averageSolutionTimeSeconds(averageSolutionTimeSeconds),
+        mostCommonDifficulty(mostCommonDifficulty) {}
+
+    [[nodiscard]] int getTotalGames() const { return totalGames; }
+    [[nodiscard]] int getFinishedGames() const { return finishedGames; }
+    [[nodiscard]] int getAverageSolutionTimeSeconds() const { return averageSolutionTimeSeconds; }
+    [[nodiscard]] SudokuDifficultyEnum getMostCommonDifficulty() const { return mostCommonDifficulty; }
+
+    [[nodiscard]] int getCompletionRate() const {
+        return totalGames == 0 ? 0.0 : static_cast<double>(finishedGames) / totalGames * 100.0;
+    }
 };
+
 
 #endif //USERSTATS_H
