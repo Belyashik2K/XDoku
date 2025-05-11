@@ -65,7 +65,7 @@ add_executable(XDoku
         include/interfaces/IEvent.h
         include/application/EventBus.h
         include/application/AppMediator.h
-        include/application/Application.h
+        include/Application.h
         src/application/EventBus.cpp
         src/application/AppMediator.cpp
         include/application/presenters/SignInPresenter.h
@@ -76,7 +76,7 @@ add_executable(XDoku
         include/interfaces/IFrameHandler.h
         include/presentation/imgui/ImguiFrameHandler.h
         src/presentation/imgui/ImguiFrameHandler.cpp
-        src/application/Application.cpp
+        src/Application.cpp
         include/presentation/imgui/managers/ImguiTextureManager.h
         src/presentation/imgui/managers/ImguiTextureManager.cpp
         include/presentation/imgui/guards/ImguiWindowGuard.h

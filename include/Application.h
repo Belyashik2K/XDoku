@@ -6,7 +6,7 @@
 #define APPLICATION_H
 #include <memory>
 
-#include "AppMediator.h"
+#include "application/AppMediator.h"
 #include "interfaces/IFrameHandler.h"
 #include "interfaces/database/repositories/IRepositoryFactory.h"
 
