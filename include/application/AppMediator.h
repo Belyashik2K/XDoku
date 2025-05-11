@@ -44,38 +44,32 @@ class AppMediator {
 
     void subscribeToEvents();
 public:
-    explicit AppMediator(const std::shared_ptr<EventBus> &eventBus,
-                         const std::shared_ptr<IBasePresenter> &presenter = nullptr);
+    explicit AppMediator(
+        const std::shared_ptr<EventBus>& eventBus,
+        const std::shared_ptr<SignInPresenter>& signInPresenter,
+        const std::shared_ptr<SignUpPresenter>& signUpPresenter,
+        const std::shared_ptr<MainMenuPresenter>& mainMenuPresenter,
+        const std::shared_ptr<ProfilePresenter>& profilePresenter,
+        const std::shared_ptr<HowToPlayPresenter>& howToPlayPresenter,
+        const std::shared_ptr<LeaderboardPresenter>& leaderboardPresenter,
+        const std::shared_ptr<SudokuGameDifficultySelectorPresenter>& sudokuGameDifficultySelectorPresenter,
+        const std::shared_ptr<SudokuGamePresenter>& sudokuGamePresenter,
+        const std::shared_ptr<SudokuGameSummaryPresenter>& sudokuGameSummaryPresenter
+    ) : eventBus(eventBus),
+        signUpPresenter(signUpPresenter),
+        signInPresenter(signInPresenter),
+        mainMenuPresenter(mainMenuPresenter),
+        profilePresenter(profilePresenter),
+        leaderboardPresenter(leaderboardPresenter),
+        howToPlayPresenter(howToPlayPresenter),
+        sudokuGamePresenter(sudokuGamePresenter),
+        sudokuGameDifficultySelectorPresenter(sudokuGameDifficultySelectorPresenter),
+        sudokuGameSummaryPresenter(sudokuGameSummaryPresenter) {
+        subscribeToEvents();
+    }
 
     void setCurrentPresenter(const std::shared_ptr<IBasePresenter> &presenter);
 
-    void setSignUpPresenter(const std::shared_ptr<SignUpPresenter> &presenter) {
-        signUpPresenter = presenter;
-    }
-    void setSignInPresenter(const std::shared_ptr<SignInPresenter> &presenter) {
-        signInPresenter = presenter;
-    }
-    void setMainMenuPresenter(const std::shared_ptr<MainMenuPresenter> &presenter) {
-        mainMenuPresenter = presenter;
-    }
-    void setLeaderboardPresenter(const std::shared_ptr<LeaderboardPresenter> &presenter) {
-        leaderboardPresenter = presenter;
-    }
-    void setSudokuGamePresenter(const std::shared_ptr<SudokuGamePresenter> &presenter) {
-        sudokuGamePresenter = presenter;
-    }
-    void setSudokuGameDifficultySelectorPresenter(const std::shared_ptr<SudokuGameDifficultySelectorPresenter> &presenter) {
-        sudokuGameDifficultySelectorPresenter = presenter;
-    }
-    void setProfilePresenter(const std::shared_ptr<ProfilePresenter> &presenter) {
-        profilePresenter = presenter;
-    }
-    void setHowToPlayPresenter(const std::shared_ptr<HowToPlayPresenter> &presenter) {
-        howToPlayPresenter = presenter;
-    }
-    void setSudokuGameSummaryPresenter(const std::shared_ptr<SudokuGameSummaryPresenter> &presenter) {
-        sudokuGameSummaryPresenter = presenter;
-    }
     void render() const;
 };
 
