@@ -2,21 +2,21 @@
 // Created by belyashik2k on 4/29/25.
 //
 
-#include "../include/Application.h"
-#include "../include/application/app_events/ApplicationEvents.h"
-#include "../include/application/factories/PresenterFactory.h"
-#include "../include/infrastructure/database/PostgreSQL/factories/PostgreSQLRepositoryFactory.h"
-#include "../include/presentation/imgui/ImguiFrameHandler.h"
-#include "../include/presentation/imgui/managers/ImguiAudioManager.h"
-#include "../include/presentation/imgui/views/game/ImguiSudokuGameDifficultySelectorView.h"
-#include "../include/presentation/imgui/views/game/ImguiSudokuGameSummaryView.h"
-#include "../include/presentation/imgui/views/game/ImguiSudokuGameView.h"
-#include "../include/presentation/imgui/views/how_to_play/ImguiHowToPlayView.h"
-#include "../include/presentation/imgui/views/leaderboard/ImguiLeaderboardView.h"
-#include "../include/presentation/imgui/views/main_menu/ImguiMainMenuView.h"
-#include "../include/presentation/imgui/views/profile/ImguiProfileView.h"
-#include "../include/presentation/imgui/views/sign_in/ImguiSignInView.h"
-#include "../include/presentation/imgui/views/sign_up/ImguiSignUpView.h"
+#include "Application.h"
+#include "application/app_events/ApplicationEvents.h"
+#include "application/factories/PresenterFactory.h"
+#include "infrastructure/database/PostgreSQL/factories/PostgreSQLRepositoryFactory.h"
+#include "presentation/imgui/ImguiFrameHandler.h"
+#include "presentation/imgui/managers/ImguiAudioManager.h"
+#include "presentation/imgui/views/game/ImguiSudokuGameDifficultySelectorView.h"
+#include "presentation/imgui/views/game/ImguiSudokuGameSummaryView.h"
+#include "presentation/imgui/views/game/ImguiSudokuGameView.h"
+#include "presentation/imgui/views/how_to_play/ImguiHowToPlayView.h"
+#include "presentation/imgui/views/leaderboard/ImguiLeaderboardView.h"
+#include "presentation/imgui/views/main_menu/ImguiMainMenuView.h"
+#include "presentation/imgui/views/profile/ImguiProfileView.h"
+#include "presentation/imgui/views/sign_in/ImguiSignInView.h"
+#include "presentation/imgui/views/sign_up/ImguiSignUpView.h"
 
 Application::Application() {
     initRepositories();
