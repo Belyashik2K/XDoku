@@ -106,6 +106,9 @@ void ImguiFrameHandler::init() {
         ImguiAudioManager::getInstance().loadAudio(
             "../assets/sounds/incorrect.wav"
         );
+        ImguiAudioManager::getInstance().loadAudio(
+            "../assets/sounds/win.wav"
+        );
     }
     loaded = true;
 
