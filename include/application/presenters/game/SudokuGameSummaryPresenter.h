@@ -13,6 +13,8 @@ class SudokuGameSummaryPresenter final : public IPresenter<ISudokuGameSummaryVie
     std::shared_ptr<EventBus> eventBus;
     std::shared_ptr<SudokuGameManager> gameManager;
 
+    bool needToPlaySound = true;
+
 public:
     explicit SudokuGameSummaryPresenter(
         const std::shared_ptr<EventBus> &eventBus,
@@ -35,6 +37,18 @@ public:
 
     int getMistakesCount() const {
         return getCurrentGame()->getMistakesCount();
+    }
+
+    bool getNeedToPlaySound() {
+        if (getCurrentGame()->getStatus() == SudokuGameStatusEnum::SURRENDERED) {
+            return false;
+        }
+
+        if (needToPlaySound) {
+            needToPlaySound = false;
+            return true;
+        }
+        return false;
     }
 
     std::string getElapsedTime() const {

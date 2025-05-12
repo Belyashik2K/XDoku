@@ -9,6 +9,7 @@
 #include "presentation/imgui/ImguiUtils.h"
 #include "presentation/imgui/guards/ImguiChildWindowGuard.h"
 #include "presentation/imgui/guards/ImguiWindowGuard.h"
+#include "presentation/imgui/managers/ImguiAudioManager.h"
 
 void ImguiSudokuGameSummaryView::render() {
     ImguiWindowGuard window(
@@ -16,6 +17,10 @@ void ImguiSudokuGameSummaryView::render() {
         ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar
     );
     ImguiUtils::updateBackground("../assets/textures/menu/leaderboard.jpg");
+
+    if (getPresenter()->getNeedToPlaySound()) {
+        ImguiAudioManager::getInstance().playAudio("../assets/sounds/win.wav");
+    }
 
     const auto &areaSize = ImVec2(ImGui::GetWindowSize().x * 0.30f, ImGui::GetWindowSize().y * 0.40f);
     ImguiChildWindowGuard tableArea(
