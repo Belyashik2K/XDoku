@@ -6,6 +6,19 @@
 
 #include "application/app_events/ButtonEvents.h"
 
-void HowToPlayPresenter::onBackButtonClicked() const {
+void HowToPlayPresenter::setNextFAQType() {
+    if (currentFAQType == FAQType::OVERVIEW) {
+        resetFAQType();
+    } else {
+        currentFAQType = static_cast<FAQType>(static_cast<int>(currentFAQType) + 1);
+    }
+}
+
+void HowToPlayPresenter::onNextButtonClicked() {
+    setNextFAQType();
+}
+
+void HowToPlayPresenter::onBackButtonClicked() {
+    resetFAQType();
     eventBus->publish(OnBackButtonClicked());
 }

@@ -31,8 +31,13 @@ void ImguiUtils::createButton(
     const char *label,
     const ImVec2 &size,
     const std::function<void()> &onLeftClick,
-    const std::function<void()> &onRightClick
+    const std::function<void()> &onRightClick,
+    const bool isCentered
 ) {
+    if (isCentered) {
+        centerCursor(size);
+    }
+
     ImGui::PushID(id);
     ImGui::Button(label, size);
     ImGui::PopID();
