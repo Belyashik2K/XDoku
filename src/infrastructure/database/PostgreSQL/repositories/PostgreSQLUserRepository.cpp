@@ -237,7 +237,7 @@ UserStats PostgreSQLUserRepository::getUserStats(const int userId) const {
                 user_id,
                 COUNT(*) AS total_games,
                 COUNT(*) FILTER (WHERE status = $1) AS finished_games,
-                ROUND(AVG(EXTRACT(EPOCH FROM end_time - start_time)))::int AS avg_solution_time_seconds
+                ROUND(AVG(EXTRACT(EPOCH FROM end_time - start_time)) FILTER (WHERE status = $1))::int AS avg_solution_time_seconds
             FROM games
             WHERE end_time IS NOT NULL AND user_id = $2
             GROUP BY user_id
