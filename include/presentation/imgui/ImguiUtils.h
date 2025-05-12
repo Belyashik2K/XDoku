@@ -16,7 +16,8 @@ namespace ImguiUtils {
         const char *label,
         const ImVec2 &size = ImVec2(0, 0),
         const std::function<void()>& onLeftClick = nullptr,
-        const std::function<void()>& onRightClick = nullptr
+        const std::function<void()>& onRightClick = nullptr,
+        bool isCentered = false
     );
     void printText(
         const char *text,
