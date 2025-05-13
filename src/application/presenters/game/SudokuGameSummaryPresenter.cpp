@@ -4,7 +4,8 @@
 
 #include "application/presenters/game/SudokuGameSummaryPresenter.h"
 
-void SudokuGameSummaryPresenter::onFinishGameButtonClicked() const {
+void SudokuGameSummaryPresenter::onFinishGameButtonClicked() {
     printf("[SudokuGameSummaryPresenter] Finish game button clicked\n");
+    resetNeedToPlaySound();
     eventBus->publish(OnSummaryViewClosed());
 }

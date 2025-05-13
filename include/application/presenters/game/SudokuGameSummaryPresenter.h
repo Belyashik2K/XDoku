@@ -39,6 +39,10 @@ public:
         return getCurrentGame()->getMistakesCount();
     }
 
+    void resetNeedToPlaySound() {
+        needToPlaySound = true;
+    }
+
     bool getNeedToPlaySound() {
         if (getCurrentGame()->getStatus() == SudokuGameStatusEnum::SURRENDERED) {
             return false;
@@ -59,7 +63,7 @@ public:
         return gameManager->calculateRating();
     }
 
-    void onFinishGameButtonClicked() const;
+    void onFinishGameButtonClicked();
 };
 
 #endif //SUDOKUGAMESUMMARYPRESENTER_H
