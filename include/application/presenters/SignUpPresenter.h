@@ -19,7 +19,11 @@ enum SignUpError {
     PASSWORD_MISMATCH,
     INVALID_EMAIL,
     INVALID_USERNAME,
-    WEAK_PASSWORD,
+    SHOULD_BE_AT_LEAST_8_CHARACTERS,
+    SHOULD_CONTAIN_AT_LEAST_1_UPPERCASE,
+    SHOULD_CONTAIN_AT_LEAST_1_LOWERCASE,
+    SHOULD_CONTAIN_AT_LEAST_1_NUMBER,
+    SHOULD_CONTAIN_AT_LEAST_1_SPECIAL_CHARACTER,
     UNEXPECTED_ERROR
 };
 
@@ -34,6 +38,8 @@ class SignUpPresenter final :
     char password[128] = "";
     char confirmPassword[128] = "";
 
+    SignUpError singUpError = NO_ERROR;
+
     bool validateInputs(
         const std::string &username,
         const std::string &email,
@@ -41,19 +47,35 @@ class SignUpPresenter final :
         const std::string &confirmPassword
     );
 
+    bool validateUsername(const std::string &username);
+
+    bool validateEmail(const std::string &email);
+
+    bool validatePassword(const std::string &password, const std::string &confirmPassword);
+
     std::optional<User> createUser(
         const std::string &username,
         const std::string &email,
         const std::string &password
     ) const;
 
-    SignUpError error = NO_ERROR;
+    void setSignUpError(const SignUpError error) {
+        singUpError = error;
+    }
 
 public:
     SignUpPresenter(
         const std::shared_ptr<EventBus> &eventBus,
         const std::shared_ptr<IUserRepository> &userRepository
     ) : eventBus(eventBus), userRepository(userRepository) {
+    }
+
+    void resetData() {
+        username[0] = '\0';
+        email[0] = '\0';
+        password[0] = '\0';
+        confirmPassword[0] = '\0';
+        setSignUpError(NO_ERROR);
     }
 
     void onSignUpButtonClicked();

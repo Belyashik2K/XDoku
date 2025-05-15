@@ -13,7 +13,7 @@ bool SignInPresenter::isPasswordValid(const std::string &password, const std::st
     return BCrypt::validatePassword(password, hash);
 }
 
-bool SignInPresenter::authorizeUser(const std::string &username, const std::string &password) const {
+bool SignInPresenter::authorizeUser(const std::string &username, const std::string &password) {
     const std::optional<User> user = userRepository->get(username);
     if (!user.has_value()) {
         printf("[SignInPresenter] User not found\n");
@@ -25,6 +25,7 @@ bool SignInPresenter::authorizeUser(const std::string &username, const std::stri
         return false;
     }
 
+    resetData();
     eventBus->publish(OnUserLoggedIn(user.value().getId()));
     return true;
 }
@@ -36,14 +37,28 @@ void SignInPresenter::onLoginButtonClicked() {
     const auto passwordStr = std::string(password);
 
     if (usernameStr.empty() || passwordStr.empty()) {
+        setSignInError(SIGN_IN_ALL_FIELDS_REQUIRED);
         return;
     }
+
     if (authorizeUser(usernameStr, passwordStr)) {
         printf("[SignInPresenter] User logged in successfully\n");
     } else {
-        setIncorrectLogin(true);
+        setSignInError(INVALID_CREDENTIALS);
     }
 }
+
+std::string SignInPresenter::getErrorMessage() const {
+    switch (signInError) {
+        case SIGN_IN_ALL_FIELDS_REQUIRED:
+            return "All fields are required";
+        case INVALID_CREDENTIALS:
+            return "Invalid username or password";
+        default:
+            return "";
+    }
+}
+
 
 void SignInPresenter::onSignUpButtonClicked() const {
     eventBus->publish(OnSignUpButtonClicked());
