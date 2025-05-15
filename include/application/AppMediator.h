@@ -8,6 +8,7 @@
 #include <stack>
 
 #include "EventBus.h"
+#include "domain/custom_types/stack/DokuStack.h"
 #include "interfaces/IPresenter.h"
 #include "presenters/HowToPlayPresenter.h"
 #include "presenters/LeaderboardPresenter.h"
@@ -21,7 +22,7 @@
 
 class AppMediator {
 
-    std::stack<std::shared_ptr<IBasePresenter>> presenterStack{};
+    DokuStack<std::shared_ptr<IBasePresenter>> presenterStack{};
 
     std::shared_ptr<IBasePresenter> currentPresenter;
     std::shared_ptr<EventBus> eventBus;

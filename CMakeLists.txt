@@ -153,6 +153,9 @@ add_executable(XDoku
         include/interfaces/database/repositories/IRepositoryFactory.h
         include/presentation/imgui/views/ImguiViewFactory.h
         include/application/factories/PresenterFactory.h
+        include/domain/custom_types/vector/DokuVector.h
+        include/domain/custom_types/vector/DokuVectorIterator.h
+        include/domain/custom_types/stack/DokuStack.h
 )
 
 target_include_directories(XDoku PRIVATE
