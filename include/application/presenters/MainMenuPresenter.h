@@ -10,9 +10,7 @@
 #include "interfaces/IPresenter.h"
 #include "interfaces/views/IMainMenuView.h"
 
-class MainMenuPresenter final :
-        public IPresenter<IMainMenuView, MainMenuPresenter>,
-        public std::enable_shared_from_this<MainMenuPresenter> {
+class MainMenuPresenter final : public IPresenter<IMainMenuView> {
     std::shared_ptr<EventBus> eventBus;
 public:
     explicit MainMenuPresenter(
@@ -29,11 +27,6 @@ public:
     void onHowToPlayButtonClicked() const;
 
     void onExitButtonClicked() const;
-
-    void init(std::unique_ptr<IMainMenuView> &&view) override {
-        this->setSelf(weak_from_this());
-        this->setView(std::move(view));
-    }
 };
 
 #endif //MAINMENUPRESENTER_H

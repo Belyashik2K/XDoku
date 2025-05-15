@@ -18,7 +18,7 @@ void ImguiSudokuGameSummaryView::render() {
     );
     ImguiUtils::updateBackground("../assets/textures/menu/leaderboard.jpg");
 
-    if (getPresenter()->getNeedToPlaySound()) {
+    if (presenter->getNeedToPlaySound()) {
         ImguiAudioManager::getInstance().playAudio("../assets/sounds/win.wav");
     }
 
@@ -33,13 +33,10 @@ void ImguiSudokuGameSummaryView::render() {
     ImguiUtils::printText("Game Summary", BLACK, 39, true);
     ImguiUtils::addVerticalSpacing(4);
 
-    const auto sp = getPresenter();
-    if (!sp) return;
-
-    std::string difficulty = sp->getDifficulty();
-    int mistakesCount = sp->getMistakesCount();
-    std::string elapsedTime = sp->getElapsedTime();
-    int gainedRating = sp->getGainedRating();
+    std::string difficulty = presenter->getDifficulty();
+    int mistakesCount = presenter->getMistakesCount();
+    std::string elapsedTime = presenter->getElapsedTime();
+    int gainedRating = presenter->getGainedRating();
 
     const std::string difficultyStr = std::format(
         "Difficulty: {}",
@@ -73,9 +70,7 @@ void ImguiSudokuGameSummaryView::render() {
             "Finish game",
             ImVec2(ImGui::GetWindowSize().x, 60),
             [this] {
-                const auto sp = getPresenter();
-                if (!sp) return;
-                sp->onFinishGameButtonClicked();
+                presenter->onFinishGameButtonClicked();
             }
         );
 }

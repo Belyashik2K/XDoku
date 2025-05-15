@@ -6,16 +6,16 @@
 #define PRESENTERFACTORY_H
 #include <memory>
 
-class PresenterFactory {
+class ViewFactory {
 public:
-    explicit PresenterFactory() = default;
+    explicit ViewFactory() = default;
 
     template <typename ViewType, typename PresenterType, typename... Dependencies>
-    std::shared_ptr<PresenterType> create(Dependencies&&... deps) {
-        auto view = std::make_unique<ViewType>();
-        auto presenter = std::make_shared<PresenterType>(std::forward<Dependencies>(deps)...);
-        presenter->init(std::move(view));
-        return presenter;
+    std::shared_ptr<ViewType> create(Dependencies&&... deps) {
+        auto view = std::make_shared<ViewType>();
+        auto presenter = std::make_unique<PresenterType>(std::forward<Dependencies>(deps)...);
+        view->init(std::move(presenter));
+        return view;
     }
 };
 

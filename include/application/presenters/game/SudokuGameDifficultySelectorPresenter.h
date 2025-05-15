@@ -11,20 +11,13 @@
 #include "interfaces/IPresenter.h"
 #include "interfaces/views/game/ISudokuGameDifficultySelectorView.h"
 
-class SudokuGameDifficultySelectorPresenter final :
-        public IPresenter<ISudokuGameDifficultySelectorView, SudokuGameDifficultySelectorPresenter>,
-        public std::enable_shared_from_this<SudokuGameDifficultySelectorPresenter> {
+class SudokuGameDifficultySelectorPresenter final : public IPresenter<ISudokuGameDifficultySelectorView> {
     std::shared_ptr<EventBus> eventBus;
 
 public:
     explicit SudokuGameDifficultySelectorPresenter(
         const std::shared_ptr<EventBus> &eventBus
     ) : eventBus(eventBus) {
-    }
-
-    void init(std::unique_ptr<ISudokuGameDifficultySelectorView> &&view) override {
-        this->setSelf(weak_from_this());
-        this->setView(std::move(view));
     }
 
     void onDifficultySelected(SudokuDifficultyEnum difficulty) const;

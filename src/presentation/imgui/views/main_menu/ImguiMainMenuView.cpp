@@ -69,9 +69,7 @@ void ImguiMainMenuView::renderFormButtons() const {
         "Play",
         buttonSize,
         [this] {
-            const auto sp = getPresenter();
-            if (!sp) return;
-            sp->onPlayButtonClicked();
+            presenter->onPlayButtonClicked();
         }
     );
     ImguiUtils::createButton(
@@ -79,9 +77,7 @@ void ImguiMainMenuView::renderFormButtons() const {
         "Profile",
         buttonSize,
         [this] {
-            const auto sp = getPresenter();
-            if (!sp) return;
-            sp->onProfileButtonClicked();
+            presenter->onProfileButtonClicked();
         }
     );
     ImguiUtils::createButton(
@@ -89,9 +85,7 @@ void ImguiMainMenuView::renderFormButtons() const {
         "Leaderboard",
         buttonSize,
         [this] {
-            const auto sp = getPresenter();
-            if (!sp) return;
-            sp->onLeaderboardButtonClicked();
+            presenter->onLeaderboardButtonClicked();
         }
     );
     ImguiUtils::createButton(
@@ -99,9 +93,7 @@ void ImguiMainMenuView::renderFormButtons() const {
         "How to play",
         buttonSize,
         [this] {
-            const auto sp = getPresenter();
-            if (!sp) return;
-            sp->onHowToPlayButtonClicked();
+            presenter->onHowToPlayButtonClicked();
         }
     );
     ImguiUtils::createButton(
@@ -109,9 +101,7 @@ void ImguiMainMenuView::renderFormButtons() const {
         "Exit",
         buttonSize,
         [this] {
-            const auto sp = getPresenter();
-            if (!sp) return;
-            sp->onExitButtonClicked();
+            presenter->onExitButtonClicked();
         }
     );
     ImGui::PopFont();

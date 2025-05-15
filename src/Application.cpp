@@ -55,17 +55,17 @@ void Application::initAppMediator() {
     printf("[Application] Initializing app mediator...\n");
     appMediator = std::make_shared<AppMediator>(
         eventBus,
-        signInPresenter,
-        signUpPresenter,
-        mainMenuPresenter,
-        profilePresenter,
-        howToPlayPresenter,
-        leaderboardPresenter,
-        sudokuGameDifficultySelectorPresenter,
-        sudokuGamePresenter,
-        sudokuGameSummaryPresenter
+        signUpView,
+        signInView,
+        mainMenuView,
+        profileView,
+        leaderboardView,
+        howToPlayView,
+        sudokuGameView,
+        sudokuGameDifficultySelectorView,
+        sudokuGameSummaryView
     );
-    appMediator->setCurrentPresenter(signInPresenter);
+    appMediator->setCurrentView(signInView);
     printf("[Application] App mediator initialized\n");
 }
 
@@ -80,21 +80,21 @@ void Application::initManagers() {
 
 void Application::initPresentersAndViews() {
     printf("[Application] Initializing presenters...\n");
-    PresenterFactory presenterFactory;
-    signInPresenter = presenterFactory.create<ImguiSignInView, SignInPresenter>(eventBus, userRepository);
-    signUpPresenter = presenterFactory.create<ImguiSignUpView, SignUpPresenter>(eventBus, userRepository);
-    mainMenuPresenter = presenterFactory.create<ImguiMainMenuView, MainMenuPresenter>(eventBus);
-    profilePresenter = presenterFactory.create<ImguiProfileView, ProfilePresenter>(eventBus, sessionManager);
-    howToPlayPresenter = presenterFactory.create<ImguiHowToPlayView, HowToPlayPresenter>(eventBus);
-    leaderboardPresenter = presenterFactory.create<ImguiLeaderboardView, LeaderboardPresenter>(
+    ViewFactory viewFactory;
+    signInView = viewFactory.create<ImguiSignInView, SignInPresenter>(eventBus, userRepository);
+    signUpView = viewFactory.create<ImguiSignUpView, SignUpPresenter>(eventBus, userRepository);
+    mainMenuView = viewFactory.create<ImguiMainMenuView, MainMenuPresenter>(eventBus);
+    profileView = viewFactory.create<ImguiProfileView, ProfilePresenter>(eventBus, sessionManager);
+    howToPlayView = viewFactory.create<ImguiHowToPlayView, HowToPlayPresenter>(eventBus);
+    leaderboardView = viewFactory.create<ImguiLeaderboardView, LeaderboardPresenter>(
         eventBus, ratingRepository
     );
-    sudokuGameDifficultySelectorPresenter = presenterFactory.create<ImguiSudokuGameDifficultySelectorView,
+    sudokuGameDifficultySelectorView = viewFactory.create<ImguiSudokuGameDifficultySelectorView,
         SudokuGameDifficultySelectorPresenter>(eventBus);
-    sudokuGamePresenter = presenterFactory.create<ImguiSudokuGameView,
+    sudokuGameView = viewFactory.create<ImguiSudokuGameView,
         SudokuGamePresenter>(eventBus, sudokuGameManager
     );
-    sudokuGameSummaryPresenter = presenterFactory.create<ImguiSudokuGameSummaryView, SudokuGameSummaryPresenter>(
+    sudokuGameSummaryView = viewFactory.create<ImguiSudokuGameSummaryView, SudokuGameSummaryPresenter>(
         eventBus, sudokuGameManager
     );
     printf("[Application] Presenters initialized\n");

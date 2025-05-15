@@ -8,8 +8,7 @@
 
 #include "interfaces/views/game/ISudokuGameSummaryView.h"
 
-class SudokuGameSummaryPresenter final : public IPresenter<ISudokuGameSummaryView, SudokuGameSummaryPresenter>,
-                                         public std::enable_shared_from_this<SudokuGameSummaryPresenter> {
+class SudokuGameSummaryPresenter final : public IPresenter<ISudokuGameSummaryView> {
     std::shared_ptr<EventBus> eventBus;
     std::shared_ptr<SudokuGameManager> gameManager;
 
@@ -20,11 +19,6 @@ public:
         const std::shared_ptr<EventBus> &eventBus,
         const std::shared_ptr<SudokuGameManager> &gameManager
     ) : eventBus(eventBus), gameManager(gameManager) {
-    }
-
-    void init(std::unique_ptr<ISudokuGameSummaryView> &&view) override {
-        this->setSelf(weak_from_this());
-        this->setView(std::move(view));
     }
 
     const SudokuGame *getCurrentGame() const {

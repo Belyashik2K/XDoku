@@ -19,8 +19,7 @@ enum SignInError {
     INVALID_CREDENTIALS
 };
 
-class SignInPresenter final : public IPresenter<ISignInView, SignInPresenter>,
-                              public std::enable_shared_from_this<SignInPresenter> {
+class SignInPresenter final : public IPresenter<ISignInView> {
     std::shared_ptr<EventBus> eventBus;
     std::shared_ptr<IUserRepository> userRepository;
 
@@ -59,11 +58,6 @@ public:
     int getBufferSize() const { return sizeof(username); }
 
     std::string getErrorMessage() const;
-
-    void init(std::unique_ptr<ISignInView> &&view) override {
-        this->setSelf(weak_from_this());
-        this->setView(std::move(view));
-    }
 };
 
 #endif //LOGINPRESENTER_H

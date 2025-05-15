@@ -22,54 +22,54 @@
 
 class AppMediator {
 
-    DokuStack<std::shared_ptr<IBasePresenter>> presenterStack{};
+    DokuStack<std::shared_ptr<IBaseView>> viewStack;
 
-    std::shared_ptr<IBasePresenter> currentPresenter;
+    std::shared_ptr<IBaseView> currentView;
     std::shared_ptr<EventBus> eventBus;
 
-    std::shared_ptr<SignUpPresenter> signUpPresenter;
-    std::shared_ptr<SignInPresenter> signInPresenter;
-    std::shared_ptr<MainMenuPresenter> mainMenuPresenter;
-    std::shared_ptr<ProfilePresenter> profilePresenter;
-    std::shared_ptr<LeaderboardPresenter> leaderboardPresenter;
-    std::shared_ptr<HowToPlayPresenter> howToPlayPresenter;
-    std::shared_ptr<SudokuGamePresenter> sudokuGamePresenter;
-    std::shared_ptr<SudokuGameDifficultySelectorPresenter> sudokuGameDifficultySelectorPresenter;
-    std::shared_ptr<SudokuGameSummaryPresenter> sudokuGameSummaryPresenter;
+    std::shared_ptr<ISignUpView> signUpView;
+    std::shared_ptr<ISignInView> signInView;
+    std::shared_ptr<IMainMenuView> mainMenuView;
+    std::shared_ptr<IProfileView> profileView;
+    std::shared_ptr<ILeaderboardView> leaderboardView;
+    std::shared_ptr<IHowToPlayView> howToPlayView;
+    std::shared_ptr<ISudokuGameView> sudokuGameView;
+    std::shared_ptr<ISudokuGameDifficultySelectorView> sudokuGameDifficultySelectorView;
+    std::shared_ptr<ISudokuGameSummaryView> sudokuGameSummaryView;
 
     void navigateBack();
 
-    void navigateTo(const std::shared_ptr<IBasePresenter> &presenter);
+    void navigateTo(const std::shared_ptr<IBaseView> &view);
 
     void resetToRoot();
 
     void subscribeToEvents();
 public:
     explicit AppMediator(
-        const std::shared_ptr<EventBus>& eventBus,
-        const std::shared_ptr<SignInPresenter>& signInPresenter,
-        const std::shared_ptr<SignUpPresenter>& signUpPresenter,
-        const std::shared_ptr<MainMenuPresenter>& mainMenuPresenter,
-        const std::shared_ptr<ProfilePresenter>& profilePresenter,
-        const std::shared_ptr<HowToPlayPresenter>& howToPlayPresenter,
-        const std::shared_ptr<LeaderboardPresenter>& leaderboardPresenter,
-        const std::shared_ptr<SudokuGameDifficultySelectorPresenter>& sudokuGameDifficultySelectorPresenter,
-        const std::shared_ptr<SudokuGamePresenter>& sudokuGamePresenter,
-        const std::shared_ptr<SudokuGameSummaryPresenter>& sudokuGameSummaryPresenter
+        const std::shared_ptr<EventBus> &eventBus,
+        const std::shared_ptr<ISignUpView> &signUpView,
+        const std::shared_ptr<ISignInView> &signInView,
+        const std::shared_ptr<IMainMenuView> &mainMenuView,
+        const std::shared_ptr<IProfileView> &profileView,
+        const std::shared_ptr<ILeaderboardView> &leaderboardView,
+        const std::shared_ptr<IHowToPlayView> &howToPlayView,
+        const std::shared_ptr<ISudokuGameView> &sudokuGameView,
+        const std::shared_ptr<ISudokuGameDifficultySelectorView> &sudokuGameDifficultySelectorView,
+        const std::shared_ptr<ISudokuGameSummaryView> &sudokuGameSummaryView
     ) : eventBus(eventBus),
-        signUpPresenter(signUpPresenter),
-        signInPresenter(signInPresenter),
-        mainMenuPresenter(mainMenuPresenter),
-        profilePresenter(profilePresenter),
-        leaderboardPresenter(leaderboardPresenter),
-        howToPlayPresenter(howToPlayPresenter),
-        sudokuGamePresenter(sudokuGamePresenter),
-        sudokuGameDifficultySelectorPresenter(sudokuGameDifficultySelectorPresenter),
-        sudokuGameSummaryPresenter(sudokuGameSummaryPresenter) {
+        signUpView(signUpView),
+        signInView(signInView),
+        mainMenuView(mainMenuView),
+        profileView(profileView),
+        leaderboardView(leaderboardView),
+        howToPlayView(howToPlayView),
+        sudokuGameView(sudokuGameView),
+        sudokuGameDifficultySelectorView(sudokuGameDifficultySelectorView),
+        sudokuGameSummaryView(sudokuGameSummaryView) {
         subscribeToEvents();
     }
 
-    void setCurrentPresenter(const std::shared_ptr<IBasePresenter> &presenter);
+    void setCurrentView(const std::shared_ptr<IBaseView> &view);
 
     void render() const;
 };

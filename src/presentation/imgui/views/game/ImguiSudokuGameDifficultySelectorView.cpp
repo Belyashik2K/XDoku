@@ -79,9 +79,7 @@ void ImguiSudokuGameDifficultySelectorView::renderDifficultyButtons() const {
                 difficulty.c_str(),
                 ImVec2(width, 70),
                 [this, copy] {
-                    const auto sp = getPresenter();
-                    if (!sp) return;
-                    sp->onDifficultySelected(SudokuDifficulty::fromString(copy));
+                    presenter->onDifficultySelected(SudokuDifficulty::fromString(copy));
                 }
             );
             if (isOdd && isNotLast) {
@@ -96,9 +94,7 @@ void ImguiSudokuGameDifficultySelectorView::renderDifficultyButtons() const {
         "Back to menu",
         ImVec2(xSize, 70),
         [this] {
-            const auto sp = getPresenter();
-            if (!sp) return;
-            sp->onBackButtonClicked();
+            presenter->onBackButtonClicked();
         }
         );
     }

@@ -6,22 +6,36 @@
 #define IVIEW_H
 #include <memory>
 
-template<typename PresenterType>
-class IView {
-protected:
-    std::weak_ptr<PresenterType> presenter;
+class IBaseView {
 public:
-    virtual ~IView() = default;
-
+    virtual ~IBaseView() = default;
     virtual void render() = 0;
+};
+
+template<typename PresenterType, typename ViewType>
+class IView : public IBaseView {
+protected:
+    std::unique_ptr<PresenterType> presenter;
+    std::weak_ptr<ViewType> self;
+public:
+    ~IView() override = default;
+
+    void render() override = 0;
 
     void setPresenter(const std::weak_ptr<PresenterType> &p) {
         presenter = p;
     }
 
-    std::shared_ptr<PresenterType> getPresenter() const {
-        return presenter.lock();
+    void setSelf(const std::weak_ptr<ViewType> &ptr) {
+        self = ptr;
     }
+
+    void setPresenter(std::unique_ptr<PresenterType> &&p) {
+        this->presenter = std::move(p);
+        this->presenter->setView(self);
+    }
+
+    virtual void init(std::unique_ptr<PresenterType> &&presenter) = 0;
 };
 
 #endif //IVIEW_H

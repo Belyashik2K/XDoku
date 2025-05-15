@@ -18,9 +18,7 @@ enum GameLoadingStatus {
     LOADED,
 };
 
-class SudokuGamePresenter final :
-        public IPresenter<ISudokuGameView, SudokuGamePresenter>,
-        public std::enable_shared_from_this<SudokuGamePresenter> {
+class SudokuGamePresenter final : public IPresenter<ISudokuGameView> {
     std::shared_ptr<EventBus> eventBus;
     std::shared_ptr<SudokuGameManager> gameManager;
 
@@ -34,11 +32,6 @@ public:
         const std::shared_ptr<EventBus> &eventBus,
         const std::shared_ptr<SudokuGameManager> &gameManager
     ) : eventBus(eventBus), gameManager(gameManager) {
-    }
-
-    void init(std::unique_ptr<ISudokuGameView> &&view) override {
-        this->setSelf(weak_from_this());
-        this->setView(std::move(view));
     }
 
     void updateLoadingStatus(const GameLoadingStatus &status) {
