@@ -35,7 +35,13 @@ class SignInPresenter final : public IPresenter<ISignInView, SignInPresenter>,
         signInError = error;
     }
 
-    bool authorizeUser(const std::string &username, const std::string &password) const;
+    void resetData() {
+        username[0] = '\0';
+        password[0] = '\0';
+        setSignInError(NO_SIGN_IN_ERROR);
+    }
+
+    bool authorizeUser(const std::string &username, const std::string &password);
 
 public:
     explicit SignInPresenter(

@@ -13,7 +13,7 @@ bool SignInPresenter::isPasswordValid(const std::string &password, const std::st
     return BCrypt::validatePassword(password, hash);
 }
 
-bool SignInPresenter::authorizeUser(const std::string &username, const std::string &password) const {
+bool SignInPresenter::authorizeUser(const std::string &username, const std::string &password) {
     const std::optional<User> user = userRepository->get(username);
     if (!user.has_value()) {
         printf("[SignInPresenter] User not found\n");
@@ -25,6 +25,7 @@ bool SignInPresenter::authorizeUser(const std::string &username, const std::stri
         return false;
     }
 
+    resetData();
     eventBus->publish(OnUserLoggedIn(user.value().getId()));
     return true;
 }
