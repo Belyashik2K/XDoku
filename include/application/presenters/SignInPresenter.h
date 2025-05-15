@@ -13,6 +13,12 @@
 #include "interfaces/database/repositories/IUserRepository.h"
 #include "interfaces/views/ISignInView.h"
 
+enum SignInError {
+    NO_SIGN_IN_ERROR,
+    SIGN_IN_ALL_FIELDS_REQUIRED,
+    INVALID_CREDENTIALS
+};
+
 class SignInPresenter final : public IPresenter<ISignInView, SignInPresenter>,
                               public std::enable_shared_from_this<SignInPresenter> {
     std::shared_ptr<EventBus> eventBus;
@@ -21,11 +27,13 @@ class SignInPresenter final : public IPresenter<ISignInView, SignInPresenter>,
     char username[128] = "";
     char password[128] = "";
 
-    bool incorrectLogin = false;
+    SignInError signInError = NO_SIGN_IN_ERROR;
 
     static bool isPasswordValid(const std::string &password, const std::string &hash);
 
-    void setIncorrectLogin(const bool incorrect) { incorrectLogin = incorrect; }
+    void setSignInError(const SignInError error) {
+        signInError = error;
+    }
 
     bool authorizeUser(const std::string &username, const std::string &password) const;
 
@@ -42,8 +50,9 @@ public:
 
     char *getUsername() { return username; }
     char *getPassword() { return password; }
-    bool isIncorrectLogin() const { return incorrectLogin; }
     int getBufferSize() const { return sizeof(username); }
+
+    std::string getErrorMessage() const;
 
     void init(std::unique_ptr<ISignInView> &&view) override {
         this->setSelf(weak_from_this());

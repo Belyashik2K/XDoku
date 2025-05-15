@@ -36,14 +36,28 @@ void SignInPresenter::onLoginButtonClicked() {
     const auto passwordStr = std::string(password);
 
     if (usernameStr.empty() || passwordStr.empty()) {
+        setSignInError(SIGN_IN_ALL_FIELDS_REQUIRED);
         return;
     }
+
     if (authorizeUser(usernameStr, passwordStr)) {
         printf("[SignInPresenter] User logged in successfully\n");
     } else {
-        setIncorrectLogin(true);
+        setSignInError(INVALID_CREDENTIALS);
     }
 }
+
+std::string SignInPresenter::getErrorMessage() const {
+    switch (signInError) {
+        case SIGN_IN_ALL_FIELDS_REQUIRED:
+            return "All fields are required";
+        case INVALID_CREDENTIALS:
+            return "Invalid username or password";
+        default:
+            return "";
+    }
+}
+
 
 void SignInPresenter::onSignUpButtonClicked() const {
     eventBus->publish(OnSignUpButtonClicked());

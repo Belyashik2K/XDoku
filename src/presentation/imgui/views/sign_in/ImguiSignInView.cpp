@@ -136,8 +136,10 @@ void ImguiSignInView::renderLoginError() const {
     const auto sp = getPresenter();
     if (!sp) return;
 
-    if (sp->isIncorrectLogin()) {
+    const std::string errorMessage = sp->getErrorMessage();
+
+    if (!errorMessage.empty()) {
         ImguiUtils::addVerticalSpacing(3);
-        ImguiUtils::printText("Invalid username or password", RED, 22, true);
+        ImguiUtils::printText(errorMessage.c_str(), RED, 22, true);
     }
 }
