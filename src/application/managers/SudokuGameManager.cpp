@@ -82,7 +82,7 @@ int SudokuGameManager::calculateRating() const {
     const int elapsedTime = currentGame->getElapsedTime();
 
     const int mistakes = currentGame->getMistakesCount();
-    float rating = maxRating - (mistakes * mistakesMultiplier) - (elapsedTime * timeMultiplier) * difficultyMultiplier;
+    float rating = (maxRating - (mistakes * mistakesMultiplier) - (elapsedTime * timeMultiplier)) * difficultyMultiplier;
     if (!mistakes) {
         constexpr int bonus = 200;
         rating += bonus;

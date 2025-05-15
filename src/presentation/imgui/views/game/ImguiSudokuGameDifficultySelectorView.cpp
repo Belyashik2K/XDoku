@@ -34,7 +34,7 @@ void ImguiSudokuGameDifficultySelectorView::render() {
     {
         const ImVec2 menuSize = ImGui::GetWindowSize();
         const float childWidth = menuSize.x * 0.75f;
-        const float childHeight = menuSize.y * 0.33f;
+        const float childHeight = menuSize.y * 0.38f;
         const ImVec2 childSize(childWidth, childHeight);
 
         ImguiChildWindowGuard menuPos(
@@ -69,30 +69,28 @@ void ImguiSudokuGameDifficultySelectorView::renderDifficultyButtons() const {
         });
         int i = 0;
         for (auto &difficulty : SudokuDifficulty::getDifficultyNames()) {
+            const bool isOdd = ++i % 2 != 0;
+            const bool isNotLast = i != SudokuDifficulty::getDifficultyNames().size();
+            const float width = isNotLast ? xSize * 0.5f : xSize;
             const std::string copy = difficulty;
             std::transform(difficulty.begin(), difficulty.begin() + 1, difficulty.begin(), toupper);
             ImguiUtils::createButton(
                 difficulty.c_str(),
                 difficulty.c_str(),
-                ImVec2(xSize * 0.5f, 70),
+                ImVec2(width, 70),
                 [this, copy] {
                     const auto sp = getPresenter();
                     if (!sp) return;
                     sp->onDifficultySelected(SudokuDifficulty::fromString(copy));
                 }
             );
-            if (++i % 2 != 0) {
+            if (isOdd && isNotLast) {
                 ImGui::SameLine();
             }
         }
     }
 
     {
-        // ImguiStyleColorGuard signUpButton({
-        //     {ImGuiCol_Text, BLACK},
-        //     {ImGuiCol_Border, BLACK},
-        //     {ImGuiCol_Button, WHITE},
-        // });
         ImguiUtils::createButton(
         "back_button",
         "Back to menu",
@@ -102,8 +100,6 @@ void ImguiSudokuGameDifficultySelectorView::renderDifficultyButtons() const {
             if (!sp) return;
             sp->onBackButtonClicked();
         }
-    );
+        );
     }
-
-
 }

@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
-enum class SudokuDifficultyEnum { EASY, MEDIUM, HARD, EXPERT, UNKNOWN };
+enum class SudokuDifficultyEnum { TEST, EASY, MEDIUM, HARD, EXPERT, UNKNOWN };
 
 struct SudokuDifficultySettings {
     int openCellsCount;
@@ -17,6 +17,7 @@ struct SudokuDifficultySettings {
 };
 
 const std::unordered_map<std::string, SudokuDifficultyEnum> sudokuDifficultyMap = {
+    {"test", SudokuDifficultyEnum::TEST},
     {"easy", SudokuDifficultyEnum::EASY},
     {"medium", SudokuDifficultyEnum::MEDIUM},
     {"hard", SudokuDifficultyEnum::HARD},
@@ -33,7 +34,8 @@ public:
             "easy",
             "medium",
             "hard",
-            "expert"
+            "expert",
+            "test",
         };
     }
     static std::string getDifficultyName(SudokuDifficultyEnum level);
