@@ -14,9 +14,7 @@
 
 using Stats = std::optional<UserStats>;
 
-class ProfilePresenter final :
-        public IPresenter<IProfileView, ProfilePresenter>,
-        public std::enable_shared_from_this<ProfilePresenter> {
+class ProfilePresenter final : public IPresenter<IProfileView> {
     std::shared_ptr<EventBus> eventBus;
     std::shared_ptr<SessionManager> sessionManager;
 
@@ -74,11 +72,6 @@ public:
 
     UserStats getCurrentUserStats() const {
         return sessionManager->getUserStats();
-    }
-
-    void init(std::unique_ptr<IProfileView> &&view) override {
-        this->setSelf(weak_from_this());
-        this->setView(std::move(view));
     }
 };
 

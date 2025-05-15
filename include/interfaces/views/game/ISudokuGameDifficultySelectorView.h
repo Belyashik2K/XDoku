@@ -6,7 +6,7 @@
 #define ISUDOKUGAMEDIFFICULTYSELECTORVIEW_H
 #include "interfaces/IView.h"
 
-class ISudokuGameDifficultySelectorView : public IView<class SudokuGameDifficultySelectorPresenter> {
+class ISudokuGameDifficultySelectorView : public IView<class SudokuGameDifficultySelectorPresenter, ISudokuGameDifficultySelectorView> {
 public:
     void render() override = 0;
 };

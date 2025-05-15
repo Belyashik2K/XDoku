@@ -21,15 +21,15 @@ class Application {
     std::shared_ptr<SessionManager> sessionManager;
     std::shared_ptr<SudokuGameManager> sudokuGameManager;
 
-    std::shared_ptr<SignInPresenter> signInPresenter;
-    std::shared_ptr<SignUpPresenter> signUpPresenter;
-    std::shared_ptr<MainMenuPresenter> mainMenuPresenter;
-    std::shared_ptr<ProfilePresenter> profilePresenter;
-    std::shared_ptr<LeaderboardPresenter> leaderboardPresenter;
-    std::shared_ptr<HowToPlayPresenter> howToPlayPresenter;
-    std::shared_ptr<SudokuGamePresenter> sudokuGamePresenter;
-    std::shared_ptr<SudokuGameDifficultySelectorPresenter> sudokuGameDifficultySelectorPresenter;
-    std::shared_ptr<SudokuGameSummaryPresenter> sudokuGameSummaryPresenter;
+    std::shared_ptr<ISignInView> signInView;
+    std::shared_ptr<ISignUpView> signUpView;
+    std::shared_ptr<IMainMenuView> mainMenuView;
+    std::shared_ptr<IProfileView> profileView;
+    std::shared_ptr<ILeaderboardView> leaderboardView;
+    std::shared_ptr<IHowToPlayView> howToPlayView;
+    std::shared_ptr<ISudokuGameView> sudokuGameView;
+    std::shared_ptr<ISudokuGameDifficultySelectorView> sudokuGameDifficultySelectorView;
+    std::shared_ptr<ISudokuGameSummaryView> sudokuGameSummaryView;
 
     std::unique_ptr<IFrameHandler> frameHandler;
     std::shared_ptr<AppMediator> appMediator;

@@ -6,7 +6,7 @@
 #define IPROFILEVIEW_H
 #include "interfaces/IView.h"
 
-class IProfileView : public IView<class ProfilePresenter> {
+class IProfileView : public IView<class ProfilePresenter, IProfileView> {
 public:
     void render() override = 0;
 };

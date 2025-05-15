@@ -7,115 +7,116 @@
 #include "application/app_events/UserEvents.h"
 
 void AppMediator::render() const {
-    if (currentPresenter) {
-        currentPresenter->render();
+    if (currentView) {
+        currentView->render();
     }
 }
 
-void AppMediator::setCurrentPresenter(const std::shared_ptr<IBasePresenter> &presenter) {
-    currentPresenter = presenter;
-    if (presenter) {
-        presenterStack.push(presenter);
+void AppMediator::setCurrentView(const std::shared_ptr<IBaseView> &view) {
+    currentView = view;
+    if (view) {
+        viewStack.push(view);
     }
 }
 
 void AppMediator::navigateBack() {
-    if (presenterStack.size() > 1) {
-        presenterStack.pop();
-        currentPresenter = presenterStack.top();
+    if (viewStack.size() > 1) {
+        viewStack.pop();
+        currentView = viewStack.top();
     }
 }
 
-void AppMediator::navigateTo(const std::shared_ptr<IBasePresenter> &presenter) {
-    if (presenter) {
-        currentPresenter = presenter;
-        presenterStack.push(presenter);
+void AppMediator::navigateTo(const std::shared_ptr<IBaseView> &view) {
+    if (view) {
+        currentView = view;
+        viewStack.push(view);
     }
 }
 
 void AppMediator::resetToRoot() {
-    while (presenterStack.size() > 1) {
-        presenterStack.pop();
+    while (viewStack.size() > 1) {
+        viewStack.pop();
     }
-    if (!presenterStack.empty()) {
-        currentPresenter = presenterStack.top();
+    if (!viewStack.empty()) {
+        currentView = viewStack.top();
     }
 }
+
 
 void AppMediator::subscribeToEvents() {
     printf("[AppMediator] Subscribing to events...\n");
     eventBus->subscribe<OnSignUpButtonClicked>([this](const OnSignUpButtonClicked &) {
-        if (signUpPresenter) {
-            navigateTo(signUpPresenter);
+        if (signUpView) {
+            navigateTo(signUpView);
         }
     });
     eventBus->subscribe<OnSignInButtonClicked>([this](const OnSignInButtonClicked &) {
-        if (signInPresenter) {
-            navigateTo(signInPresenter);
+        if (signInView) {
+            navigateTo(signInView);
         }
     });
     eventBus->subscribe<OnUserLoggedIn>([this](const OnUserLoggedIn &) {
-        if (mainMenuPresenter) {
+        if (mainMenuView) {
             resetToRoot();
-            navigateTo(mainMenuPresenter);
+            navigateTo(mainMenuView);
         }
     });
     eventBus->subscribe<OnLeaderboardButtonClicked>([this](const OnLeaderboardButtonClicked &) {
-        if (leaderboardPresenter) {
-            navigateTo(leaderboardPresenter);
+        if (leaderboardView) {
+            navigateTo(leaderboardView);
         }
     });
     eventBus->subscribe<OnMainMenuButtonClicked>([this](const OnMainMenuButtonClicked &) {
-        if (mainMenuPresenter) {
+        if (mainMenuView) {
             resetToRoot();
-            navigateTo(mainMenuPresenter);
+            navigateTo(mainMenuView);
         }
     });
     eventBus->subscribe<OnActiveSudokuGameFound>([this](const OnActiveSudokuGameFound &) {
-        if (sudokuGamePresenter) {
-            navigateTo(sudokuGamePresenter);
+        if (sudokuGameView) {
+            navigateTo(sudokuGameView);
         }
     });
     eventBus->subscribe<OnActiveSudokuGameNotFound>([this](const OnActiveSudokuGameNotFound &) {
-        if (sudokuGameDifficultySelectorPresenter) {
-            navigateTo(sudokuGameDifficultySelectorPresenter);
+        if (sudokuGameDifficultySelectorView) {
+            navigateTo(sudokuGameDifficultySelectorView);
         }
     });
     eventBus->subscribe<OnProfileButtonClicked>([this](const OnProfileButtonClicked &) {
-        if (profilePresenter) {
-            navigateTo(profilePresenter);
+        if (profileView) {
+            navigateTo(profileView);
         }
     });
     eventBus->subscribe<OnHowToPlayButtonClicked>([this](const OnHowToPlayButtonClicked &) {
-        if (howToPlayPresenter) {
-            navigateTo(howToPlayPresenter);
+        if (howToPlayView) {
+            navigateTo(howToPlayView);
         }
     });
     eventBus->subscribe<OnUserLoggedOut>([this](const OnUserLoggedOut &) {
-        if (signInPresenter) {
+        if (signInView) {
             resetToRoot();
-            navigateTo(signInPresenter);
+            navigateTo(signInView);
         }
     });
     eventBus->subscribe<OnSudokuGameCreated>([this](const OnSudokuGameCreated &) {
-        if (sudokuGamePresenter) {
-            navigateTo(sudokuGamePresenter);
+        if (sudokuGameView) {
+            navigateTo(sudokuGameView);
         }
     });
     eventBus->subscribe<OnSudokuGameFinished>([this](const OnSudokuGameFinished &) {
-        if (sudokuGameSummaryPresenter) {
-            navigateTo(sudokuGameSummaryPresenter);
+        if (sudokuGameSummaryView) {
+            navigateTo(sudokuGameSummaryView);
         }
     });
     eventBus->subscribe<OnSudokuGameSurrendered>([this](const OnSudokuGameSurrendered &) {
-        if (sudokuGameSummaryPresenter) {
-            navigateTo(sudokuGameSummaryPresenter);
+        if (sudokuGameSummaryView) {
+            navigateTo(sudokuGameSummaryView);
         }
     });
     eventBus->subscribe<OnSummaryViewClosed>([this](const OnSummaryViewClosed &) {
-        if (mainMenuPresenter) {
+        if (mainMenuView) {
             resetToRoot();
-            navigateTo(mainMenuPresenter);
+            navigateTo(mainMenuView);
         }
     });
     eventBus->subscribe<OnBackButtonClicked>([this](const OnBackButtonClicked &) {

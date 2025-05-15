@@ -45,10 +45,7 @@ void ImguiProfileView::render() {
 }
 
 void ImguiProfileView::renderStatistics() const {
-    const auto sp = getPresenter();
-    if (!sp) return;
-
-    const User *user = sp->getCurrentUser();
+    const User *user = presenter->getCurrentUser();
 
     const auto header = "Profile";
     const std::string playerID = std::format(R"(Your ID: {})", user->getId());
@@ -57,13 +54,13 @@ void ImguiProfileView::renderStatistics() const {
     const std::string rating = std::format(R"(Current rating: {} points)", user->getRating());
 
     const auto stats = "Statistics";
-    const std::string totalGames = std::format(R"(Total games: {})", sp->getGamesCount());
-    const std::string totalWins = std::format(R"(Total finished: {})", sp->getFinishedGamesCount());
-    const std::string totalCompletion = std::format(R"(Total completion: {}%%)", sp->getCompletionRate());
-    const std::string averageTimeValue = sp->getAverageSolutionTime();
+    const std::string totalGames = std::format(R"(Total games: {})", presenter->getGamesCount());
+    const std::string totalWins = std::format(R"(Total finished: {})", presenter->getFinishedGamesCount());
+    const std::string totalCompletion = std::format(R"(Total completion: {}%%)", presenter->getCompletionRate());
+    const std::string averageTimeValue = presenter->getAverageSolutionTime();
     const std::string averageTime = std::format(R"(Average time: {})", averageTimeValue);
     const std::string mostCommonDifficulty =
-            std::format(R"(Most common difficulty: {})", sp->getMostCommonDifficulty());
+            std::format(R"(Most common difficulty: {})", presenter->getMostCommonDifficulty());
 
     constexpr int headerPx = 36;
     constexpr int textPx = 32;
@@ -104,9 +101,7 @@ void ImguiProfileView::renderButtons() const {
         "Logout",
         buttonSize,
         [this] {
-            const auto sp = getPresenter();
-            if (!sp) return;
-            sp->onLogoutButtonClicked();
+            presenter->onLogoutButtonClicked();
         }
     );
     ImguiUtils::createButton(
@@ -114,9 +109,7 @@ void ImguiProfileView::renderButtons() const {
         "Back to menu",
         buttonSize,
         [this] {
-            const auto sp = getPresenter();
-            if (!sp) return;
-            sp->onBackButtonClicked();
+            presenter->onBackButtonClicked();
         }
     );
 }

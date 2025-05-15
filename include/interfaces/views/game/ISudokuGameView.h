@@ -6,7 +6,7 @@
 #define ISUDOKUGAMEVIEW_H
 #include "interfaces/IView.h"
 
-class ISudokuGameView : public IView<class SudokuGamePresenter> {
+class ISudokuGameView : public IView<class SudokuGamePresenter, ISudokuGameView> {
 public:
     void render() override = 0;
 };

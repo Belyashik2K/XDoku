@@ -21,20 +21,16 @@ void ImguiLeaderboardView::render() {
 }
 
 void ImguiLeaderboardView::printLoader() const {
-    const auto sp = getPresenter();
-    if (!sp) return;
-    if (!sp->isOnLoading()) return;
+    if (!presenter->isOnLoading()) return;
 
     ImGui::SetCursorPosY(ImGui::GetWindowHeight() * 0.45f);
     ImguiUtils::printText("Loading...", BLACK, 39, true);
 }
 
 void ImguiLeaderboardView::renderLeaderboard() const {
-    const auto sp = getPresenter();
-    if (!sp) return;
-    if (sp->isOnLoading()) return;
+    if (presenter->isOnLoading()) return;
 
-    const LeaderboardPlaces leaderboardPlaces = sp->getLeaderboardPlaces();
+    const LeaderboardPlaces leaderboardPlaces = presenter->getLeaderboardPlaces();
     if (!leaderboardPlaces.has_value()) {
         ImguiUtils::printText("No leaderboard data available :(", BLACK, 39, true);
         return;
@@ -87,9 +83,7 @@ void ImguiLeaderboardView::renderLeaderboard() const {
             "Refresh",
             ImVec2(ImGui::GetWindowSize().x, 60),
             [this] {
-                const auto sp = getPresenter();
-                if (!sp) return;
-                sp->onRefreshButtonClicked();
+                presenter->onRefreshButtonClicked();
             }
         );
         ImguiUtils::addVerticalSpacing();
@@ -98,9 +92,7 @@ void ImguiLeaderboardView::renderLeaderboard() const {
             "Back to menu",
             ImVec2(ImGui::GetWindowSize().x, 60),
             [this] {
-                const auto sp = getPresenter();
-                if (!sp) return;
-                sp->onBackButtonClicked();
+                presenter->onBackButtonClicked();
             }
         );
     }

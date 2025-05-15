@@ -6,7 +6,7 @@
 #define IMAINMENUVIEW_H
 #include "interfaces/IView.h"
 
-class IMainMenuView : public IView<class MainMenuPresenter> {
+class IMainMenuView : public IView<class MainMenuPresenter , IMainMenuView> {
 public:
     void render() override = 0;
 };

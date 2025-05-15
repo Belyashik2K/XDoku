@@ -152,7 +152,7 @@ add_executable(XDoku
         include/infrastructure/database/PostgreSQL/factories/PostgreSQLRepositoryFactory.h
         include/interfaces/database/repositories/IRepositoryFactory.h
         include/presentation/imgui/views/ImguiViewFactory.h
-        include/application/factories/PresenterFactory.h
+        include/factories/ViewFactory.h
         include/domain/custom_types/vector/DokuVector.h
         include/domain/custom_types/vector/DokuVectorIterator.h
         include/domain/custom_types/stack/DokuStack.h

@@ -6,7 +6,7 @@
 #define IHOWTOPLAYVIEW_H
 #include "interfaces/IView.h"
 
-class IHowToPlayView : public IView<class HowToPlayPresenter> {
+class IHowToPlayView : public IView<class HowToPlayPresenter, IHowToPlayView>{
 public:
     void render() override = 0;
 };

@@ -27,9 +27,7 @@ enum SignUpError {
     UNEXPECTED_ERROR
 };
 
-class SignUpPresenter final :
-        public IPresenter<ISignUpView, SignUpPresenter>,
-        public std::enable_shared_from_this<SignUpPresenter> {
+class SignUpPresenter final : public IPresenter<ISignUpView> {
     std::shared_ptr<EventBus> eventBus;
     std::shared_ptr<IUserRepository> userRepository;
 
@@ -89,11 +87,6 @@ public:
     char *getPassword() { return password; }
     char *getConfirmPassword() { return confirmPassword; }
     int getBufferSize() const { return sizeof(username); }
-
-    void init(std::unique_ptr<ISignUpView> &&view) override {
-        this->setSelf(weak_from_this());
-        this->setView(std::move(view));
-    }
 };
 
 #endif //SIGNUPPRESENTER_H

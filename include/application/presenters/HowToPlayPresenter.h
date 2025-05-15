@@ -18,8 +18,7 @@ enum class FAQType {
 };
 
 class HowToPlayPresenter final :
-        public IPresenter<IHowToPlayView, HowToPlayPresenter>,
-        public std::enable_shared_from_this<HowToPlayPresenter> {
+        public IPresenter<IHowToPlayView> {
     std::shared_ptr<EventBus> eventBus;
 
     FAQType currentFAQType = FAQType::DIFFICULTY;
@@ -27,11 +26,6 @@ public:
     explicit HowToPlayPresenter(
         const std::shared_ptr<EventBus> &eventBus
     ) : eventBus(eventBus) {
-    }
-
-    void init(std::unique_ptr<IHowToPlayView> &&view) override {
-        this->setSelf(weak_from_this());
-        this->setView(std::move(view));
     }
 
     void resetFAQType() {

@@ -6,7 +6,7 @@
 #define ILEADERBOARDVIEW_H
 #include "interfaces/IView.h"
 
-class ILeaderboardView : public IView<class LeaderboardPresenter> {
+class ILeaderboardView : public IView<class LeaderboardPresenter, ILeaderboardView>{
 public:
     void render() override = 0;
 };

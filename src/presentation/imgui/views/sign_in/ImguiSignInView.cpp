@@ -46,9 +46,6 @@ void ImguiSignInView::renderFormHeader() {
 }
 
 void ImguiSignInView::renderFormInputs() const {
-    const auto sp = getPresenter();
-    if (!sp) return;
-
     ImguiStyleColorGuard localColorGuard({
         {ImGuiCol_Text, WHITE},
         {ImGuiCol_Border, LIGHT_GRAY},
@@ -68,8 +65,8 @@ void ImguiSignInView::renderFormInputs() const {
     ImguiUtils::createInputField(
         "username_input",
         "Username",
-        sp->getUsername(),
-        sp->getBufferSize(),
+        presenter->getUsername(),
+        presenter->getBufferSize(),
         inputSize,
         ImGuiInputTextFlags_CharsNoBlank,
         false
@@ -79,8 +76,8 @@ void ImguiSignInView::renderFormInputs() const {
     ImguiUtils::createInputField(
         "password_input",
         "Password",
-        sp->getPassword(),
-        sp->getBufferSize(),
+        presenter->getPassword(),
+        presenter->getBufferSize(),
         inputSize,
         ImGuiInputTextFlags_Password,
         false
@@ -106,9 +103,7 @@ void ImguiSignInView::renderFormButtons() const {
             "Sign in",
             buttonSize,
             [this] {
-                const auto sp = getPresenter();
-                if (!sp) return;
-                sp->onLoginButtonClicked();
+                presenter->onLoginButtonClicked();
             }
         );
     }
@@ -124,19 +119,14 @@ void ImguiSignInView::renderFormButtons() const {
             "Don't have an account? Sign up",
             buttonSize,
             [this] {
-                const auto sp = getPresenter();
-                if (!sp) return;
-                sp->onSignUpButtonClicked();
+                presenter->onSignUpButtonClicked();
             }
         );
     }
 }
 
 void ImguiSignInView::renderLoginError() const {
-    const auto sp = getPresenter();
-    if (!sp) return;
-
-    const std::string errorMessage = sp->getErrorMessage();
+    const std::string errorMessage = presenter->getErrorMessage();
 
     if (!errorMessage.empty()) {
         ImguiUtils::addVerticalSpacing(3);

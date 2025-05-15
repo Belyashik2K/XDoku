@@ -36,11 +36,8 @@ void ImguiHowToPlayView::render() {
 }
 
 void ImguiHowToPlayView::renderCurrentBackground() const {
-    const auto sp = getPresenter();
-    if (!sp) return;
-
     const std::string basePath = "../assets/textures/how_to_play/";
-    switch (sp->getCurrentFAQType()) {
+    switch (presenter->getCurrentFAQType()) {
         case FAQType::DIFFICULTY:
             ImguiUtils::updateBackground(basePath + "ds_background.jpg");
             break;
@@ -59,10 +56,7 @@ void ImguiHowToPlayView::renderCurrentBackground() const {
 }
 
 void ImguiHowToPlayView::renderCurrentFAQ() const {
-    const auto sp = getPresenter();
-    if (!sp) return;
-
-    switch (sp->getCurrentFAQType()) {
+    switch (presenter->getCurrentFAQType()) {
         case FAQType::DIFFICULTY:
             renderDifficultyFAQ();
             break;
@@ -168,9 +162,7 @@ void ImguiHowToPlayView::renderButtons() const {
          "Next",
          ImVec2(windowSize.x * 0.6f, 60),
          [this] {
-             const auto sp = getPresenter();
-             if (!sp) return;
-             sp->onNextButtonClicked();
+             presenter->onNextButtonClicked();
          },
          nullptr,
          true
@@ -183,9 +175,7 @@ void ImguiHowToPlayView::renderButtons() const {
         "Back to menu",
         ImVec2(windowSize.x * 0.6f, 60),
         [this] {
-            const auto sp = getPresenter();
-            if (!sp) return;
-            sp->onBackButtonClicked();
+            presenter->onBackButtonClicked();
         },
         nullptr,
         true

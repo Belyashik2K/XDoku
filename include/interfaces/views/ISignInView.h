@@ -6,7 +6,7 @@
 #define ISIGNINVIEW_H
 #include "interfaces/IView.h"
 
-class ISignInView : public IView<class SignInPresenter> {
+class ISignInView : public IView<class SignInPresenter, ISignInView> {
 public:
     void render() override = 0;
 };

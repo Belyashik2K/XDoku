@@ -18,10 +18,7 @@ void ImguiSudokuGameView::render() {
                             ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
     ImguiUtils::updateBackground("../assets/textures/game/background.png");
 
-    auto sp = getPresenter();
-    if (!sp) return;
-
-    if (!sp->getCurrentGame()) {
+    if (!presenter->getCurrentGame()) {
         ImguiUtils::printText("No active game found", BLACK, 30, true);
         return;
     }
@@ -59,9 +56,7 @@ void ImguiSudokuGameView::renderGame() const {
 }
 
 void ImguiSudokuGameView::renderLoading() const {
-    const auto sp = getPresenter();
-    if (!sp) return;
-    if (sp->getLoadingStatus() != LOADING) return;
+    if (presenter->getLoadingStatus() != LOADING) return;
     ImguiUtils::printText("Loading...", BLACK, 30, true);
 }
 
@@ -101,11 +96,8 @@ void ImguiSudokuGameView::drawCells(
     const float cellSize,
     ImDrawList *drawList
 ) const {
-    const auto sp = getPresenter();
-    if (!sp) return;
-
-    const auto grid = sp->getCurrentGame()->getCurrentGrid();
-    auto [selectedRow, selectedCol] = sp->getSelectedCell();
+    const auto grid = presenter->getCurrentGame()->getCurrentGrid();
+    auto [selectedRow, selectedCol] = presenter->getSelectedCell();
 
     for (int row = 0; row < 9; ++row) {
         for (int col = 0; col < 9; ++col) {
@@ -120,11 +112,11 @@ void ImguiSudokuGameView::drawCells(
                 ImVec2(cellSize, cellSize)
             );
             if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0)) {
-                sp->setSelectedCell(row, col);
+                presenter->setSelectedCell(row, col);
             }
 
             if (row == selectedRow && col == selectedCol) {
-                if (sp->isValidMove()) {
+                if (presenter->isValidMove()) {
                     drawList->AddRectFilled(cellMin, cellMax, VERY_LIGHT_GRAY);
                 } else {
                     drawList->AddRectFilled(cellMin, cellMax, LIGHT_RED);
@@ -155,9 +147,7 @@ void ImguiSudokuGameView::adjustLayoutParameters(ImVec2 &windowPos, ImVec2 &wind
 }
 
 void ImguiSudokuGameView::renderSudokuGrid() const {
-    const auto sp = getPresenter();
-    if (!sp) return;
-    if (sp->getLoadingStatus() != LOADED) return;
+    if (presenter->getLoadingStatus() != LOADED) return;
 
     const ImVec2 parentWindowSize = ImGui::GetWindowSize();
     ImguiChildWindowGuard gridArea(
@@ -184,9 +174,7 @@ void ImguiSudokuGameView::renderSudokuGrid() const {
 
 void ImguiSudokuGameView::handleKeyboardInput() const {
     if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-        const auto sp = getPresenter();
-        if (!sp) return;
-        auto [fst, snd] = getPresenter()->getSelectedCell();
+        auto [fst, snd] = presenter->getSelectedCell();
         const int selectedRow = fst;
         const int selectedCol = snd;
         if (selectedRow < 0 || selectedCol < 0) {
@@ -196,7 +184,7 @@ void ImguiSudokuGameView::handleKeyboardInput() const {
         for (int key = ImGuiKey_1; key <= ImGuiKey_9; ++key) {
             if (ImGui::IsKeyPressed(static_cast<ImGuiKey>(key))) {
                 const int value = key - ImGuiKey_0;
-                if (const bool result = sp->onNewMove(value); !result) {
+                if (const bool result = presenter->onNewMove(value); !result) {
                     ImguiAudioManager::getInstance().playAudio("../assets/sounds/incorrect.wav");
                 } else {
                     ImguiAudioManager::getInstance().playAudio("../assets/sounds/correct.wav");
@@ -207,7 +195,7 @@ void ImguiSudokuGameView::handleKeyboardInput() const {
         if (
             ImGui::IsKeyPressed(ImGuiKey_Escape)
         ) {
-            sp->unselectCell();
+            presenter->unselectCell();
         }
     }
 }
@@ -228,9 +216,7 @@ void ImguiSudokuGameView::renderButtons() const {
             "Surrender :(",
             buttonSize,
             [this] {
-                const auto sp = getPresenter();
-                if (!sp) return;
-                sp->onSurrenderButtonClicked();
+                presenter->onSurrenderButtonClicked();
         });
 
         ImguiUtils::addVerticalSpacing(3);
@@ -242,33 +228,29 @@ void ImguiSudokuGameView::renderButtons() const {
             "Back to menu",
             buttonSize,
             [this] {
-                const auto sp = getPresenter();
-                if (!sp) return;
-                sp->onBackButtonClicked();
+                presenter->onBackButtonClicked();
         });
     }
 
 }
 
 void ImguiSudokuGameView::renderStatistics() const {
-    const auto sp = getPresenter();
-    if (!sp) return;
-    if (!sp->getCurrentGame()) return;
+    if (!presenter->getCurrentGame()) return;
     ImGui::SetCursorPosY(ImGui::GetWindowSize().y * 0.33f);
     ImguiUtils::printText("Statistics", BLACK, 39, true);
     ImguiUtils::addVerticalSpacing(3);
 
     const std::string difficulty = std::format(
         "Difficulty: {}",
-        sp->getGameStatus()
+        presenter->getGameStatus()
     );
     const std::string mistakes = std::format(
         "Mistakes: {}",
-        sp->getMistakesCount()
+        presenter->getMistakesCount()
     );
     const std::string elapsedTime = std::format(
         "Elapsed time: {}",
-        sp->getElapsedTime()
+        presenter->getElapsedTime()
     );
 
     ImguiUtils::printText(difficulty.c_str(), BLACK, 30, true);
