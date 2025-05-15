@@ -6,6 +6,7 @@
 
 #include <stdexcept>
 
+#define TEST_CELL_COUNT 80
 #define EASY_CELLS_COUNT 40
 #define MEDIUM_CELLS_COUNT 36
 #define HARD_CELLS_COUNT 32
@@ -13,6 +14,8 @@
 
 int SudokuDifficulty::getOpenCellsCount(const SudokuDifficultyEnum level) {
     switch (level) {
+        case SudokuDifficultyEnum::TEST:
+            return TEST_CELL_COUNT;
         case SudokuDifficultyEnum::EASY:
             return EASY_CELLS_COUNT;
         case SudokuDifficultyEnum::MEDIUM:
@@ -28,6 +31,8 @@ int SudokuDifficulty::getOpenCellsCount(const SudokuDifficultyEnum level) {
 
 std::string SudokuDifficulty::getDifficultyName(const SudokuDifficultyEnum level) {
     switch (level) {
+        case SudokuDifficultyEnum::TEST:
+            return "test";
         case SudokuDifficultyEnum::EASY:
             return "easy";
         case SudokuDifficultyEnum::MEDIUM:
@@ -54,6 +59,8 @@ SudokuDifficultyEnum SudokuDifficulty::fromString(const std::string &difficulty)
 
 float SudokuDifficulty::getRatingMultiplier(const SudokuDifficultyEnum level) {
     switch (level) {
+        case SudokuDifficultyEnum::TEST:
+            return 100;
         case SudokuDifficultyEnum::EASY:
             return 1;
         case SudokuDifficultyEnum::MEDIUM:
