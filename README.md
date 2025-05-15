@@ -32,3 +32,6 @@
 ## Статус разработки 🚧  
 Проект находится в активной разработке.  
 **Текущая цель**: Реализация онлайн-многопользовательских функций и улучшение алгоритма генерации судоку.  
+
+## Лицензия 👤
+[XDoku](https://creativecommons.org) © 2025 by [Dmitrii Sokolov](https://creativecommons.org) is licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)  
