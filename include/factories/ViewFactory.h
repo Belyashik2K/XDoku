@@ -2,8 +2,8 @@
 // Created by belyashik2k on 5/11/25.
 //
 
-#ifndef PRESENTERFACTORY_H
-#define PRESENTERFACTORY_H
+#ifndef VIEWFACTORY_H
+#define VIEWFACTORY_H
 #include <memory>
 
 class ViewFactory {
@@ -19,4 +19,4 @@ public:
     }
 };
 
-#endif //PRESENTERFACTORY_H
+#endif //VIEWFACTORY_H
