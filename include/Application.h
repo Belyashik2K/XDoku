@@ -31,16 +31,6 @@ class Application {
     std::shared_ptr<ISudokuGameDifficultySelectorView> sudokuGameDifficultySelectorView;
     std::shared_ptr<ISudokuGameSummaryView> sudokuGameSummaryView;
 
-    // std::shared_ptr<SignInPresenter> signInPresenter;
-    // std::shared_ptr<SignUpPresenter> signUpPresenter;
-    // std::shared_ptr<MainMenuPresenter> mainMenuPresenter;
-    // std::shared_ptr<ProfilePresenter> profilePresenter;
-    // std::shared_ptr<LeaderboardPresenter> leaderboardPresenter;
-    // std::shared_ptr<HowToPlayPresenter> howToPlayPresenter;
-    // std::shared_ptr<SudokuGamePresenter> sudokuGamePresenter;
-    // std::shared_ptr<SudokuGameDifficultySelectorPresenter> sudokuGameDifficultySelectorPresenter;
-    // std::shared_ptr<SudokuGameSummaryPresenter> sudokuGameSummaryPresenter;
-
     std::unique_ptr<IFrameHandler> frameHandler;
     std::shared_ptr<AppMediator> appMediator;
     std::shared_ptr<EventBus> eventBus;

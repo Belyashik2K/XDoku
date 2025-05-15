@@ -13,7 +13,9 @@ public:
 };
 
 template<typename PresenterType, typename ViewType>
-class IView : public IBaseView {
+class IView : public IBaseView,
+public std::enable_shared_from_this<ViewType>
+{
 protected:
     std::unique_ptr<PresenterType> presenter;
     std::weak_ptr<ViewType> self;
@@ -35,7 +37,10 @@ public:
         this->presenter->setView(self);
     }
 
-    virtual void init(std::unique_ptr<PresenterType> &&presenter) = 0;
+    virtual void init(std::unique_ptr<PresenterType> &&presenter) {
+        this->setSelf(this->weak_from_this());
+        this->setPresenter(std::move(presenter));
+    }
 };
 
 #endif //IVIEW_H
