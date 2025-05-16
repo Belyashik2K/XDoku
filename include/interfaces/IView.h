@@ -24,10 +24,6 @@ public:
 
     void render() override = 0;
 
-    void setPresenter(const std::weak_ptr<PresenterType> &p) {
-        presenter = p;
-    }
-
     void setSelf(const std::weak_ptr<ViewType> &ptr) {
         self = ptr;
     }
