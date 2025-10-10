@@ -4,6 +4,8 @@
 
 #include "presentation/imgui/views/how_to_play/ImguiHowToPlayView.h"
 
+#include <format>
+
 #include "application/presenters/HowToPlayPresenter.h"
 #include "domain/sudoku/enums/SudokuDifficulty.h"
 #include "presentation/imgui/ImguiColors.h"

@@ -4,6 +4,8 @@
 
 #include "presentation/imgui/views/profile/ImguiProfileView.h"
 
+#include <format>
+
 #include "application/presenters/ProfilePresenter.h"
 #include "presentation/imgui/ImguiColors.h"
 #include "presentation/imgui/ImguiUtils.h"

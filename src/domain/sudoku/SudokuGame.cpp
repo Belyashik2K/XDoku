@@ -5,6 +5,9 @@
 #include <utility>
 
 #include "domain/sudoku/SudokuGame.h"
+
+#include <format>
+
 #include "domain/sudoku/utils/SudokuGenerator.h"
 
 SudokuGame::SudokuGame(

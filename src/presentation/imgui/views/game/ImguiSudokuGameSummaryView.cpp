@@ -4,6 +4,8 @@
 
 #include "presentation/imgui/views/game/ImguiSudokuGameSummaryView.h"
 
+#include <format>
+
 #include "application/presenters/game/SudokuGameSummaryPresenter.h"
 #include "presentation/imgui/ImguiColors.h"
 #include "presentation/imgui/ImguiUtils.h"

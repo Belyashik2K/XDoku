@@ -11,6 +11,8 @@
 #include "presentation/imgui/managers/ImguiFontManager.h"
 #include "presentation/imgui/views/game/ImguiSudokuGameView.h"
 
+#include <format>
+
 #include "presentation/imgui/managers/ImguiAudioManager.h"
 
 void ImguiSudokuGameView::render() {

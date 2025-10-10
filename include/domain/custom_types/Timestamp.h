@@ -1,6 +1,7 @@
 #ifndef TIMESTAMP_H
 #define TIMESTAMP_H
 
+#include <ctime>
 #include <sstream>
 
 class Timestamp {

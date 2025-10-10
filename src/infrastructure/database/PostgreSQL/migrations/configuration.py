@@ -1,1 +1,1 @@
-DATABASE_URL: str = "postgresql+psycopg2://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@localhost:5432/xdoku"
+DATABASE_URL: str = "postgresql+psycopg2://xdoku_owner:G3Jekh5xfyAuLXQqD8wY9n@localhost:5432/xdoku"

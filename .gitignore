@@ -56,3 +56,5 @@ vgcore.*
 
 *.clangd/
 /cmake-build-*/
+
+.venv

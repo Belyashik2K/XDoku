@@ -4,6 +4,8 @@
 
 #include "application/presenters/ProfilePresenter.h"
 
+#include <format>
+
 #include "application/app_events/ButtonEvents.h"
 
 void ProfilePresenter::onBackButtonClicked() const{

@@ -29,7 +29,7 @@ Application::Application() {
 
 void Application::initRepositories() {
     printf("[Application] Initializing repositories...\n");
-    const std::string connectionString = "postgresql://xdoku_master:G3Jekh5xfyAuLXQqD8wY9n@localhost:5432/xdoku";
+    const std::string connectionString = "postgresql://xdoku_owner:G3Jekh5xfyAuLXQqD8wY9n@localhost:5432/xdoku";
     repositoryFactory = std::make_unique<PostgreSQLRepositoryFactory>(connectionString);
     userRepository = repositoryFactory->createUserRepository();
     sessionRepository = repositoryFactory->createSessionRepository();
