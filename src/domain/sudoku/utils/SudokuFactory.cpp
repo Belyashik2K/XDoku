@@ -8,8 +8,7 @@
 
 SudokuGame SudokuGameFactory::createNewGame(int userId, SudokuDifficultyEnum difficulty) {
     SudokuGenerator generator;
-    const SudokuGrid grid = generator.generate(difficulty);
-    const SudokuGrid solutionGrid = generator.getSolutionGrid(grid);
+    const auto [grid, solutionGrid] = generator.generate(difficulty);
 
     return {userId, grid, solutionGrid, difficulty};
 }

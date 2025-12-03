@@ -1,276 +1,237 @@
 #include "domain/sudoku/utils/SudokuGenerator.h"
 
+#include <algorithm>
+#include <array>
+#include <bit>
+#include <functional>
+#include <numeric>
 #include <random>
-#include <chrono>
-#include <optional>
+#include <utility>
+#include <vector>
 
-#define EMPTY 0
+constexpr int FULL_MASK = 0x3FE;
+constexpr int BOX_INDEX(const int row, const int col) { return (row / 3) * 3 + (col / 3); }
 
-std::optional<std::pair<int, int>> findEmptyCell(const SudokuGrid& grid) {
-    for (int row = 0; row < 9; ++row) {
-        for (int col = 0; col < 9; ++col) {
-            if (grid.getCellValue(row, col) == EMPTY) {
-                return std::make_pair(row, col);
-            }
+struct ConstraintMasks {
+    std::array<int, 9> row{};
+    std::array<int, 9> col{};
+    std::array<int, 9> box{};
+
+    void reset() {
+        row.fill(0);
+        col.fill(0);
+        box.fill(0);
+    }
+
+    void set(const int rowIdx,const int colIdx, const int valueBit) {
+        const int boxIdx = BOX_INDEX(rowIdx, colIdx);
+        row[rowIdx] |= valueBit;
+        col[colIdx] |= valueBit;
+        box[boxIdx] |= valueBit;
+    }
+
+    void unset(const int rowIdx, const int colIdx, const int valueBit) {
+        const int boxIdx = BOX_INDEX(rowIdx, colIdx);
+        row[rowIdx] ^= valueBit;
+        col[colIdx] ^= valueBit;
+        box[boxIdx] ^= valueBit;
+    }
+
+    [[nodiscard]] int availableMask(int rowIdx, int colIdx) const {
+        return FULL_MASK & ~(row[rowIdx] | col[colIdx] | box[BOX_INDEX(rowIdx, colIdx)]);
+    }
+};
+
+std::vector<int> maskToCandidates(int mask) {
+    std::vector<int> out;
+    while (mask) {
+        const int bit = mask & -mask;
+        out.push_back(bit);
+        mask &= mask - 1;
+    }
+    return out;
+}
+
+bool fillWithBacktracking(
+    std::array<std::array<int, 9>, 9> &buffer,
+    ConstraintMasks &masks,
+    const std::function<int()> &randomSeed,
+    const int index = 0
+) {
+    if (index == 81) {
+        return true;
+    }
+    const int row = index / 9;
+    const int col = index % 9;
+    const int available = masks.availableMask(row, col);
+    if (available == 0) {
+        return false;
+    }
+
+    auto candidates = maskToCandidates(available);
+    std::ranges::shuffle(candidates, std::mt19937(randomSeed()));
+
+    for (const int bit : candidates) {
+        const int value = std::countr_zero(static_cast<unsigned>(bit));
+        masks.set(row, col, bit);
+        buffer[row][col] = value;
+
+        if (fillWithBacktracking(buffer, masks, randomSeed, index + 1)) {
+            return true;
+        }
+
+        masks.unset(row, col, bit);
+        buffer[row][col] = 0;
+    }
+    return false;
+}
+
+bool countSolutions(
+    SudokuGrid &grid,
+    const int index,
+    ConstraintMasks &masks,
+    int &solutions,
+    const int limit
+) {
+    if (solutions >= limit) {
+        return true;
+    }
+
+    if (index == 81) {
+        ++solutions;
+        return solutions >= limit;
+    }
+
+    const int row = index / 9;
+    const int col = index % 9;
+
+    if (grid.getCellValue(row, col) != 0) {
+        return countSolutions(grid, index + 1, masks, solutions, limit);
+    }
+
+    int available = masks.availableMask(row, col);
+    while (available) {
+        const int bit = available & -available;
+        const int value = std::countr_zero(static_cast<unsigned>(bit));
+
+        grid.setCellValue(row, col, value);
+        masks.set(row, col, bit);
+
+        countSolutions(grid, index + 1, masks, solutions, limit);
+
+        grid.setCellValue(row, col, 0);
+        masks.unset(row, col, bit);
+
+        if (solutions >= limit) {
+            return true;
+        }
+
+        available &= available - 1;
+    }
+
+    return false;
+}
+
+bool SudokuGenerator::applyRemoval(SudokuGrid &puzzle, int targetRemovals, std::mt19937 &rng) {
+    std::vector<int> positions(81);
+    std::iota(positions.begin(), positions.end(), 0);
+    std::shuffle(positions.begin(), positions.end(), rng);
+
+    int removed = 0;
+    for (const int index : positions) {
+        if (removed >= targetRemovals) break;
+        const int row = index / 9;
+        const int col = index % 9;
+        if (puzzle.getCellValue(row, col) == 0) continue;
+
+        const int backup = puzzle.getCellValue(row, col);
+        puzzle.setCellValue(row, col, 0);
+        if (hasUniqueSolution(puzzle)) {
+            ++removed;
+        } else {
+            puzzle.setCellValue(row, col, backup);
         }
     }
-    return std::nullopt;
+    return removed >= targetRemovals;
 }
 
-template<typename T>
-void SudokuGenerator::shuffle(std::vector<T> &arr) {
-    static std::mt19937 rng(std::chrono::system_clock::now().time_since_epoch().count());
-    std::shuffle(arr.begin(), arr.end(), rng);
+std::pair<SudokuGrid, SudokuGrid> SudokuGenerator::generateGrid(int open_cells_count) {
+    ConstraintMasks masks;
+    masks.reset();
+    std::array<std::array<int, 9>, 9> buffer{};
+    std::mt19937 rng(std::random_device{}());
+    auto seedFn = [&] { return rng(); };
+
+    while (!fillWithBacktracking(buffer, masks, seedFn)) {
+        masks.reset();
+        for (auto &row : buffer) {
+            row.fill(0);
+        }
+        rng.seed(std::random_device{}());
+    }
+
+    SudokuGrid solution;
+    for (int row = 0; row < 9; ++row) {
+        for (int col = 0; col < 9; ++col) {
+            solution.setCellValue(row, col, buffer[row][col]);
+        }
+    }
+
+    SudokuGrid puzzle = solution;
+    const int cellsToClear = std::clamp(81 - open_cells_count, 0, 81);
+    if (!applyRemoval(puzzle, cellsToClear, rng)) {
+        return generateGrid(open_cells_count);
+    }
+
+    return {puzzle, solution};
 }
 
-bool SudokuGenerator::hasUniqueSolution(SudokuGrid &grid) {
+void SudokuGenerator::buildMasksFromGrid(
+    const SudokuGrid &grid,
+    std::array<int, 9> &rowMask,
+    std::array<int, 9> &colMask,
+    std::array<int, 9> &boxMask
+) {
+    rowMask.fill(0);
+    colMask.fill(0);
+    boxMask.fill(0);
+    for (int row = 0; row < 9; ++row) {
+        for (int col = 0; col < 9; ++col) {
+            const int value = grid.getCellValue(row, col);
+            if (value == 0) continue;
+            const int bit = 1 << value;
+            const int box = BOX_INDEX(row, col);
+            rowMask[row] |= bit;
+            colMask[col] |= bit;
+            boxMask[box] |= bit;
+        }
+    }
+}
+
+bool SudokuGenerator::hasUniqueSolution(const SudokuGrid &grid) {
+    SudokuGrid temp = grid;
+    std::array<int, 9> rowMask{};
+    std::array<int, 9> colMask{};
+    std::array<int, 9> boxMask{};
+    buildMasksFromGrid(temp, rowMask, colMask, boxMask);
+
+    ConstraintMasks masks{rowMask, colMask, boxMask};
     int solutions = 0;
-    SudokuGrid tempBoard = grid;
-    solveWithCount(tempBoard, solutions, 2);
+    countSolutions(temp, 0, masks, solutions, 2);
     return solutions == 1;
 }
 
-bool SudokuGenerator::isValid(const SudokuGrid& grid, int row, int col, int num) {
-    for (int i = 0; i < 9; ++i) {
-        if (grid.getCellValue(row, i) == num) {
-            return false;
-        }
-    }
+bool SudokuGenerator::solveWithLimit(SudokuGrid &grid, int &solutions, const int limit) {
+    std::array<int, 9> rowMask{};
+    std::array<int, 9> colMask{};
+    std::array<int, 9> boxMask{};
+    buildMasksFromGrid(grid, rowMask, colMask, boxMask);
 
-    for (int i = 0; i < 9; ++i) {
-        if (grid.getCellValue(i, col) == num) {
-            return false;
-        }
-    }
-
-    const int boxRow = row / 3 * 3;
-    const int boxCol = col / 3 * 3;
-    for (int i = boxRow; i < boxRow + 3; ++i) {
-        for (int j = boxCol; j < boxCol + 3; ++j) {
-            if (grid.getCellValue(i, j) == num) {
-                return false;
-            }
-        }
-    }
-    return true;
+    ConstraintMasks masks{rowMask, colMask, boxMask};
+    return countSolutions(grid, 0, masks, solutions, limit);
 }
 
-bool SudokuGenerator::solve(SudokuGrid& grid) {
-    auto emptyCell = findEmptyCell(grid);
-    if (!emptyCell.has_value()) {
-        return true;
-    }
-
-    auto [row, col] = emptyCell.value();
-    std::vector nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    shuffle(nums);
-
-    for (const int num : nums) {
-        if (isValid(grid, row, col, num)) {
-            grid.setCellValue(row, col, num);
-            
-            if (solve(grid)) {
-                return true;
-            }
-            
-            grid.setCellValue(row, col, EMPTY);
-        }
-    }
-    return false;
-}
-
-void SudokuGenerator::solveWithCount(SudokuGrid& grid, int &count, const int limit) {
-    if (count >= limit) return;
-
-    auto emptyCell = findEmptyCell(grid);
-    if (!emptyCell.has_value()) {
-        count++;
-        return;
-    }
-
-    auto [row, col] = emptyCell.value();
-    std::vector nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    shuffle(nums);
-
-    for (const int num : nums) {
-        if (isValid(grid, row, col, num)) {
-            grid.setCellValue(row, col, num);
-            solveWithCount(grid, count, limit);
-            if (count >= limit) return;
-            grid.setCellValue(row, col, EMPTY);
-        }
-    }
-}
-
-int SudokuGenerator::getUniqueCandidate(const SudokuGrid& grid, int row, int col) {
-    std::set<int> candidates;
-    for (int num = 1; num <= 9; ++num) {
-        if (isValid(grid, row, col, num)) {
-            candidates.insert(num);
-        }
-    }
-
-    for (const int num : candidates) {
-        bool uniqueInRow = true, uniqueInCol = true, uniqueInBlock = true;
-
-        for (int c = 0; c < 9; ++c) {
-            if (c != col && grid.getCellValue(row, c) == EMPTY && isValid(grid, row, c, num)) {
-                uniqueInRow = false;
-                break;
-            }
-        }
-
-        for (int r = 0; r < 9; ++r) {
-            if (r != row && grid.getCellValue(r, col) == EMPTY && isValid(grid, r, col, num)) {
-                uniqueInCol = false;
-                break;
-            }
-        }
-
-        const int boxRow = row / 3 * 3;
-        const int boxCol = col / 3 * 3;
-        for (int r = boxRow; r < boxRow + 3; ++r) {
-            for (int c = boxCol; c < boxCol + 3; ++c) {
-                if ((r != row || c != col) && grid.getCellValue(r, c) == EMPTY && isValid(grid, r, c, num)) {
-                    uniqueInBlock = false;
-                    break;
-                }
-            }
-            if (!uniqueInBlock) break;
-        }
-
-        if (uniqueInRow || uniqueInCol || uniqueInBlock) {
-            return num;
-        }
-    }
-    return 0;
-}
-
-bool SudokuGenerator::solveByHumanLogic(SudokuGrid& grid) {
-    bool progress = true;
-    while (progress) {
-        progress = false;
-
-        for (int row = 0; row < 9; ++row) {
-            for (int col = 0; col < 9; ++col) {
-                if (grid.getCellValue(row, col) != EMPTY) continue;
-
-                std::set<int> candidates;
-                for (int num = 1; num <= 9; ++num) {
-                    if (isValid(grid, row, col, num)) {
-                        candidates.insert(num);
-                    }
-                }
-
-                if (candidates.size() == 1) {
-                    grid.setCellValue(row, col, *candidates.begin());
-                    progress = true;
-                }
-            }
-        }
-
-        if (!progress) break;
-
-        for (int row = 0; row < 9; ++row) {
-            for (int col = 0; col < 9; ++col) {
-                if (grid.getCellValue(row, col) != EMPTY) continue;
-
-                if (const int unique = getUniqueCandidate(grid, row, col); unique != 0) {
-                    grid.setCellValue(row, col, unique);
-                    progress = true;
-                }
-            }
-        }
-    }
-
-    for (int row = 0; row < 9; ++row) {
-        for (int col = 0; col < 9; ++col) {
-            if (grid.getCellValue(row, col) == EMPTY) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-void SudokuGenerator::removeNumbers(SudokuGrid &grid, const int countOfOpenCells) {
-    const int to_remove = 81 - countOfOpenCells;
-    std::vector<std::pair<int, int>> positions;
-
-    for (int i = 0; i < 9; ++i) {
-        for (int j = 0; j < 9; ++j) {
-            positions.emplace_back(i, j);
-        }
-    }
-
-    shuffle(positions);
-
-    int removed = 0;
-    for (auto&[row, col] : positions) {
-        if (removed >= to_remove) break;
-        if (grid.getCellValue(row, col) == EMPTY) continue;
-
-        const int backup = grid.getCellValue(row, col);
-        grid.setCellValue(row, col, EMPTY);
-
-        if (SudokuGrid tempGrid = grid; !hasUniqueSolution(tempGrid) || !solveByHumanLogic(tempGrid)) {
-            grid.setCellValue(row, col, backup);
-        } else {
-            removed++;
-        }
-    }
-}
-
-SudokuGrid SudokuGenerator::generateFullGrid() {
-    SudokuGrid grid;
-
-    std::vector nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-
-    shuffle(nums);
-
-    if (!fillGridRandomly(grid, nums)) {
-        throw std::runtime_error("Не удалось сгенерировать полную сетку судоку.");
-    }
-
-    return grid;
-}
-
-bool SudokuGenerator::fillGridRandomly(SudokuGrid& grid, const std::vector<int>& nums) {
-    auto emptyCell = findEmptyCell(grid);
-    if (!emptyCell.has_value()) {
-        return true;
-    }
-
-    auto [row, col] = emptyCell.value();
-
-    std::vector<int> shuffledNums = nums;
-    shuffle(shuffledNums);
-
-    for (const int num : shuffledNums) {
-        if (isValid(grid, row, col, num)) {
-            grid.setCellValue(row, col, num);
-
-            if (fillGridRandomly(grid, shuffledNums)) {
-                return true;
-            }
-
-            grid.setCellValue(row, col, EMPTY);
-        }
-    }
-
-    return false;
-}
-
-SudokuGrid SudokuGenerator::generate(const SudokuDifficultyEnum difficulty) {
-    SudokuGrid grid = generateFullGrid();
-    const auto [openCellsCount, strRepr, ratingMult] = SudokuDifficulty::getSettings(difficulty);
-    removeNumbers(grid, openCellsCount);
-    return grid;
-}
-
-SudokuGrid SudokuGenerator::getSolutionGrid(SudokuGrid grid) {
-    if (solve(grid)) {
-        return grid;
-    }
-    throw std::runtime_error("Не удалось найти решение судоку");
+std::pair<SudokuGrid, SudokuGrid>  SudokuGenerator::generate(const SudokuDifficultyEnum difficulty) {
+    const auto [open_cells_count, str_repr, rating_multiplier] = SudokuDifficulty::getSettings(difficulty);
+    return generateGrid(open_cells_count);
 }

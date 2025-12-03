@@ -7,38 +7,29 @@
 
 #include <vector>
 #include <set>
+#include <array>
+#include <random>
 
 #include "domain/sudoku/SudokuGrid.h"
 #include "domain/sudoku/enums/SudokuDifficulty.h"
 
 class SudokuGenerator {
 public:
-    SudokuGrid generate(SudokuDifficultyEnum difficulty);
-
-    SudokuGrid getSolutionGrid(SudokuGrid grid);
+    std::pair<SudokuGrid, SudokuGrid> generate(SudokuDifficultyEnum difficulty);
 private:
-    SudokuGrid generateFullGrid();
+    std::pair<SudokuGrid, SudokuGrid> generateGrid(int open_cells_count);
 
-    bool fillGridRandomly(SudokuGrid &grid, const std::vector<int> &nums);
+    static bool hasUniqueSolution(const SudokuGrid &grid);
 
-    void removeNumbers(SudokuGrid &grid, int countOfOpenCells);
+    static bool solveWithLimit(SudokuGrid &grid, int &solutions, int limit = 2);
 
-    bool hasUniqueSolution(SudokuGrid &grid);
-
-
-    bool isValid(const SudokuGrid &grid, int row, int col, int num);
-
-    template <typename T>
-    void shuffle(std::vector<T> &arr);
-
-    bool solve(SudokuGrid &grid);
-
-    void solveWithCount(SudokuGrid &grid, int &count, int limit = 2);
-
-    int getUniqueCandidate(const SudokuGrid &grid, int row, int col);
-
-    bool solveByHumanLogic(SudokuGrid &grid);
-    bool isUniqueCandidate(const std::vector<std::vector<SudokuCell>> &board, int row, int col, const std::set<int> &candidates) ;
+    static void buildMasksFromGrid(
+        const SudokuGrid &grid,
+        std::array<int, 9> &rowMask,
+        std::array<int, 9> &colMask,
+        std::array<int, 9> &boxMask
+    );
+    bool applyRemoval(SudokuGrid &puzzle, int targetRemovals, std::mt19937 &rng);
 };
 
 #endif //SUDOKUGENERATOR_H
