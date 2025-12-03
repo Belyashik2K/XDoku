@@ -37,7 +37,7 @@ struct ConstraintMasks {
         box[boxIdx] ^= valueBit;
     }
 
-    [[nodiscard]] int availableMask(int rowIdx, int colIdx) const {
+    [[nodiscard]] int availableMask(const int rowIdx, const int colIdx) const {
         return FULL_MASK & ~(row[rowIdx] | col[colIdx] | box[BOX_INDEX(rowIdx, colIdx)]);
     }
 };
