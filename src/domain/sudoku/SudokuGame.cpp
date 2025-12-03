@@ -28,7 +28,8 @@ SudokuGame::SudokuGame(
     int id, const int userId, SudokuGrid grid, SudokuGrid solutionGrid,
     const SudokuDifficultyEnum difficulty, const int mistakesCount,
     Timestamp startTime, std::optional<Timestamp> endTime,
-    const SudokuGameStatusEnum status
+    const SudokuGameStatusEnum status,
+    std::optional<std::vector<SudokuMove>> moves
 ) {
     this->id = id;
     this->userId = userId;
@@ -39,7 +40,24 @@ SudokuGame::SudokuGame(
     this->startTime = startTime;
     this->endTime = endTime;
     this->status = status;
+
+    if (moves.has_value()) {
+        load_moves(moves.value());
+    }
 }
+
+void SudokuGame::load_moves(const std::vector<SudokuMove> &stored_moves) {
+    for (const auto &move: stored_moves) {
+        if (move.isValidMove()) {
+            grid.setCellValue(move.coords().first, move.coords().second, move.getValue());
+            grid.lockCell(move.coords().first, move.coords().second);
+        } else {
+            mistakesCount++;
+        }
+        this->moves.push_back(move);
+    }
+}
+
 
 SudokuMove SudokuGame::createMove(
     const int row,

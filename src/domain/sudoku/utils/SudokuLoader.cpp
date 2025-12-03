@@ -10,7 +10,8 @@ SudokuGame SudokuGameLoader::loadGame(
     const std::string &grid, const std::string &solutionGrid,
     const std::string &difficulty, int mistakesCount,
     const std::string &startTime, const std::optional<std::string> &endTime,
-    const std::string &status
+    const std::string &status,
+    std::optional<std::vector<SudokuMove>> moves
 ) {
     std::optional<Timestamp> endTimeOpt;
     if (!endTime.has_value()) {
@@ -28,6 +29,7 @@ SudokuGame SudokuGameLoader::loadGame(
         mistakesCount,
         Timestamp(startTime),
         endTimeOpt,
-        SudokuGameStatus::fromString(status)
+        SudokuGameStatus::fromString(status),
+        moves
     };
 }

@@ -24,16 +24,6 @@ void SudokuGameManager::loadActiveGame() {
     std::optional<SudokuGame> game = gameRepository->getUserCurrentGame(currentUser->getId());
     if (game.has_value()) {
         printf("[SudokuGameManager] Found active game for user %d\n", currentUser->getId());
-        std::optional<std::vector<SudokuMove> > moves = moveRepository->getMovesByGameId(game->getId());
-        if (moves.has_value()) {
-            printf("[SudokuGameManager] Found %zu moves for game with ID: %d\n", moves->size(), game->getId());
-            for (const auto &move: *moves) {
-                auto [fst, snd] = move.coords();
-                game->createMove(fst, snd, move.getValue());
-            }
-        } else {
-            printf("[SudokuGameManager] No moves found for game with ID: %d\n", game->getId());
-        }
         setCurrentGame(std::make_unique<SudokuGame>(game.value()));
     } else {
         printf("[SudokuGameManager] No active game found for user %d\n", currentUser->getId());

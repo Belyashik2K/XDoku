@@ -104,7 +104,8 @@ std::optional<SudokuGame> PostgreSQLGameRepository::getGame(int gameId) {
         mistakesCount,
         startTime,
         endTime,
-        status
+        status,
+        getMovesByGameId(id)
     );
 }
 
@@ -157,7 +158,8 @@ std::optional<SudokuGame> PostgreSQLGameRepository::getUserCurrentGame(int userI
         mistakesCount,
         startTime,
         endTime,
-        status
+        status,
+        getMovesByGameId(id)
     );
 }
 
@@ -180,4 +182,33 @@ bool PostgreSQLGameRepository::updateGame(const int gameId, const SudokuGameStat
     query.addParameter(std::to_string(gameId));
     const pqxx::result result = database->execute(query);
     return result.affected_rows() > 0;
+}
+
+std::optional<std::vector<SudokuMove>> PostgreSQLGameRepository::getMovesByGameId(const int gameId) const {
+    if (!database->isConnected()) {
+        return std::nullopt;
+    }
+
+    PostgreSQLQuery query(R"(
+        SELECT id, game_id, row, col, value, is_valid FROM moves
+        WHERE game_id = $1
+    )");
+    query.addParameter(std::to_string(gameId));
+
+    const pqxx::result result = database->execute(query);
+    if (result.empty()) {
+        return std::nullopt;
+    }
+    std::vector<SudokuMove> moves;
+    for (const auto &row: result) {
+        const int id = row["id"].as<int>();
+        const int gridRow = row["row"].as<int>();
+        const int gridCol = row["col"].as<int>();
+        const int value = row["value"].as<int>();
+        const bool isValid = row["is_valid"].as<bool>();
+
+        moves.emplace_back(id, gameId, gridRow, gridCol, value, isValid);
+    }
+
+    return moves;
 }

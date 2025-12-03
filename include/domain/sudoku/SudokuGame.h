@@ -29,7 +29,8 @@ public:
         int mistakesCount,
         Timestamp startTime,
         std::optional<Timestamp> endTime,
-        SudokuGameStatusEnum status
+        SudokuGameStatusEnum status,
+        std::optional<std::vector<SudokuMove>> moves
     );
 
     SudokuMove createMove(int row, int column, int value);
@@ -72,6 +73,8 @@ private:
     int mistakesCount = 0;
 
     std::vector<SudokuMove> moves; // TODO: Replace with a vector of unique_ptr to SudokuMove
+
+    void load_moves(const std::vector<SudokuMove> &stored_moves);
 };
 
 #endif //SUDOKUGAME_H

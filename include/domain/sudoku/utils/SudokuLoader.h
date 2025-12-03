@@ -18,7 +18,8 @@ public:
         int mistakesCount,
         const std::string &startTime,
         const std::optional<std::string>& endTime,
-        const std::string &status
+        const std::string &status,
+        std::optional<std::vector<SudokuMove>> moves = std::nullopt
     );
 
 };
