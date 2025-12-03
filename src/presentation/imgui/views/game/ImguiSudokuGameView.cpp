@@ -126,13 +126,14 @@ void ImguiSudokuGameView::drawCells(
             }
 
             if (!grid.isCellEmpty(row, col)) {
-                std::string text = std::to_string(grid.getCellValue(row, col));
-                const ImVec2 textSize = ImGui::CalcTextSize(text.c_str());
+                char text[2];
+                std::snprintf(text, sizeof(text), "%d", grid.getCellValue(row, col));
+                const ImVec2 textSize = ImGui::CalcTextSize(text);
                 auto textPos = ImVec2(
                     cellMin.x + (cellSize - textSize.x) * 0.5f,
                     cellMin.y + (cellSize - textSize.y) * 0.5f
                 );
-                drawList->AddText(textPos, BLACK, text.c_str());
+                drawList->AddText(textPos, BLACK, text);
             }
 
             ImGui::SetCursorScreenPos(ImVec2(cellMax.x, cellMin.y));

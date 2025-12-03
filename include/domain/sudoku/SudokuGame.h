@@ -49,19 +49,6 @@ public:
     [[nodiscard]] std::string getElapsedTimeAsString() const;
 private:
 
-    SudokuGame(
-        int id,
-        int userId,
-        const std::string &grid,
-        const std::string &solutionGrid,
-        const std::string &difficulty,
-        int mistakesCount,
-        std::string startTime,
-        const std::optional<std::string> &endTime,
-        const std::string &status,
-        bool exitedWhileSolved
-    );
-
     std::optional<int> id;
     int userId;
     SudokuGrid grid;
