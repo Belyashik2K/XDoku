@@ -29,7 +29,8 @@ private:
         std::array<int, 9> &colMask,
         std::array<int, 9> &boxMask
     );
-    bool applyRemoval(SudokuGrid &puzzle, int targetRemovals, std::mt19937 &rng);
+
+    static bool applyRemoval(SudokuGrid &puzzle, int targetRemovals, std::mt19937 &rng);
 };
 
 #endif //SUDOKUGENERATOR_H

@@ -135,7 +135,7 @@ bool countSolutions(
 bool SudokuGenerator::applyRemoval(SudokuGrid &puzzle, int targetRemovals, std::mt19937 &rng) {
     std::vector<int> positions(81);
     std::iota(positions.begin(), positions.end(), 0);
-    std::shuffle(positions.begin(), positions.end(), rng);
+    std::ranges::shuffle(positions, rng);
 
     int removed = 0;
     for (const int index : positions) {
