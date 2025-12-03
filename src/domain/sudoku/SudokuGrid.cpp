@@ -27,12 +27,22 @@ bool SudokuGrid::setCellValue(const int row, const int col, const int value) {
         return false;
     }
 
+    const int oldValue = cells[row][col].getValue();
+
+    if (oldValue == value) {
+        return true;
+    }
+
     if (
         !isValueUniqueInRow(row, value) ||
         !isValueUniqueInColumn(col, value) ||
         !isValueUniqueInBox(row, col, value)
     ) {
         return false;
+    }
+
+    if (oldValue != 0) {
+        updateMasks(row, col, oldValue, false);
     }
 
     cells[row][col].setValue(value);
