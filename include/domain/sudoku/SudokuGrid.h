@@ -4,29 +4,76 @@
 
 #ifndef SUDOKUGRID_H
 #define SUDOKUGRID_H
+#include <array>
 #include <vector>
 
 #include "SudokuCell.h"
 
+#include "domain/sudoku/SudokuGrid.h"
+
 class SudokuGrid {
+private:
     std::vector<std::vector<SudokuCell>> cells;
 
-    [[nodiscard]] bool isValueUniqueInRow(int row, int value) const;
-    [[nodiscard]] bool isValueUniqueInColumn(int col, int value) const;
-    [[nodiscard]] bool isValueUniqueInBox(int row, int col, int value) const;
+    std::array<int, 9> rowMasks = {};
+    std::array<int, 9> colMasks = {};
+    std::array<int, 9> boxMasks = {};
+
 public:
-    SudokuGrid();
+    const std::vector<std::vector<SudokuCell>>& getCells() const {
+        return cells;
+    }
 
-    [[nodiscard]] int getCellValue(int row, int col) const;
-    [[nodiscard]] bool isCellEditable(int row, int col) const;
+    void updateMasks(int row, int col, int value, bool isSetting);
 
-    bool isCellEmpty(int row, int col) const;
+    bool isValueUniqueInRow(const int row, const int value) const {
+        if (value == 0) return true;
+        return (rowMasks[row] & (1 << (value - 1))) == 0;
+    }
+
+    bool isValueUniqueInColumn(const int col, const int value) const {
+        if (value == 0) return true;
+        return (colMasks[col] & (1 << (value - 1))) == 0;
+    }
+
+    bool isValueUniqueInBox(const int row, const int col, const int value) const {
+        if (value == 0) return true;
+        const int boxIndex = (row / 3) * 3 + (col / 3);
+        return (boxMasks[boxIndex] & (1 << (value - 1))) == 0;
+    }
+
+    int getCellValue(const int row, const int col) const {
+        return cells[row][col].getValue();
+    }
+
+    bool isCellEditable(const int row, const int col) const {
+        return cells[row][col].mayBeEdited();
+    }
+
+    bool isCellEmpty(const int row, const int col) const {
+        return cells[row][col].isEmpty();
+    }
 
     bool setCellValue(int row, int col, int value);
-    void lockCell(int row, int col);
-    void fixCell(int row, int col);
 
-    [[nodiscard]] const std::vector<std::vector<SudokuCell>>& getCells() const;
+    void lockCell(const int row, const int col) {
+        cells[row][col].lock();
+    }
+
+    void fixCell(const int row, const int col) {
+        cells[row][col].fix();
+    }
+
+    SudokuGrid() {
+        cells.resize(9, std::vector<SudokuCell>(9));
+    }
+
+    void resetMasks() {
+        rowMasks.fill(0);
+        colMasks.fill(0);
+        boxMasks.fill(0);
+    }
 };
+
 
 #endif //SUDOKUGRID_H
