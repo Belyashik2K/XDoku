@@ -13,6 +13,7 @@ public:
     explicit PostgreSQLMoveRepository(std::shared_ptr<PostgreSQLDatabase> database);
 
     bool createMove(SudokuMove move) override;
+    bool createMoves(const std::vector<SudokuMove> &moves) override;
     std::optional<std::vector<SudokuMove>> getMovesByGameId(int gameId) override;
 };
 

@@ -3,6 +3,9 @@
 //
 
 #include "infrastructure/database/PostgreSQL/repositories/PostgreSQLMoveRepository.h"
+
+#include <iostream>
+
 #include "infrastructure/database/PostgreSQL/PostgreSQLQuery.h"
 
 PostgreSQLMoveRepository::PostgreSQLMoveRepository(std::shared_ptr<PostgreSQLDatabase> database) {
@@ -30,6 +33,43 @@ bool PostgreSQLMoveRepository::createMove(const SudokuMove move) {
         return false;
     }
     return true;
+}
+
+bool PostgreSQLMoveRepository::createMoves(const std::vector<SudokuMove> &moves) {
+    if (moves.empty()) {
+        return true;
+    }
+    if (!database->isConnected()) {
+        return false;
+    }
+
+    std::string values;
+    values.reserve(moves.size() * 32);
+    int paramIndex = 1;
+    for (std::size_t i = 0; i < moves.size(); ++i) {
+        values += "($" + std::to_string(paramIndex++) + ", $" + std::to_string(paramIndex++) + ", $" +
+                  std::to_string(paramIndex++) + ", $" + std::to_string(paramIndex++) + ", $" +
+                  std::to_string(paramIndex++) + ")";
+        if (i + 1 != moves.size()) {
+            values += ", ";
+        }
+    }
+
+    const std::string queryText =
+        "INSERT INTO moves (game_id, row, col, value, is_valid) VALUES " + values + " RETURNING id";
+
+    PostgreSQLQuery query(queryText);
+    for (const auto &move : moves) {
+        query.addParameter(std::to_string(move.isValidMove()));
+        query.addParameter(std::to_string(move.getValue()));
+        query.addParameter(std::to_string(move.coords().second));
+        query.addParameter(std::to_string(move.coords().first));
+        query.addParameter(std::to_string(move.getGameId()));
+
+    }
+
+    const pqxx::result result = database->execute(query);
+    return !result.empty();
 }
 
 std::optional<std::vector<SudokuMove>> PostgreSQLMoveRepository::getMovesByGameId(const int gameId) {

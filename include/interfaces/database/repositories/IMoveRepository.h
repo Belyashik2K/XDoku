@@ -15,6 +15,11 @@ public:
     virtual bool createMove(
         SudokuMove move
     ) = 0;
+
+    virtual bool createMoves(
+        const std::vector<SudokuMove> &moves
+    ) = 0;
+
     virtual std::optional<std::vector<SudokuMove>> getMovesByGameId(int gameId) = 0;
 };
 

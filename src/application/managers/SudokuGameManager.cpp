@@ -60,8 +60,8 @@ void SudokuGameManager::flushPendingMoves() const {
         return;
     }
     printf("[SudokuGameManager] Flushing %zu pending moves...\n", pendingMoves.size());
-    for (const auto &move : pendingMoves) {
-        moveRepository->createMove(move);
+    if (!moveRepository->createMoves(pendingMoves)) {
+        printf("[SudokuGameManager] Failed to persist pending moves\n");
     }
     pendingMoves.clear();
 }
