@@ -20,6 +20,9 @@ class SudokuGameManager {
     std::shared_ptr<SessionManager> sessionManager;
 
     std::unique_ptr<SudokuGame> currentGame = nullptr;
+    mutable std::vector<SudokuMove> pendingMoves;
+
+    static constexpr std::size_t MOVE_FLUSH_THRESHOLD = 8;
 
     void loadActiveGame();
 
@@ -31,16 +34,22 @@ class SudokuGameManager {
         if (!currentGame) {
             return;
         }
+        flushPendingMoves();
         currentGame.reset();
     }
 
     void setCurrentGame(std::unique_ptr<SudokuGame> game) {
+        flushPendingMoves();
         currentGame = std::move(game);
     }
 
     void findActiveGame() const;
 
     void updateRating(int ratingChange, const std::string &message) const;
+
+    void enqueueMove(SudokuMove move) const;
+
+    void flushPendingMoves() const;
 
 public:
     SudokuGameManager(
@@ -55,6 +64,10 @@ public:
         ratingRepository(ratingRepository),
         sessionManager(sessionManager) {
         subscribeToEvents();
+    }
+
+    ~SudokuGameManager() {
+        flushPendingMoves();
     }
 
     [[nodiscard]] const SudokuGame *getCurrentGame() const {

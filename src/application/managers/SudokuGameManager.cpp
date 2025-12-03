@@ -24,6 +24,7 @@ void SudokuGameManager::loadActiveGame() {
     std::optional<SudokuGame> game = gameRepository->getUserCurrentGame(currentUser->getId());
     if (game.has_value()) {
         printf("[SudokuGameManager] Found active game for user %d\n", currentUser->getId());
+        flushPendingMoves();
         setCurrentGame(std::make_unique<SudokuGame>(game.value()));
     } else {
         printf("[SudokuGameManager] No active game found for user %d\n", currentUser->getId());
@@ -37,6 +38,7 @@ void SudokuGameManager::createSudokuGame(const SudokuDifficultyEnum &difficulty)
     std::optional<SudokuGame> createdGame = gameRepository->createGame(currentUser->getId(), game);
     if (createdGame.has_value()) {
         printf("[SudokuGameManager] Created new sudoku game for user %d\n", currentUser->getId());
+        flushPendingMoves();
         setCurrentGame(std::make_unique<SudokuGame>(createdGame.value()));
         eventBus->publish(OnSudokuGameCreated());
     } else {
@@ -48,10 +50,27 @@ bool SudokuGameManager::createMove(const int selected_row, const int selected_co
     printf("[SudokuGameManager] Creating move (row: %d, col: %d, value: %d) in game with ID: %d\n",
            selected_row, selected_col, value, currentGame->getId());
     const SudokuMove move = currentGame->createMove(selected_row, selected_col, value);
-    // TODO: Fix bug with fixed cells
-    moveRepository->createMove(move);
-    printf("[SudokuGameManager] Move created successfully\n");
+    enqueueMove(move);
+    printf("[SudokuGameManager] Move queued successfully\n");
     return move.isValidMove();
+}
+
+void SudokuGameManager::flushPendingMoves() const {
+    if (pendingMoves.empty()) {
+        return;
+    }
+    printf("[SudokuGameManager] Flushing %zu pending moves...\n", pendingMoves.size());
+    for (const auto &move : pendingMoves) {
+        moveRepository->createMove(move);
+    }
+    pendingMoves.clear();
+}
+
+void SudokuGameManager::enqueueMove(SudokuMove move) const {
+    pendingMoves.push_back(move);
+    if (pendingMoves.size() >= MOVE_FLUSH_THRESHOLD || !move.isValidMove()) {
+        flushPendingMoves();
+    }
 }
 
 int SudokuGameManager::calculateRating() const {
@@ -90,6 +109,7 @@ void SudokuGameManager::finishGame() const {
         printf("[SudokuGameManager] No active game to finish\n");
         return;
     }
+    flushPendingMoves();
     currentGame->finish();
     const bool result = gameRepository->updateGame(
         currentGame->getId(),
@@ -109,6 +129,7 @@ void SudokuGameManager::surrenderGame() const {
         printf("[SudokuGameManager] No active game to surrender\n");
         return;
     }
+    flushPendingMoves();
     currentGame->surrender();
     const bool result = gameRepository->updateGame(
         currentGame->getId(),
@@ -131,6 +152,7 @@ void SudokuGameManager::updateRating(
         printf("[SudokuGameManager] No active game to update rating\n");
         return;
     }
+    flushPendingMoves();
     const User *currentUser = sessionManager->getCurrentUser();
     const int newRating = ratingRepository->createRatingHistoryRecord(
         currentUser->getId(),
@@ -158,12 +180,15 @@ void SudokuGameManager::subscribeToEvents() {
     printf("[SudokuGameManager] Subscribing to events...\n");
 
     eventBus->subscribe<OnApplicationStartup>([this](const OnApplicationStartup &) {
+        flushPendingMoves();
         this->loadActiveGame();
     });
     eventBus->subscribe<OnUserLoggedIn>([this](const OnUserLoggedIn &) {
+        flushPendingMoves();
         this->loadActiveGame();
     });
     eventBus->subscribe<OnUserLoggedOut>([this](const OnUserLoggedOut &) {
+        flushPendingMoves();
         this->clearCurrentGame();
     });
     eventBus->subscribe<OnPlayButtonClicked>([this](const OnPlayButtonClicked &) {
@@ -174,12 +199,15 @@ void SudokuGameManager::subscribeToEvents() {
     }
     );
     eventBus->subscribe<OnSummaryViewClosed>([this](const OnSummaryViewClosed &) {
+        flushPendingMoves();
         this->clearCurrentGame();
     });
     eventBus->subscribe<OnSudokuGameFinished>([this](const OnSudokuGameFinished &) {
+        flushPendingMoves();
         this->finishGame();
     });
     eventBus->subscribe<OnSudokuGameSurrendered>([this](const OnSudokuGameSurrendered &) {
+        flushPendingMoves();
         this->surrenderGame();
     });
 }
