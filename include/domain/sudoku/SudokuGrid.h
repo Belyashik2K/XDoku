@@ -11,6 +11,8 @@
 
 #include "domain/sudoku/SudokuGrid.h"
 
+#define COMPLETED_MASK 0b111111111
+
 class SudokuGrid {
 private:
     std::vector<std::vector<SudokuCell>> cells;
@@ -40,6 +42,15 @@ public:
         if (value == 0) return true;
         const int boxIndex = (row / 3) * 3 + (col / 3);
         return (boxMasks[boxIndex] & (1 << (value - 1))) == 0;
+    }
+
+    bool isGridSolved() const {
+        for (int i = 0; i < 9; ++i) {
+            if (rowMasks[i] != COMPLETED_MASK || colMasks[i] != COMPLETED_MASK || boxMasks[i] != COMPLETED_MASK) {
+                return false;
+            }
+        }
+        return true;
     }
 
     int getCellValue(const int row, const int col) const {

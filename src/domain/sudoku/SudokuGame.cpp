@@ -84,14 +84,7 @@ SudokuMove SudokuGame::createMove(
 }
 
 bool SudokuGame::isSudokuSolved() const {
-    for (int row = 0; row < 9; ++row) {
-        for (int col = 0; col < 9; ++col) {
-            if (grid.getCellValue(row, col) != solutionGrid.getCellValue(row, col)) {
-                return false;
-            }
-        }
-    }
-    return true;
+    return grid.isGridSolved();
 }
 
 int SudokuGame::getElapsedTime() const {
