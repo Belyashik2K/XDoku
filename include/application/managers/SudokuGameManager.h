@@ -47,7 +47,7 @@ class SudokuGameManager {
 
     void updateRating(int ratingChange, const std::string &message) const;
 
-    void enqueueMove(SudokuMove move) const;
+    void enqueueMove(const SudokuMove &move) const;
 
     void flushPendingMoves() const;
 

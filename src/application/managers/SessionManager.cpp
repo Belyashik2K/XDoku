@@ -10,8 +10,15 @@
 #include "application/app_events/ButtonEvents.h"
 #include "domain/UserStats.h"
 
+static std::optional<std::string> cachedHWID = std::nullopt;
+
 std::optional<std::string> SessionManager::getDeviceHWID() {
     // TODO: Implement a more secure way to get the HWID on different platforms
+
+    if (cachedHWID.has_value()) {
+        return cachedHWID;
+    }
+
     std::ifstream file("/etc/machine-id");
     std::string hwid;
     if (file.is_open()) {
@@ -20,9 +27,12 @@ std::optional<std::string> SessionManager::getDeviceHWID() {
     }
 
     if (hwid.empty()) {
-        return std::nullopt;
+        cachedHWID = std::nullopt;
+    } else {
+        cachedHWID = hwid;
     }
-    return hwid;
+
+    return cachedHWID;
 }
 
 void SessionManager::findActiveSession() {

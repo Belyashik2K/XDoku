@@ -66,7 +66,7 @@ void SudokuGameManager::flushPendingMoves() const {
     pendingMoves.clear();
 }
 
-void SudokuGameManager::enqueueMove(SudokuMove move) const {
+void SudokuGameManager::enqueueMove(const SudokuMove &move) const {
     pendingMoves.push_back(move);
     if (pendingMoves.size() >= MOVE_FLUSH_THRESHOLD || !move.isValidMove()) {
         flushPendingMoves();
