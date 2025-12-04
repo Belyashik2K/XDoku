@@ -13,14 +13,13 @@ public:
     virtual ~IMoveRepository() = default;
 
     virtual bool createMove(
-        SudokuMove move
+        const std::unique_ptr<SudokuMove>& move
     ) = 0;
 
     virtual bool createMoves(
-        const std::vector<SudokuMove> &moves
+        const std::vector<std::unique_ptr<SudokuMove>> &moves
     ) = 0;
 
-    virtual std::optional<std::vector<SudokuMove>> getMovesByGameId(int gameId) = 0;
 };
 
 #endif //IMOVEREPOSITORY_H

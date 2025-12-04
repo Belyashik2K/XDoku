@@ -11,7 +11,7 @@ SudokuGame SudokuGameLoader::loadGame(
     const std::string &difficulty, int mistakesCount,
     const std::string &startTime, const std::optional<std::string> &endTime,
     const std::string &status,
-    std::optional<std::vector<SudokuMove>> moves
+    std::optional<std::vector<std::unique_ptr<SudokuMove>>> moves
 ) {
     std::optional<Timestamp> endTimeOpt;
     if (!endTime.has_value()) {

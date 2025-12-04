@@ -46,16 +46,17 @@ void SudokuGameManager::createSudokuGame(const SudokuDifficultyEnum &difficulty)
     }
 }
 
-bool SudokuGameManager::createMove(const int selected_row, const int selected_col, const int value) const {
+bool SudokuGameManager::createMove(const int selected_row, const int selected_col, const int value) {
     printf("[SudokuGameManager] Creating move (row: %d, col: %d, value: %d) in game with ID: %d\n",
            selected_row, selected_col, value, currentGame->getId());
-    const SudokuMove move = currentGame->createMove(selected_row, selected_col, value);
-    enqueueMove(move);
+    std::unique_ptr<SudokuMove> move = currentGame->createMove(selected_row, selected_col, value);
+    const bool isValid = move->isValidMove();
+    enqueueMove(std::move(move));
     printf("[SudokuGameManager] Move queued successfully\n");
-    return move.isValidMove();
+    return isValid;
 }
 
-void SudokuGameManager::flushPendingMoves() const {
+void SudokuGameManager::flushPendingMoves() {
     if (pendingMoves.empty()) {
         return;
     }
@@ -66,9 +67,9 @@ void SudokuGameManager::flushPendingMoves() const {
     pendingMoves.clear();
 }
 
-void SudokuGameManager::enqueueMove(const SudokuMove &move) const {
-    pendingMoves.push_back(move);
-    if (pendingMoves.size() >= MOVE_FLUSH_THRESHOLD || !move.isValidMove()) {
+void SudokuGameManager::enqueueMove(std::unique_ptr<SudokuMove> move) {
+    pendingMoves.push_back(std::move(move));
+    if (pendingMoves.size() >= MOVE_FLUSH_THRESHOLD || !pendingMoves.back()->isValidMove()) {
         flushPendingMoves();
     }
 }
@@ -104,7 +105,7 @@ bool SudokuGameManager::isGridComplete() const {
     return getCurrentGame()->isSudokuSolved();
 }
 
-void SudokuGameManager::finishGame() const {
+void SudokuGameManager::finishGame() {
     if (!currentGame) {
         printf("[SudokuGameManager] No active game to finish\n");
         return;
@@ -124,7 +125,7 @@ void SudokuGameManager::finishGame() const {
     }
 }
 
-void SudokuGameManager::surrenderGame() const {
+void SudokuGameManager::surrenderGame() {
     if (!currentGame) {
         printf("[SudokuGameManager] No active game to surrender\n");
         return;
@@ -147,7 +148,7 @@ void SudokuGameManager::surrenderGame() const {
 void SudokuGameManager::updateRating(
     const int ratingChange,
     const std::string &message
-) const {
+) {
     if (!currentGame) {
         printf("[SudokuGameManager] No active game to update rating\n");
         return;

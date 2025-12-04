@@ -184,7 +184,7 @@ bool PostgreSQLGameRepository::updateGame(const int gameId, const SudokuGameStat
     return result.affected_rows() > 0;
 }
 
-std::optional<std::vector<SudokuMove>> PostgreSQLGameRepository::getMovesByGameId(const int gameId) const {
+std::optional<std::vector<std::unique_ptr<SudokuMove>>> PostgreSQLGameRepository::getMovesByGameId(const int gameId) const {
     if (!database->isConnected()) {
         return std::nullopt;
     }
@@ -199,7 +199,7 @@ std::optional<std::vector<SudokuMove>> PostgreSQLGameRepository::getMovesByGameI
     if (result.empty()) {
         return std::nullopt;
     }
-    std::vector<SudokuMove> moves;
+    std::vector<std::unique_ptr<SudokuMove>> moves;
     for (const auto &row: result) {
         const int id = row["id"].as<int>();
         const int gridRow = row["row"].as<int>();
@@ -207,7 +207,7 @@ std::optional<std::vector<SudokuMove>> PostgreSQLGameRepository::getMovesByGameI
         const int value = row["value"].as<int>();
         const bool isValid = row["is_valid"].as<bool>();
 
-        moves.emplace_back(id, gameId, gridRow, gridCol, value, isValid);
+        moves.emplace_back(std::make_unique<SudokuMove>(id, gameId, gridRow, gridCol, value, isValid));
     }
 
     return moves;

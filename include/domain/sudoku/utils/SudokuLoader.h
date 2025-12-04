@@ -19,7 +19,7 @@ public:
         const std::string &startTime,
         const std::optional<std::string>& endTime,
         const std::string &status,
-        std::optional<std::vector<SudokuMove>> moves = std::nullopt
+        std::optional<std::vector<std::unique_ptr<SudokuMove>>> moves = std::nullopt
     );
 
 };

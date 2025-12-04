@@ -12,9 +12,8 @@ class PostgreSQLMoveRepository final : public IMoveRepository {
 public:
     explicit PostgreSQLMoveRepository(std::shared_ptr<PostgreSQLDatabase> database);
 
-    bool createMove(SudokuMove move) override;
-    bool createMoves(const std::vector<SudokuMove> &moves) override;
-    std::optional<std::vector<SudokuMove>> getMovesByGameId(int gameId) override;
+    bool createMove(const std::unique_ptr<SudokuMove>& move) override;
+    bool createMoves(const std::vector<std::unique_ptr<SudokuMove>> &moves) override;
 };
 
 #endif //POSTGRESQLMOVEREPOSITORY_H

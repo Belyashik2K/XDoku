@@ -5,6 +5,8 @@
 #ifndef SUDOKUGAME_H
 #define SUDOKUGAME_H
 
+#include <memory>
+
 #include "SudokuGrid.h"
 #include "SudokuMove.h"
 #include "enums/SudokuDifficulty.h"
@@ -28,12 +30,12 @@ public:
         SudokuDifficultyEnum difficulty,
         int mistakesCount,
         Timestamp startTime,
-        std::optional<Timestamp> endTime,
+        const std::optional<Timestamp> &endTime,
         SudokuGameStatusEnum status,
-        std::optional<std::vector<SudokuMove>> moves
+        const std::optional<std::vector<std::unique_ptr<SudokuMove>>> &moves
     );
 
-    SudokuMove createMove(int row, int column, int value);
+    std::unique_ptr<SudokuMove> createMove(int row, int column, int value);
     bool isSudokuSolved() const;
     void finish();
     void surrender();
@@ -59,9 +61,9 @@ private:
     SudokuGameStatusEnum status;
     int mistakesCount = 0;
 
-    std::vector<SudokuMove> moves; // TODO: Replace with a vector of unique_ptr to SudokuMove
+    // std::vector<std::unique_ptr<SudokuMove>> moves;
 
-    void load_moves(const std::vector<SudokuMove> &stored_moves);
+    void load_moves(const std::vector<std::unique_ptr<SudokuMove>> &stored_moves);
 };
 
 #endif //SUDOKUGAME_H
