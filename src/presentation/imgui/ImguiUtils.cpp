@@ -7,10 +7,21 @@
 #include <presentation/imgui/ImguiUtils.h>
 #include <presentation/imgui/managers/ImguiTextureManager.h>
 #include <presentation/imgui/guards/ImguiStyleColorGuard.h>
+
+#include "application/managers/ProfilingManager.h"
 #include "presentation/imgui/managers/ImguiFontManager.h"
 
 void ImguiUtils::updateBackground(const std::string &filePath) {
-    const GLuint backgroundTex = ImguiTextureManager::getInstance().loadTextureFromFile(filePath);
+    FunctionTimerManager& manager = FunctionTimerManager::instance();
+    const auto backgroundTex = manager.track(
+    "ImguiTextureManager::loadTextureFromFile",
+        [](const std::string& filePath) {
+            return ImguiTextureManager::getInstance().loadTextureFromFile(filePath);
+        },
+        filePath
+    );
+
+    // const GLuint backgroundTex = ImguiTextureManager::getInstance().loadTextureFromFile(filePath);
     const ImVec2 windowPos = ImGui::GetWindowPos();
     const ImVec2 windowSize = ImGui::GetWindowSize();
     ImDrawList *drawList = ImGui::GetWindowDrawList();

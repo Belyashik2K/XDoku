@@ -48,12 +48,12 @@ public:
             const auto& functionName = entry.first;
             const auto& stat = entry.second;
             double averageTime = static_cast<double>(stat.totalTime) / stat.callCount;
-            std::cout << "| " << std::setw(20) << std::left << functionName
-            << " | total: " << std::setw(15) << std::right << stat.totalTime / 1'000'000.0
+            std::cout << "| " << std::setw(50) << std::left << functionName
+            << " | total: " << std::setw(15) << std::right << stat.totalTime / 1'000'000.0 << "s"
             << " | calls: " << std::setw(10) << std::right << stat.callCount
-            << " | avg: " << std::setw(17) << std::right << averageTime / 1'000.0 << " |\n";
-            printf("=========================================================\n");
+            << " | avg: " << std::setw(17) << std::right << averageTime / 1'000.0 << "ms |\n";
         }
+        printf("=========================================================\n");
     }
 
 private:
