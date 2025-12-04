@@ -8,6 +8,8 @@
 #include <iostream>
 #include <ostream>
 
+#include "application/managers/ProfilingManager.h"
+
 bool ImguiAudioManager::init() {
     if (ma_engine_init(nullptr, &engine_) != MA_SUCCESS) {
         std::cerr << "Failed to initialize audio engine" << std::endl;
@@ -36,6 +38,18 @@ void ImguiAudioManager::loadAudio(const std::string &path) {
 }
 
 void ImguiAudioManager::playAudio(const std::string &path) {
+    FunctionTimerManager& manager = FunctionTimerManager::instance();
+    manager.track(
+        "ImguiAudioManager::playAudio",
+        [this](const std::string& path) {
+            playInternal(path);
+            return 1;
+        },
+        path
+    );
+}
+
+void ImguiAudioManager::playInternal(const std::string &path) {
     if (const auto it = sounds_.find(path); it != sounds_.end()) {
         ma_sound* sound = it->second;
         ma_sound_stop(sound);
@@ -47,4 +61,3 @@ void ImguiAudioManager::playAudio(const std::string &path) {
         std::cerr << "Audio not loaded: " << path << std::endl;
     }
 }
-

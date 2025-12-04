@@ -21,6 +21,8 @@ public:
     void loadAudio(const std::string &path);
     void playAudio(const std::string &path);
 
+    void playInternal(const std::string &path);
+
     ImguiAudioManager(const ImguiAudioManager &) = delete;
     ImguiAudioManager &operator=(const ImguiAudioManager &) = delete;
 private:
