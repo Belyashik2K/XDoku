@@ -28,6 +28,8 @@ class SudokuGameManager {
 
     void createSudokuGame(const SudokuDifficultyEnum &difficulty);
 
+    void createSudokuGamerInternal(const SudokuDifficultyEnum &difficulty);
+
     void subscribeToEvents();
 
     void clearCurrentGame() {

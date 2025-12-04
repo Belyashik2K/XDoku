@@ -7,6 +7,7 @@
 #include "application/app_events/ApplicationEvents.h"
 #include "application/app_events/ButtonEvents.h"
 #include "application/app_events/UserEvents.h"
+#include "application/managers/ProfilingManager.h"
 #include "domain/sudoku/utils/SudokuFactory.h"
 
 void SudokuGameManager::loadActiveGame() {
@@ -32,6 +33,20 @@ void SudokuGameManager::loadActiveGame() {
 }
 
 void SudokuGameManager::createSudokuGame(const SudokuDifficultyEnum &difficulty) {
+    FunctionTimerManager& manager = FunctionTimerManager::instance();
+    manager.track(
+        "SudokuGameManager::createSudokuGame",
+        [this] (const SudokuDifficultyEnum &difficulty) {
+            this->createSudokuGamerInternal(
+                difficulty
+            );
+            return 1;
+        },
+        difficulty
+    );
+}
+
+void SudokuGameManager::createSudokuGamerInternal(const SudokuDifficultyEnum &difficulty) {
     const User *currentUser = sessionManager->getCurrentUser();
     printf("[SudokuGameManager] Creating new sudoku game for user %d\n", currentUser->getId());
     std::unique_ptr<SudokuGame> game = SudokuGameFactory::createNewGame(currentUser->getId(), difficulty);
