@@ -156,6 +156,7 @@ add_executable(XDoku
         include/domain/custom_types/vector/DokuVector.h
         include/domain/custom_types/vector/DokuVectorIterator.h
         include/domain/custom_types/stack/DokuStack.h
+        include/application/managers/ProfilingManager.h
 )
 
 target_include_directories(XDoku PRIVATE
