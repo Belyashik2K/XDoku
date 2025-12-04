@@ -4,9 +4,21 @@
 
 #include "application/presenters/game/SudokuGamePresenter.h"
 #include "application/app_events/ButtonEvents.h"
+#include "application/managers/ProfilingManager.h"
 
 bool SudokuGamePresenter::onNewMove(const int value) {
-    const bool isValid = gameManager->createMove(selectedRow, selectedCol, value);
+
+    FunctionTimerManager& manager = FunctionTimerManager::instance();
+    const bool isValid = manager.track(
+        "SudokuGameManager::createMove",
+        [this](const int row, const int col, const int val) {
+            return gameManager->createMove(row, col, val);
+        },
+        selectedRow,
+        selectedCol,
+        value
+    );
+    // const bool isValid = gameManager->createMove(selectedRow, selectedCol, value);
     updateMoveStatus(isValid);
     if (isValid) {
         selectedRow = NOT_SELECTED;
