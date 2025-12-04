@@ -9,6 +9,8 @@
 #include <utility>
 #include <vector>
 
+#include "application/managers/ProfilingManager.h"
+
 constexpr int FULL_MASK = 0x3FE;
 constexpr int BOX_INDEX(const int row, const int col) { return (row / 3) * 3 + (col / 3); }
 
@@ -146,7 +148,13 @@ bool SudokuGenerator::applyRemoval(SudokuGrid &puzzle, int targetRemovals, std::
 
         const int backup = puzzle.getCellValue(row, col);
         puzzle.setCellValue(row, col, 0);
-        if (hasUniqueSolution(puzzle)) {
+        FunctionTimerManager& manager = FunctionTimerManager::instance();
+        const bool is_unique = manager.track(
+            "SudokuGenerator::hasUniqueSolution",
+            [this](const SudokuGrid &puzzle) { return this->hasUniqueSolution(puzzle); },
+            puzzle
+        );
+        if (is_unique) {
             ++removed;
         } else {
             puzzle.setCellValue(row, col, backup);

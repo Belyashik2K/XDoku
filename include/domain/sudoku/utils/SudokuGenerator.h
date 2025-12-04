@@ -30,7 +30,7 @@ private:
         std::array<int, 9> &boxMask
     );
 
-    static bool applyRemoval(SudokuGrid &puzzle, int targetRemovals, std::mt19937 &rng);
+    bool applyRemoval(SudokuGrid &puzzle, int targetRemovals, std::mt19937 &rng);
 };
 
 #endif //SUDOKUGENERATOR_H
