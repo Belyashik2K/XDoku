@@ -12,7 +12,7 @@ PostgreSQLGameRepository::PostgreSQLGameRepository(std::shared_ptr<PostgreSQLDat
     this->database = std::move(database);
 }
 
-std::optional<SudokuGame> PostgreSQLGameRepository::createGame(const int userId, SudokuGame game) {
+std::optional<std::unique_ptr<SudokuGame>> PostgreSQLGameRepository::createGame(const int userId, std::unique_ptr<SudokuGame> game) {
     if (!database->isConnected()) {
         return std::nullopt;
     }
@@ -23,11 +23,11 @@ std::optional<SudokuGame> PostgreSQLGameRepository::createGame(const int userId,
         RETURNING id, start_time, end_time, status
     )");
     query.addParameter(std::to_string(userId));
-    nlohmann::json current = SudokuGridSerializer::saveGridToJson(game.getCurrentGrid());
-    nlohmann::json solution = SudokuGridSerializer::saveGridToJson(game.getSolutionGrid());
+    nlohmann::json current = SudokuGridSerializer::saveGridToJson(game->getCurrentGrid());
+    nlohmann::json solution = SudokuGridSerializer::saveGridToJson(game->getSolutionGrid());
     query.addParameter(current.dump());
     query.addParameter(solution.dump());
-    query.addParameter(SudokuDifficulty::getDifficultyName(game.getDifficulty()));
+    query.addParameter(SudokuDifficulty::getDifficultyName(game->getDifficulty()));
 
     const pqxx::result result = database->execute(query);
     if (result.empty()) {
@@ -51,7 +51,7 @@ std::optional<SudokuGame> PostgreSQLGameRepository::createGame(const int userId,
         userId,
         current.dump(),
         solution.dump(),
-        SudokuDifficulty::getDifficultyName(game.getDifficulty()),
+        SudokuDifficulty::getDifficultyName(game->getDifficulty()),
         mistakesCount,
         startTime,
         endTime,
@@ -59,7 +59,7 @@ std::optional<SudokuGame> PostgreSQLGameRepository::createGame(const int userId,
     );
 }
 
-std::optional<SudokuGame> PostgreSQLGameRepository::getGame(int gameId) {
+std::optional<std::unique_ptr<SudokuGame>> PostgreSQLGameRepository::getGame(int gameId) {
     if (!database->isConnected()) {
         return std::nullopt;
     }
@@ -109,7 +109,7 @@ std::optional<SudokuGame> PostgreSQLGameRepository::getGame(int gameId) {
     );
 }
 
-std::optional<SudokuGame> PostgreSQLGameRepository::getUserCurrentGame(int userId) {
+std::optional<std::unique_ptr<SudokuGame>> PostgreSQLGameRepository::getUserCurrentGame(int userId) {
     if (!database->isConnected()) {
         return std::nullopt;
     }

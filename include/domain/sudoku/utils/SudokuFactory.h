@@ -8,7 +8,7 @@
 
 class SudokuGameFactory {
 public:
-    static SudokuGame createNewGame(int userId, SudokuDifficultyEnum difficulty);
+    static std::unique_ptr<SudokuGame> createNewGame(int userId, SudokuDifficultyEnum difficulty);
 };
 
 #endif //SUDOKUFACTORY_H

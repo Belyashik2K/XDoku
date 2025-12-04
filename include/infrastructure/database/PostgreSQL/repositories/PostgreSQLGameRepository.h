@@ -12,12 +12,12 @@ class PostgreSQLGameRepository final : public IGameRepository {
     std::shared_ptr<PostgreSQLDatabase> database;
 public:
     explicit PostgreSQLGameRepository(std::shared_ptr<PostgreSQLDatabase> database);
-    std::optional<SudokuGame> createGame(
+    std::optional<std::unique_ptr<SudokuGame>> createGame(
         int userId,
-        SudokuGame game
+        std::unique_ptr<SudokuGame> game
     ) override;
-    std::optional<SudokuGame> getGame(int gameId) override;
-    std::optional<SudokuGame> getUserCurrentGame(int userId) override;
+    std::optional<std::unique_ptr<SudokuGame>> getGame(int gameId) override;
+    std::optional<std::unique_ptr<SudokuGame>> getUserCurrentGame(int userId) override;
     bool updateGame(int gameId, SudokuGameStatusEnum status, const std::optional<Timestamp> &endTime) override;
     std::optional<std::vector<std::unique_ptr<SudokuMove>>> getMovesByGameId(int gameId) const;
 };

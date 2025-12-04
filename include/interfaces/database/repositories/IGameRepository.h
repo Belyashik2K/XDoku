@@ -12,12 +12,12 @@ class IGameRepository {
 public:
     virtual ~IGameRepository() = default;
 
-    virtual std::optional<SudokuGame> createGame(
+    virtual std::optional<std::unique_ptr<SudokuGame>> createGame(
         int userId,
-        SudokuGame game
+        std::unique_ptr<SudokuGame> game
     ) = 0;
-    virtual std::optional<SudokuGame> getGame(int gameId) = 0;
-    virtual std::optional<SudokuGame> getUserCurrentGame(int userId) = 0;
+    virtual std::optional<std::unique_ptr<SudokuGame>> getGame(int gameId) = 0;
+    virtual std::optional<std::unique_ptr<SudokuGame>> getUserCurrentGame(int userId) = 0;
     virtual bool updateGame(
         int gameId,
         SudokuGameStatusEnum status,

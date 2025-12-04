@@ -5,7 +5,7 @@
 #include "domain/sudoku/utils/SudokuLoader.h"
 #include "domain/sudoku/utils/SudokuSerializer.h"
 
-SudokuGame SudokuGameLoader::loadGame(
+std::unique_ptr<SudokuGame> SudokuGameLoader::loadGame(
     int id, int userId,
     const std::string &grid, const std::string &solutionGrid,
     const std::string &difficulty, int mistakesCount,
@@ -20,7 +20,7 @@ SudokuGame SudokuGameLoader::loadGame(
         endTimeOpt = Timestamp(endTime.value());
     }
 
-    return {
+    return std::make_unique<SudokuGame>(
         id,
         userId,
         SudokuGridSerializer::loadGridFromJsonString(grid),
@@ -31,5 +31,5 @@ SudokuGame SudokuGameLoader::loadGame(
         endTimeOpt,
         SudokuGameStatus::fromString(status),
         moves
-    };
+    );
 }

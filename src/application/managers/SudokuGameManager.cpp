@@ -21,11 +21,11 @@ void SudokuGameManager::loadActiveGame() {
         return;
     }
 
-    std::optional<SudokuGame> game = gameRepository->getUserCurrentGame(currentUser->getId());
+    std::optional<std::unique_ptr<SudokuGame>> game = gameRepository->getUserCurrentGame(currentUser->getId());
     if (game.has_value()) {
         printf("[SudokuGameManager] Found active game for user %d\n", currentUser->getId());
         flushPendingMoves();
-        setCurrentGame(std::make_unique<SudokuGame>(game.value()));
+        setCurrentGame(std::move(game.value()));
     } else {
         printf("[SudokuGameManager] No active game found for user %d\n", currentUser->getId());
     }
@@ -34,12 +34,12 @@ void SudokuGameManager::loadActiveGame() {
 void SudokuGameManager::createSudokuGame(const SudokuDifficultyEnum &difficulty) {
     const User *currentUser = sessionManager->getCurrentUser();
     printf("[SudokuGameManager] Creating new sudoku game for user %d\n", currentUser->getId());
-    const SudokuGame game = SudokuGameFactory::createNewGame(currentUser->getId(), difficulty);
-    std::optional<SudokuGame> createdGame = gameRepository->createGame(currentUser->getId(), game);
+    std::unique_ptr<SudokuGame> game = SudokuGameFactory::createNewGame(currentUser->getId(), difficulty);
+    std::optional<std::unique_ptr<SudokuGame>> createdGame = gameRepository->createGame(currentUser->getId(), std::move(game));
     if (createdGame.has_value()) {
         printf("[SudokuGameManager] Created new sudoku game for user %d\n", currentUser->getId());
         flushPendingMoves();
-        setCurrentGame(std::make_unique<SudokuGame>(createdGame.value()));
+        setCurrentGame(std::move(createdGame.value()));
         eventBus->publish(OnSudokuGameCreated());
     } else {
         printf("[SudokuGameManager] Failed to create new sudoku game for user %d\n", currentUser->getId());

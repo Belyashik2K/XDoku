@@ -6,9 +6,14 @@
 
 #include "domain/sudoku/utils/SudokuGenerator.h"
 
-SudokuGame SudokuGameFactory::createNewGame(int userId, SudokuDifficultyEnum difficulty) {
+std::unique_ptr<SudokuGame> SudokuGameFactory::createNewGame(int userId, SudokuDifficultyEnum difficulty) {
     SudokuGenerator generator;
     const auto [grid, solutionGrid] = generator.generate(difficulty);
 
-    return {userId, grid, solutionGrid, difficulty};
+    return std::make_unique<SudokuGame>(
+        userId,
+        grid,
+        solutionGrid,
+        difficulty
+    );
 }

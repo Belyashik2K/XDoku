@@ -9,7 +9,7 @@
 
 class SudokuGameLoader {
 public:
-    static SudokuGame loadGame(
+    static std::unique_ptr<SudokuGame> loadGame(
         int id,
         int userId,
         const std::string &grid,
