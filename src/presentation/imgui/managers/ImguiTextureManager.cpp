@@ -7,6 +7,7 @@
 #include <iostream>
 #define STB_IMAGE_IMPLEMENTATION
 #include <imgui.h>
+#include <ranges>
 #include <stb_image.h>
 
 bool ImguiTextureManager::memoryTextureLoader(const void* data, size_t data_size, GLuint* out_texture, int* out_width, int* out_height)
@@ -69,8 +70,8 @@ GLuint ImguiTextureManager::loadTextureFromFile(const std::string &filePath) {
 }
 
 void ImguiTextureManager::cleanup() {
-    for (const auto &pair : textureCache) {
-        glDeleteTextures(1, &pair.second.textureID);
+    for (const auto &val: textureCache | std::views::values) {
+        glDeleteTextures(1, &val.textureID);
     }
     textureCache.clear();
 }

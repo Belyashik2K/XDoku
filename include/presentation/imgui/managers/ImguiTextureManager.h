@@ -28,7 +28,9 @@ public:
 
 private:
     ImguiTextureManager() = default;
-    ~ImguiTextureManager() = default;
+    ~ImguiTextureManager() {
+        cleanup();
+    }
 
     static bool memoryTextureLoader(
         const void *data,
