@@ -157,8 +157,17 @@ void ImguiFrameHandler::run(const std::function<void()> renderCallback) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        // Size the root window off the live io.DisplaySize (kept in sync with
+        // the real window size by ImGui_ImplGlfw_NewFrame() every frame),
+        // not the width/height requested at glfwCreateWindow() time: in
+        // fullscreen mode GLFW may hand back a window whose actual size
+        // doesn't match the requested video mode (e.g. on some multi-monitor
+        // or virtual-display setups), which left the root window - and with
+        // it all of the game's UI - sized smaller than the real window,
+        // visible only in the top-left corner of an otherwise-fullscreen
+        // (correctly cleared) framebuffer.
         ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize(ImVec2(windowWidth.value(), windowHeight.value()), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize, ImGuiCond_FirstUseEver);
         ImGui::PushFont(ImguiFontManager::getInstance().getFont(28));
         renderCallback();
         ImGui::PopFont();
