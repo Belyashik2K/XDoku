@@ -7,10 +7,12 @@
 #include <presentation/imgui/guards/ImguiChildWindowGuard.h>
 
 ImguiChildWindowGuard::~ImguiChildWindowGuard() {
-    if (m_Started) {
-        ImGui::PopStyleVar();
-        ImGui::EndChild();
-    }
+    // Unlike ImGui::Begin(), a false return from BeginChild() only means "skip
+    // drawing content" - EndChild() (and the PushStyleVar it's paired with) must
+    // still always be called, or ImGui's window stack is left unbalanced and the
+    // next End()/EndChild() call asserts.
+    ImGui::PopStyleVar();
+    ImGui::EndChild();
 }
 
 ImguiChildWindowGuard::ImguiChildWindowGuard(

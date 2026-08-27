@@ -4,6 +4,8 @@
 
 #ifndef IMGUIHOWTOPLAYVIEW_H
 #define IMGUIHOWTOPLAYVIEW_H
+#include <string>
+
 #include "interfaces/views/IHowToPlayView.h"
 
 class ImguiHowToPlayView final : public IHowToPlayView {

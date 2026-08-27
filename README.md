@@ -47,7 +47,7 @@ tested on Kali Linux).
 |---|---|---|
 | Linux | ✅ Yes | Originally developed and tested here. |
 | macOS | ✅ Yes | Built, ran, and connected to a local Postgres end to end on Apple Silicon. |
-| Windows | ⚠️ Should work | Needs vcpkg/MSYS2 packages below; not build-tested by the maintainer. `pthread` linkage may need MSVC-specific handling. |
+| Windows | ✅ Yes | Built and ran end to end with MSVC (VS Build Tools) + vcpkg + CMake/Ninja, connected to a local Postgres via Docker. See the vcpkg notes below — the default `x64-windows` triplet doesn't work. |
 
 ## Getting started
 
@@ -75,12 +75,18 @@ brew install cmake glfw libpqxx postgresql@16
 <details>
 <summary>Windows (vcpkg)</summary>
 
+Use the `x64-windows-static-md` triplet, not the default `x64-windows`. vcpkg's default triplet
+builds libpqxx as a shared DLL, and its import library ends up exporting inline `std::string_view`
+members — which then collide (`LNK2005`) with the same symbols instantiated in this project's own
+object files. `x64-windows-static-md` links libpqxx/glfw3 statically while still using the dynamic
+MSVC runtime (`/MD`), which matches this project's default build and avoids the clash.
+
 ```powershell
-vcpkg install glfw3 libpqxx
+vcpkg install glfw3:x64-windows-static-md libpqxx:x64-windows-static-md
 ```
 
-Use the vcpkg CMake toolchain file when configuring the project
-(`-DCMAKE_TOOLCHAIN_FILE=<vcpkg-root>/scripts/buildsystems/vcpkg.cmake`).
+A plain MSVC + CMake/Ninja setup (e.g. VS Build Tools) is enough — no Visual Studio IDE required.
+Building itself is covered by [`build-windows.bat`](scripts/build-windows.bat) in step 5 below.
 </details>
 
 ### 2. Configure environment
@@ -127,6 +133,22 @@ alembic upgrade head
 cmake -B build -S .
 cmake --build build
 ```
+
+<details>
+<summary>Windows specifics</summary>
+
+Plain `cmake` from a regular shell doesn't work here — it needs the MSVC x64 dev environment
+(`cl`/`link`, `INCLUDE`/`LIB`) plus the vcpkg toolchain file and triplet from step 1. Instead, set
+`VCPKG_ROOT` to your vcpkg checkout and run [`build-windows.bat`](scripts/build-windows.bat):
+
+```powershell
+set VCPKG_ROOT=C:\vcpkg
+scripts\build-windows.bat
+```
+
+It finds your VS install, imports its 64-bit toolset, and runs the CMake configure + build with
+the right flags. Output ends up at `build\XDoku.exe`.
+</details>
 
 ### 6. Run
 

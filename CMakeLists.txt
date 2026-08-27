@@ -10,6 +10,12 @@ find_package(OpenGL REQUIRED)
 
 if (NOT WIN32)
     enable_language(ASM)
+else ()
+    # Windows.h pulls in a huge surface area by default (winsock, GDI, crypto, COM...)
+    # which conflicts with vendored deps (bcrypt) and can clash with modern Windows
+    # SDK headers (ncrypt.h) when compiled without these trimmed down. NOMINMAX avoids
+    # windows.h's min/max macros shadowing std::min/std::max used throughout the code.
+    add_compile_definitions(WIN32_LEAN_AND_MEAN NOMINMAX)
 endif ()
 
 add_executable(XDoku
@@ -179,8 +185,16 @@ target_include_directories(XDoku PRIVATE
         deps/stb
         deps/miniaudio
         deps/bcrypt/include
-        deps/bcrypt/include/bcrypt
 )
+
+if (NOT WIN32)
+    # Nothing in the codebase includes a bare "bcrypt.h" (only "bcrypt/bcrypt.h", already
+    # reachable via deps/bcrypt/include above), so this extra path is unnecessary. On
+    # Windows it's actively harmful: the Windows SDK's own CNG header is also named
+    # bcrypt.h, and this directory being earlier on the search path shadows it, breaking
+    # any system header (e.g. wincrypt.h) that expects the real one.
+    target_include_directories(XDoku PRIVATE deps/bcrypt/include/bcrypt)
+endif ()
 
 if (NOT WIN32)
     target_sources(XDoku PRIVATE deps/bcrypt/src/x86.S)
@@ -209,8 +223,13 @@ target_link_libraries(XDoku PRIVATE
         ${PQ_TARGET}
         glfw
         OpenGL::GL
-        pthread
 )
+
+if (NOT WIN32)
+    # Thread support is part of the CRT on Windows; there's no separate pthread
+    # library to link against there (and vcpkg doesn't ship one for MSVC).
+    target_link_libraries(XDoku PRIVATE pthread)
+endif ()
 
 # HardwareId's platform-specific backends need extra system libraries.
 if (APPLE)
