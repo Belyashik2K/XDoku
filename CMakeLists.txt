@@ -8,6 +8,10 @@ find_package(libpqxx REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
+if (NOT WIN32)
+    enable_language(ASM)
+endif ()
+
 add_executable(XDoku
         src/run.cpp
         deps/glad/glad-4-3/src/glad.c
@@ -18,6 +22,10 @@ add_executable(XDoku
         deps/imgui/imgui_demo.cpp
         deps/imgui/backends/imgui_impl_glfw.cpp
         deps/imgui/backends/imgui_impl_opengl3.cpp
+        deps/bcrypt/src/bcrypt.c
+        deps/bcrypt/src/crypt_blowfish.c
+        deps/bcrypt/src/crypt_gensalt.c
+        deps/bcrypt/src/wrapper.c
         include/interfaces/IView.h
         include/interfaces/IPresenter.h
         include/domain/User.h
@@ -166,7 +174,13 @@ target_include_directories(XDoku PRIVATE
         deps/nlohmann_json
         deps/stb
         deps/miniaudio
+        deps/bcrypt/include
+        deps/bcrypt/include/bcrypt
 )
+
+if (NOT WIN32)
+    target_sources(XDoku PRIVATE deps/bcrypt/src/x86.S)
+endif ()
 
 target_link_libraries(XDoku PRIVATE
         pqxx
@@ -174,5 +188,4 @@ target_link_libraries(XDoku PRIVATE
         glfw
         OpenGL::GL
         pthread
-        bcrypt
 )
