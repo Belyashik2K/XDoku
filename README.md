@@ -41,14 +41,12 @@ reference. Issues and PRs may not be reviewed.
 
 The rendering stack (GLFW/OpenGL/ImGui) and the database layer are portable, and the code has been
 audited to remove the Linux-only assumptions the project originally had (it was developed and
-tested on Kali Linux). That said, it has **not** been build-verified on Windows or macOS by the
-maintainer — if you hit a platform-specific issue, a PR fixing it is welcome even though the
-project isn't actively maintained.
+tested on Kali Linux).
 
-| Platform | Expected to work | Notes |
+| Platform | Status | Notes |
 |---|---|---|
 | Linux | ✅ Yes | Originally developed and tested here. |
-| macOS | ⚠️ Should work | Needs Homebrew packages below; not build-tested by the maintainer. |
+| macOS | ✅ Yes | Built, ran, and connected to a local Postgres end to end on Apple Silicon. |
 | Windows | ⚠️ Should work | Needs vcpkg/MSYS2 packages below; not build-tested by the maintainer. `pthread` linkage may need MSVC-specific handling. |
 
 ## Getting started
