@@ -4,7 +4,11 @@ project(XDoku)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(PostgreSQL REQUIRED)
-find_package(libpqxx REQUIRED)
+# Not REQUIRED: some distro packages (e.g. Debian/Ubuntu's libpqxx-dev) don't ship a CMake
+# config file at all, only a plain library + headers on the default system paths. REQUIRED
+# here would hard-fail configuration on those before ever reaching the libpqxx::pqxx-vs-plain
+# "pqxx" fallback below, which exists specifically to handle that case.
+find_package(libpqxx CONFIG QUIET)
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
