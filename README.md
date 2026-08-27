@@ -6,8 +6,6 @@
 
 <p align="center"><strong>A cross-platform Sudoku desktop app with accounts, a leaderboard, and progress tracking.</strong></p>
 
-<p align="center"><a href="https://miro.com/app/board/uXjVI8V73Is=">Design board</a></p>
-
 ## About
 
 XDoku is a Sudoku implementation built as a coursework project by two people. It's a native
@@ -51,7 +49,7 @@ you'd use for a production service — see [Architecture](#architecture) below.
 
 ## Why PostgreSQL?
 
-This started as a two-person coursework project, not a "real" product — for that, SQLite would
+This started as a two-person coursework project, not a real product — for that, SQLite would
 have been the obvious choice. We picked Postgres for two reasons: we ran it on a shared server, so
 both of us worked against the same database instead of juggling separate local copies; and midway
 through the project it became clear this could grow past coursework into an actual backend-backed
