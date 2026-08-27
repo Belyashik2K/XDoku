@@ -28,6 +28,8 @@ add_executable(XDoku
         deps/bcrypt/src/wrapper.c
         include/infrastructure/config/EnvConfig.h
         src/infrastructure/config/EnvConfig.cpp
+        include/infrastructure/platform/HardwareId.h
+        src/infrastructure/platform/HardwareId.cpp
         include/interfaces/IView.h
         include/interfaces/IPresenter.h
         include/domain/User.h
@@ -209,3 +211,10 @@ target_link_libraries(XDoku PRIVATE
         OpenGL::GL
         pthread
 )
+
+# HardwareId's platform-specific backends need extra system libraries.
+if (APPLE)
+    target_link_libraries(XDoku PRIVATE "-framework IOKit" "-framework CoreFoundation")
+elseif (WIN32)
+    target_link_libraries(XDoku PRIVATE advapi32)
+endif ()
