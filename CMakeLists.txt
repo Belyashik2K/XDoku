@@ -26,6 +26,8 @@ add_executable(XDoku
         deps/bcrypt/src/crypt_blowfish.c
         deps/bcrypt/src/crypt_gensalt.c
         deps/bcrypt/src/wrapper.c
+        include/infrastructure/config/EnvConfig.h
+        src/infrastructure/config/EnvConfig.cpp
         include/interfaces/IView.h
         include/interfaces/IPresenter.h
         include/domain/User.h
