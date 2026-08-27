@@ -11,6 +11,31 @@ services:
       - "${XDOKU_DB_PORT:-5432}:5432"
     volumes:
       - xdoku_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${XDOKU_DB_USER:-xdoku_owner} -d ${XDOKU_DB_NAME:-xdoku}"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  # Applies Alembic migrations against `postgres` on every `docker compose up`, so nobody
+  # needs Python/Alembic installed on the host. Runs once and exits; alembic upgrade head
+  # is a no-op when there's nothing new to apply, so re-running it on every `up` is safe.
+  migrations:
+    build:
+      context: ./src/infrastructure/database/PostgreSQL/migrations
+    container_name: xdoku-migrations
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      XDOKU_DB_USER: ${XDOKU_DB_USER:-xdoku_owner}
+      XDOKU_DB_PASSWORD: ${XDOKU_DB_PASSWORD:-xdoku_local_password}
+      XDOKU_DB_NAME: ${XDOKU_DB_NAME:-xdoku}
+      # Talks to postgres over the compose network, not the host-mapped port/address -
+      # XDOKU_DB_HOST/PORT from .env are for the app on the host and don't apply here.
+      XDOKU_DB_HOST: postgres
+      XDOKU_DB_PORT: 5432
+    restart: "no"
 
 volumes:
   xdoku_postgres_data:

@@ -66,8 +66,13 @@ You need a C++20 compiler, CMake 3.30+, and the following libraries: **GLFW3**, 
 <summary>Linux (Debian/Ubuntu/Kali)</summary>
 
 ```bash
-sudo apt install build-essential cmake libglfw3-dev libgl1-mesa-dev libpq-dev libpqxx-dev postgresql
+sudo apt install build-essential cmake libglfw3-dev libgl1-mesa-dev libpq-dev libpqxx-dev
 ```
+
+Note this installs only the Postgres *client* headers needed to build against — not the `postgresql`
+server package. The database itself runs via Docker (step 3 below); installing the real
+`postgresql` package too would auto-start it via systemd and squat on port 5432, so Docker's
+Postgres container fails to bind that port.
 </details>
 
 <details>
@@ -98,32 +103,23 @@ The easiest way to get a local PostgreSQL instance is Docker:
 docker compose up -d
 ```
 
-This starts Postgres on `localhost:5432` using the credentials from `.env`. No further setup
-needed for a fresh run.
+This starts Postgres on `localhost:5432` using the credentials from `.env`, and also runs schema
+migrations automatically — see [Migrations](#migrations) below. No further setup needed for a
+fresh run.
 
-#### 4. Run migrations
+If this fails with something like `address already in use` / `port is already allocated`, another
+Postgres is already bound to 5432 on your machine (e.g. a system package, or Postgres.app). Either
+stop that one, or point Docker at a different host port by setting `XDOKU_DB_PORT` in `.env` (it
+only changes the host-side mapping — the container still talks to itself on 5432 internally).
 
-Schema migrations are managed with Alembic, and Alembic needs to be run from the directory
-containing `alembic.ini`:
-
-```bash
-cd src/infrastructure/database/PostgreSQL/migrations
-python3 -m venv .venv
-source .venv/bin/activate
-pip install alembic sqlalchemy psycopg2-binary python-dotenv
-alembic upgrade head
-```
-
-(`.venv` is already covered by `.gitignore`.)
-
-#### 5. Build
+#### 4. Build
 
 ```bash
 cmake -B build -S .
 cmake --build build
 ```
 
-#### 6. Run
+#### 5. Run
 
 The app loads assets via relative paths (`../assets/...`), so run it from one directory below the
 project root — e.g. straight out of the `build` directory:
@@ -177,26 +173,11 @@ The easiest way to get a local PostgreSQL instance is Docker:
 docker compose up -d
 ```
 
-This starts Postgres on `localhost:5432` using the credentials from `.env`. No further setup
-needed for a fresh run.
+This starts Postgres on `localhost:5432` using the credentials from `.env`, and also runs schema
+migrations automatically — see [Migrations](#migrations) below. No further setup needed for a
+fresh run.
 
-#### 4. Run migrations
-
-Schema migrations are managed with Alembic, and Alembic needs to be run from the directory
-containing `alembic.ini`:
-
-```powershell
-cd src\infrastructure\database\PostgreSQL\migrations
-python -m venv .venv
-.venv\Scripts\activate
-pip install alembic sqlalchemy psycopg2-binary python-dotenv
-alembic upgrade head
-cd ..\..\..\..\..
-```
-
-(`.venv` is already covered by `.gitignore`.)
-
-#### 5. Build
+#### 4. Build
 
 Plain `cmake` from a regular shell doesn't work here — it needs the MSVC x64 dev environment
 (`cl`/`link`, `INCLUDE`/`LIB`), which a normal PowerShell/cmd window doesn't have. Point
@@ -211,7 +192,7 @@ scripts\build-windows.bat
 
 Output ends up at `build\XDoku.exe`.
 
-#### 6. Run
+#### 5. Run
 
 The app loads assets via relative paths (`../assets/...`), so run it from one directory below the
 project root — e.g. straight out of the `build` directory:
@@ -220,6 +201,27 @@ project root — e.g. straight out of the `build` directory:
 cd build
 .\XDoku.exe
 ```
+
+## Migrations
+
+Schema migrations are managed with Alembic, but you don't need Python installed to apply them:
+`docker compose up` (steps 3 above) builds a small one-off `migrations` container that waits for
+`postgres` to become healthy, then runs `alembic upgrade head` against it and exits. It re-runs on
+every `up`, which is a no-op once the schema is already current.
+
+Authoring a *new* migration still needs Alembic locally, since `alembic revision --autogenerate`
+has to import the SQLAlchemy models to diff against the database:
+
+```bash
+cd src/infrastructure/database/PostgreSQL/migrations
+python3 -m venv .venv          # Windows: python -m venv .venv
+source .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+alembic revision --autogenerate -m "describe the change"
+```
+
+(`.venv` is already covered by `.gitignore`.) The generated revision under `alembic/versions/` gets
+picked up by the `migrations` container on the next `docker compose up` like any other.
 
 ## License
 
