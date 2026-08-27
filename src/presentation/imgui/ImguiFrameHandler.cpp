@@ -37,7 +37,22 @@ ImguiFrameHandler::ImguiFrameHandler(
 }
 
 bool initGLFW() {
-    return glfwInit();
+    if (!glfwInit()) return false;
+
+    // macOS only ever hands out either a legacy OpenGL 2.1 context or a 3.2+
+    // core/forward-compatible one - it never supports the "GLSL 130 on a
+    // compatibility-profile 3.x context" combination Linux/Windows drivers
+    // are lenient about. Without these hints GLFW defaults to legacy 2.1 on
+    // macOS, which can't compile the "#version 130" shaders ImGui is
+    // initialized with below, so request a matching core profile explicitly.
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+#endif
+
+    return true;
 }
 
 bool initOpenGL() {
@@ -127,7 +142,12 @@ void ImguiFrameHandler::init() {
     style.FrameBorderSize = 1.0f;
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
+#ifdef __APPLE__
+    // Matches the core 3.2 context requested in initGLFW() above.
+    ImGui_ImplOpenGL3_Init("#version 150");
+#else
     ImGui_ImplOpenGL3_Init("#version 130");
+#endif
 }
 
 void ImguiFrameHandler::run(const std::function<void()> renderCallback) {
