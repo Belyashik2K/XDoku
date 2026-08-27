@@ -1,10 +1,10 @@
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/d518d11b-226d-4894-91d4-7a4994dac2ef" alt="XDoku" />
-</p>
-
 <h1 align="center">XDoku</h1>
 
 <p align="center"><strong>A cross-platform Sudoku desktop app with accounts, a leaderboard, and progress tracking.</strong></p>
+
+<p align="center">
+  <img src="assets/repository/xdoku_preview.gif" alt="XDoku preview" width="720" />
+</p>
 
 ## About
 
