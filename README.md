@@ -47,11 +47,17 @@ tested on Kali Linux).
 |---|---|---|
 | Linux | ✅ Yes | Originally developed and tested here. |
 | macOS | ✅ Yes | Built, ran, and connected to a local Postgres end to end on Apple Silicon. |
-| Windows | ✅ Yes | Built and ran end to end with MSVC (VS Build Tools) + vcpkg + CMake/Ninja, connected to a local Postgres via Docker. See the vcpkg notes below — the default `x64-windows` triplet doesn't work. |
+| Windows | ✅ Yes | Built and ran end to end with MSVC (VS Build Tools) + vcpkg + CMake/Ninja, connected to a local Postgres via Docker. See the Windows section below — the default `x64-windows` vcpkg triplet doesn't work. |
 
 ## Getting started
 
-### 1. Prerequisites
+Setup diverges enough between platforms (different package managers, and Windows needs an extra
+vcpkg/MSVC dance plus a `.exe` instead of a Unix binary) that it's not worth forcing into one
+shared set of steps. Pick the section for your OS.
+
+### macOS / Linux
+
+#### 1. Prerequisites
 
 You need a C++20 compiler, CMake 3.30+, and the following libraries: **GLFW3**, **OpenGL**,
 **PostgreSQL** and **libpqxx**. (`bcrypt` is vendored in `deps/bcrypt` — nothing to install for it.)
@@ -72,24 +78,7 @@ brew install cmake glfw libpqxx postgresql@16
 ```
 </details>
 
-<details>
-<summary>Windows (vcpkg)</summary>
-
-Use the `x64-windows-static-md` triplet, not the default `x64-windows`. vcpkg's default triplet
-builds libpqxx as a shared DLL, and its import library ends up exporting inline `std::string_view`
-members — which then collide (`LNK2005`) with the same symbols instantiated in this project's own
-object files. `x64-windows-static-md` links libpqxx/glfw3 statically while still using the dynamic
-MSVC runtime (`/MD`), which matches this project's default build and avoids the clash.
-
-```powershell
-vcpkg install glfw3:x64-windows-static-md libpqxx:x64-windows-static-md
-```
-
-A plain MSVC + CMake/Ninja setup (e.g. VS Build Tools) is enough — no Visual Studio IDE required.
-Building itself is covered by [`build-windows.bat`](scripts/build-windows.bat) in step 5 below.
-</details>
-
-### 2. Configure environment
+#### 2. Configure environment
 
 ```bash
 cp .env.example .env
@@ -101,7 +90,7 @@ startup, see `EnvConfig`), and by the Alembic migrations — so all three always
 database is. The defaults in `.env.example` work out of the box with the Docker setup below; change
 them only if you're pointing at your own PostgreSQL instance.
 
-### 3. Database
+#### 3. Database
 
 The easiest way to get a local PostgreSQL instance is Docker:
 
@@ -112,7 +101,7 @@ docker compose up -d
 This starts Postgres on `localhost:5432` using the credentials from `.env`. No further setup
 needed for a fresh run.
 
-### 4. Run migrations
+#### 4. Run migrations
 
 Schema migrations are managed with Alembic, and Alembic needs to be run from the directory
 containing `alembic.ini`:
@@ -120,37 +109,21 @@ containing `alembic.ini`:
 ```bash
 cd src/infrastructure/database/PostgreSQL/migrations
 python3 -m venv .venv
-source .venv/bin/activate   # on Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install alembic sqlalchemy psycopg2-binary python-dotenv
 alembic upgrade head
 ```
 
 (`.venv` is already covered by `.gitignore`.)
 
-### 5. Build
+#### 5. Build
 
 ```bash
 cmake -B build -S .
 cmake --build build
 ```
 
-<details>
-<summary>Windows specifics</summary>
-
-Plain `cmake` from a regular shell doesn't work here — it needs the MSVC x64 dev environment
-(`cl`/`link`, `INCLUDE`/`LIB`) plus the vcpkg toolchain file and triplet from step 1. Instead, set
-`VCPKG_ROOT` to your vcpkg checkout and run [`build-windows.bat`](scripts/build-windows.bat):
-
-```powershell
-set VCPKG_ROOT=C:\vcpkg
-scripts\build-windows.bat
-```
-
-It finds your VS install, imports its 64-bit toolset, and runs the CMake configure + build with
-the right flags. Output ends up at `build\XDoku.exe`.
-</details>
-
-### 6. Run
+#### 6. Run
 
 The app loads assets via relative paths (`../assets/...`), so run it from one directory below the
 project root — e.g. straight out of the `build` directory:
@@ -158,6 +131,94 @@ project root — e.g. straight out of the `build` directory:
 ```bash
 cd build
 ./XDoku
+```
+
+### Windows
+
+#### 1. Prerequisites
+
+- A C++20 MSVC toolset: either Visual Studio with the "Desktop development with C++" workload, or
+  the standalone [VS Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) —
+  the IDE itself isn't required, just the compiler.
+- [CMake](https://cmake.org/download/) 3.30+ and [Ninja](https://github.com/ninja-build/ninja/releases)
+  on `PATH`.
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/), for the database.
+- [vcpkg](https://github.com/microsoft/vcpkg), cloned and bootstrapped somewhere
+  (`git clone https://github.com/microsoft/vcpkg && cd vcpkg && .\bootstrap-vcpkg.bat`), used to
+  build **GLFW3** and **libpqxx** (`PostgreSQL`/`OpenGL` come from the Windows SDK; `bcrypt` is
+  vendored in `deps/bcrypt`). Use the `x64-windows-static-md` triplet, not the default
+  `x64-windows`: the default builds libpqxx as a shared DLL whose import library ends up exporting
+  inline `std::string_view` members, which then collide (`LNK2005`) with the same symbols
+  instantiated in this project's own object files. `x64-windows-static-md` links libpqxx/glfw3
+  statically while still using the dynamic MSVC runtime (`/MD`), matching this project's default
+  build and avoiding the clash:
+
+  ```powershell
+  vcpkg install glfw3:x64-windows-static-md libpqxx:x64-windows-static-md
+  ```
+
+#### 2. Configure environment
+
+```powershell
+copy .env.example .env
+```
+
+`.env` holds the DB connection settings (`XDOKU_DB_USER`, `XDOKU_DB_PASSWORD`, `XDOKU_DB_HOST`,
+`XDOKU_DB_PORT`, `XDOKU_DB_NAME`). It's read by `docker-compose.yml`, by the app itself (loaded at
+startup, see `EnvConfig`), and by the Alembic migrations — so all three always agree on where the
+database is. The defaults in `.env.example` work out of the box with the Docker setup below; change
+them only if you're pointing at your own PostgreSQL instance.
+
+#### 3. Database
+
+The easiest way to get a local PostgreSQL instance is Docker:
+
+```powershell
+docker compose up -d
+```
+
+This starts Postgres on `localhost:5432` using the credentials from `.env`. No further setup
+needed for a fresh run.
+
+#### 4. Run migrations
+
+Schema migrations are managed with Alembic, and Alembic needs to be run from the directory
+containing `alembic.ini`:
+
+```powershell
+cd src\infrastructure\database\PostgreSQL\migrations
+python -m venv .venv
+.venv\Scripts\activate
+pip install alembic sqlalchemy psycopg2-binary python-dotenv
+alembic upgrade head
+cd ..\..\..\..\..
+```
+
+(`.venv` is already covered by `.gitignore`.)
+
+#### 5. Build
+
+Plain `cmake` from a regular shell doesn't work here — it needs the MSVC x64 dev environment
+(`cl`/`link`, `INCLUDE`/`LIB`), which a normal PowerShell/cmd window doesn't have. Point
+[`scripts\build-windows.bat`](scripts/build-windows.bat) at your vcpkg checkout instead; it finds
+your VS install, imports its 64-bit toolset itself, and runs the CMake configure + build with the
+right flags:
+
+```powershell
+set VCPKG_ROOT=C:\path\to\your\vcpkg
+scripts\build-windows.bat
+```
+
+Output ends up at `build\XDoku.exe`.
+
+#### 6. Run
+
+The app loads assets via relative paths (`../assets/...`), so run it from one directory below the
+project root — e.g. straight out of the `build` directory:
+
+```powershell
+cd build
+.\XDoku.exe
 ```
 
 ## License
