@@ -47,6 +47,11 @@ namespace EnvConfig {
         }
     }
 
+    void loadDotEnv() {
+        loadDotEnv(".env");
+        loadDotEnv("../.env");
+    }
+
     std::string getOrDefault(const std::string &key, const std::string &defaultValue) {
         const char *value = std::getenv(key.c_str());
         return value ? std::string(value) : defaultValue;

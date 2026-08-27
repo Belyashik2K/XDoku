@@ -12,7 +12,15 @@
 // provides a getenv-with-default helper. Kept dependency-free on purpose so the
 // project doesn't need a third-party dotenv library just for local dev config.
 namespace EnvConfig {
-    void loadDotEnv(const std::string &path = ".env");
+    // Loads exactly the given file, if it exists. No-op otherwise.
+    void loadDotEnv(const std::string &path);
+
+    // Tries the common locations for .env relative to the working directory
+    // the binary is launched from: "./.env" (running from the project root)
+    // and "../.env" (running from a build directory one level below the
+    // project root, e.g. `cd build && ./XDoku`, which is also how assets are
+    // located - see the "../assets/..." paths throughout the views).
+    void loadDotEnv();
 
     std::string getOrDefault(const std::string &key, const std::string &defaultValue);
 }
