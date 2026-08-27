@@ -110,9 +110,11 @@ needed for a fresh run.
 
 ### 4. Run migrations
 
-Schema migrations are managed with Alembic. From `src/infrastructure/database/PostgreSQL/migrations`:
+Schema migrations are managed with Alembic, and Alembic needs to be run from the directory
+containing `alembic.ini`:
 
 ```bash
+cd src/infrastructure/database/PostgreSQL/migrations
 python3 -m venv .venv
 source .venv/bin/activate   # on Windows: .venv\Scripts\activate
 pip install alembic sqlalchemy psycopg2-binary python-dotenv
