@@ -1,12 +1,8 @@
 @echo off
 setlocal enabledelayedexpansion
 
-rem Builds XDoku on Windows: finds a VS C++ toolset, imports its x64 dev environment,
-rem then configures and builds via CMake + Ninja against a vcpkg toolchain.
-rem
-rem Prerequisite: set VCPKG_ROOT to your vcpkg checkout, and have already run
-rem   vcpkg install glfw3:x64-windows-static-md libpqxx:x64-windows-static-md
-rem (see README.md for why that specific triplet is required).
+rem Builds XDoku on Windows via CMake + Ninja + vcpkg. Requires VCPKG_ROOT set
+rem and glfw3/libpqxx already installed for the x64-windows-static-md triplet.
 
 if "%VCPKG_ROOT%"=="" (
     echo ERROR: VCPKG_ROOT is not set. Point it at your vcpkg checkout first, e.g.:
@@ -19,8 +15,7 @@ if not exist "%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake" (
     exit /b 1
 )
 
-rem Capture this before importing the VS dev environment below: vcvars64.bat resets
-rem VCPKG_ROOT to VS's own bundled vcpkg (VC\vcpkg), clobbering whatever the caller set.
+rem vcvars64.bat overwrites VCPKG_ROOT with VS's own bundled vcpkg, so save it first.
 set "MY_VCPKG_ROOT=%VCPKG_ROOT%"
 
 set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
@@ -44,10 +39,7 @@ if not exist "%VCVARS%" (
 call "%VCVARS%"
 if errorlevel 1 exit /b 1
 
-rem This script lives in scripts\, one level below the repo root that has CMakeLists.txt.
-rem "%~dp0.." ends in a backslash, which escapes a following closing quote on Windows
-rem command lines - "%~dp0..\." avoids that trap. Absolute -B/-S paths let this script be
-rem invoked from any working directory.
+rem Repo root is one level up from this script.
 set "REPO_ROOT=%~dp0..\."
 
 cmake -B "%REPO_ROOT%\build" -S "%REPO_ROOT%" -G Ninja -DCMAKE_TOOLCHAIN_FILE="%MY_VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows-static-md

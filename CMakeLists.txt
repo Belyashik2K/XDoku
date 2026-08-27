@@ -4,10 +4,7 @@ project(XDoku)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(PostgreSQL REQUIRED)
-# Not REQUIRED: some distro packages (e.g. Debian/Ubuntu's libpqxx-dev) don't ship a CMake
-# config file at all, only a plain library + headers on the default system paths. REQUIRED
-# here would hard-fail configuration on those before ever reaching the libpqxx::pqxx-vs-plain
-# "pqxx" fallback below, which exists specifically to handle that case.
+# Not REQUIRED: some distro packages don't ship a CMake config file, only a plain library.
 find_package(libpqxx CONFIG QUIET)
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -15,10 +12,7 @@ find_package(OpenGL REQUIRED)
 if (NOT WIN32)
     enable_language(ASM)
 else ()
-    # Windows.h pulls in a huge surface area by default (winsock, GDI, crypto, COM...)
-    # which conflicts with vendored deps (bcrypt) and can clash with modern Windows
-    # SDK headers (ncrypt.h) when compiled without these trimmed down. NOMINMAX avoids
-    # windows.h's min/max macros shadowing std::min/std::max used throughout the code.
+    # Trims windows.h to avoid clashing with vendored bcrypt and Windows SDK headers.
     add_compile_definitions(WIN32_LEAN_AND_MEAN NOMINMAX)
 endif ()
 
@@ -192,11 +186,7 @@ target_include_directories(XDoku PRIVATE
 )
 
 if (NOT WIN32)
-    # Nothing in the codebase includes a bare "bcrypt.h" (only "bcrypt/bcrypt.h", already
-    # reachable via deps/bcrypt/include above), so this extra path is unnecessary. On
-    # Windows it's actively harmful: the Windows SDK's own CNG header is also named
-    # bcrypt.h, and this directory being earlier on the search path shadows it, breaking
-    # any system header (e.g. wincrypt.h) that expects the real one.
+    # On Windows this shadows the SDK's own bcrypt.h (CNG), breaking system headers.
     target_include_directories(XDoku PRIVATE deps/bcrypt/include/bcrypt)
 endif ()
 
@@ -230,8 +220,7 @@ target_link_libraries(XDoku PRIVATE
 )
 
 if (NOT WIN32)
-    # Thread support is part of the CRT on Windows; there's no separate pthread
-    # library to link against there (and vcpkg doesn't ship one for MSVC).
+    # Thread support is part of the CRT on Windows; no separate pthread lib there.
     target_link_libraries(XDoku PRIVATE pthread)
 endif ()
 
