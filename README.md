@@ -10,8 +10,10 @@
 
 ## About
 
-XDoku is a Sudoku implementation built as a coursework project: a native ImGui interface, accounts
-with a global leaderboard, and per-game progress tracking.
+XDoku is a Sudoku implementation built as a coursework project by two people. It's a native
+desktop app (C++, OpenGL, ImGui) with accounts, a competitive leaderboard, and per-game progress
+tracking, all backed by a real PostgreSQL database and laid out with the same layered architecture
+you'd use for a production service — see [Architecture](#architecture) below.
 
 ## Features
 
@@ -26,23 +28,47 @@ with a global leaderboard, and per-game progress tracking.
 - **Language**: C++20.
 - **Rendering**: OpenGL via GLFW + GLAD + Dear ImGui.
 - **Persistence**: PostgreSQL through `libpqxx`.
-- **Migrations**: Alembic.
-- **Password hashing**: [bcrypt](https://github.com/trusch/libbcrypt), vendored in `deps/bcrypt`.
-- **Architecture**: MVP, with the DB layer abstracted behind `IDatabase`/`IRepositoryFactory` (see
-  `include/interfaces/database`).
+- **Migrations**: Alembic (Python).
+- **Security**: [bcrypt](https://github.com/trusch/libbcrypt) password hashing, vendored in
+  `deps/bcrypt`.
 
-## Project status
+## Architecture
 
-This project is **archived and no longer under active development**. Published as-is for
-reference; issues and PRs may not be reviewed.
+- **Domain-driven**: game rules and state (`SudokuGame`, `SudokuGrid`, `SudokuCell`, difficulty,
+  moves) live in `domain/` as plain C++ with no framework or persistence knowledge.
+- **Clean Architecture layering**: `domain/` → `application/` → `infrastructure/`/`presentation/`,
+  with dependencies pointing inward. Infrastructure (Postgres) and presentation (ImGui) only ever
+  talk to the domain/application layers through interfaces in `interfaces/` — `IDatabase`,
+  `IRepositoryFactory`, `IView`, `IPresenter` — so either side can be swapped without touching the
+  other.
+- **MVP** (Model-View-Presenter): every screen is a `Presenter` driving a `View` interface, with
+  the ImGui implementation in `presentation/imgui/` as one concrete View layer among possibly
+  others.
+- **Event bus + mediator**: presenters communicate through a typed pub/sub `EventBus`
+  (`application/EventBus.h`) instead of holding direct references to each other. `AppMediator`
+  owns the view stack and routes navigation between presenters, keeping that coordination out of
+  the presenters themselves.
+
+## Why PostgreSQL?
+
+This started as a two-person coursework project, not a "real" product — for that, SQLite would
+have been the obvious choice. We picked Postgres for two reasons: we ran it on a shared server, so
+both of us worked against the same database instead of juggling separate local copies; and midway
+through the project it became clear this could grow past coursework into an actual backend-backed
+game, which made a proper client-server database a better foundation to build on than something
+file-based and single-user.
+
+Either way, the architecture holds up: the database layer sits behind `IDatabase`/
+`IRepositoryFactory`, so swapping the implementation later wouldn't require touching the rest of
+the app.
 
 ## Platform support
 
 | Platform | Status | Notes |
 |---|---|---|
-| Linux | Yes | Developed on Kali; also verified on Ubuntu 26.04 (`libpqxx-dev` 7.10.0-2build1, `libpq-dev` 18.6-0ubuntu0.26.04.1). |
-| macOS | Yes | Verified on Apple Silicon. |
-| Windows | Yes | Verified with MSVC + vcpkg + CMake/Ninja — see [Windows](#windows) below. |
+| Linux | ✅ | Developed on Kali; also verified on Ubuntu 26.04 (`libpqxx-dev` 7.10.0-2build1, `libpq-dev` 18.6-0ubuntu0.26.04.1). |
+| macOS | ✅ | Verified on Apple Silicon. |
+| Windows | ✅ | Verified with MSVC + vcpkg + CMake/Ninja — see [Windows](#windows) below. |
 
 ## Getting started
 
@@ -176,6 +202,12 @@ alembic revision --autogenerate -m "describe the change"
 
 The generated file under `alembic/versions/` is picked up automatically on the next
 `docker compose up`.
+
+## Project status
+
+This project is **archived and no longer under active development**. Published as-is for
+reference; issues and PRs may not be reviewed.
+
 
 ## License
 
