@@ -113,9 +113,13 @@ needed for a fresh run.
 Schema migrations are managed with Alembic. From `src/infrastructure/database/PostgreSQL/migrations`:
 
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate   # on Windows: .venv\Scripts\activate
 pip install alembic sqlalchemy psycopg2-binary python-dotenv
 alembic upgrade head
 ```
+
+(`.venv` is already covered by `.gitignore`.)
 
 ### 5. Build
 
