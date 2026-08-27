@@ -34,7 +34,7 @@ std::optional<std::pair<int, Timestamp>> PostgreSQLSessionRepository::getUserIdA
     if (result.empty()) {
         return std::nullopt;
     }
-    const pqxx::row row = result[0];
+    const pqxx::row row(result[0]);
     const int userId = row["user_id"].as<int>();
     const std::string expiration = row["expires_at"].as<std::string>();
     return std::make_pair(userId, Timestamp(expiration));
@@ -58,7 +58,7 @@ std::optional<int> PostgreSQLSessionRepository::getUserIdBySessionId(const std::
         return std::nullopt;
     }
 
-    const pqxx::row row = result[0];
+    const pqxx::row row(result[0]);
     return row["user_id"].as<int>();
 }
 

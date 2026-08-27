@@ -77,7 +77,7 @@ std::optional<SudokuGame> PostgreSQLGameRepository::getGame(int gameId) {
         return std::nullopt;
     }
 
-    pqxx::row row = result[0];
+    pqxx::row row(result[0]);
     const int id = row["id"].as<int>();
     const int userId = row["user_id"].as<int>();
     const auto grid = row["board"].as<std::string>();
@@ -128,7 +128,7 @@ std::optional<SudokuGame> PostgreSQLGameRepository::getUserCurrentGame(int userI
         return std::nullopt;
     }
 
-    pqxx::row row = result[0];
+    pqxx::row row(result[0]);
     const int id = row["id"].as<int>();
     const int finalUserId = row["user_id"].as<int>();
     const auto grid = row["board"].as<std::string>();
