@@ -2,27 +2,16 @@
 // Created by belyashik2k on 5/2/25.
 //
 
-#include <fstream>
 #include <memory>
 
 #include "application/managers/SessionManager.h"
 #include "application/app_events/ApplicationEvents.h"
 #include "application/app_events/ButtonEvents.h"
 #include "domain/UserStats.h"
+#include "infrastructure/platform/HardwareId.h"
 
 std::optional<std::string> SessionManager::getDeviceHWID() {
-    // TODO: Implement a more secure way to get the HWID on different platforms
-    std::ifstream file("/etc/machine-id");
-    std::string hwid;
-    if (file.is_open()) {
-        std::getline(file, hwid);
-        file.close();
-    }
-
-    if (hwid.empty()) {
-        return std::nullopt;
-    }
-    return hwid;
+    return HardwareId::get();
 }
 
 void SessionManager::findActiveSession() {
@@ -52,9 +41,14 @@ void SessionManager::findActiveSession() {
 }
 
 void SessionManager::createSession(const OnUserLoggedIn &event) {
+    // Setting the in-memory current user must not depend on HWID/session
+    // persistence being available - those are only about restoring the
+    // session on the *next* launch, not about being logged in right now.
+    updateCurrentUser(event.userId);
+
     const std::optional<std::string> HWID = getDeviceHWID();
     if (!HWID.has_value()) {
-        printf("[SessionManager] HWID is not available, skipping session creation...\n");
+        printf("[SessionManager] HWID is not available, skipping session persistence...\n");
         return;
     }
 
@@ -68,7 +62,6 @@ void SessionManager::createSession(const OnUserLoggedIn &event) {
     } else {
         printf("[SessionManager] Failed to create session for user ID: %d\n", event.userId);
     }
-    updateCurrentUser(event.userId);
 }
 
 

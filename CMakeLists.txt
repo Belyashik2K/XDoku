@@ -1,12 +1,20 @@
 cmake_minimum_required(VERSION 3.30)
 project(XDoku)
 
-set(CMAKE_CXX_STANDARD 26)
+set(CMAKE_CXX_STANDARD 20)
 
 find_package(PostgreSQL REQUIRED)
-find_package(libpqxx REQUIRED)
+# Not REQUIRED: some distro packages don't ship a CMake config file, only a plain library.
+find_package(libpqxx CONFIG QUIET)
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
+
+if (NOT WIN32)
+    enable_language(ASM)
+else ()
+    # Trims windows.h to avoid clashing with vendored bcrypt and Windows SDK headers.
+    add_compile_definitions(WIN32_LEAN_AND_MEAN NOMINMAX)
+endif ()
 
 add_executable(XDoku
         src/run.cpp
@@ -18,6 +26,14 @@ add_executable(XDoku
         deps/imgui/imgui_demo.cpp
         deps/imgui/backends/imgui_impl_glfw.cpp
         deps/imgui/backends/imgui_impl_opengl3.cpp
+        deps/bcrypt/src/bcrypt.c
+        deps/bcrypt/src/crypt_blowfish.c
+        deps/bcrypt/src/crypt_gensalt.c
+        deps/bcrypt/src/wrapper.c
+        include/infrastructure/config/EnvConfig.h
+        src/infrastructure/config/EnvConfig.cpp
+        include/infrastructure/platform/HardwareId.h
+        src/infrastructure/platform/HardwareId.cpp
         include/interfaces/IView.h
         include/interfaces/IPresenter.h
         include/domain/User.h
@@ -166,14 +182,51 @@ target_include_directories(XDoku PRIVATE
         deps/nlohmann_json
         deps/stb
         deps/miniaudio
+        deps/bcrypt/include
 )
 
+if (NOT WIN32)
+    # On Windows this shadows the SDK's own bcrypt.h (CNG), breaking system headers.
+    target_include_directories(XDoku PRIVATE deps/bcrypt/include/bcrypt)
+endif ()
+
+if (NOT WIN32)
+    target_sources(XDoku PRIVATE deps/bcrypt/src/x86.S)
+endif ()
+
+# Some libpqxx/libpq installs (e.g. Homebrew's config-mode packages) only
+# export modern imported targets ("libpqxx::pqxx", "PostgreSQL::PostgreSQL"),
+# which is also what carries the include directories. Others (older distro
+# packages) just expose plain "pqxx"/"pq" libraries on the linker path with
+# headers in a default system include dir. Prefer the modern targets when
+# they exist, fall back otherwise.
+if (TARGET libpqxx::pqxx)
+    set(PQXX_TARGET libpqxx::pqxx)
+else ()
+    set(PQXX_TARGET pqxx)
+endif ()
+
+if (TARGET PostgreSQL::PostgreSQL)
+    set(PQ_TARGET PostgreSQL::PostgreSQL)
+else ()
+    set(PQ_TARGET pq)
+endif ()
+
 target_link_libraries(XDoku PRIVATE
-        pqxx
-        pq
+        ${PQXX_TARGET}
+        ${PQ_TARGET}
         glfw
         OpenGL::GL
-        pthread
-        bcrypt
-        ncurses
 )
+
+if (NOT WIN32)
+    # Thread support is part of the CRT on Windows; no separate pthread lib there.
+    target_link_libraries(XDoku PRIVATE pthread)
+endif ()
+
+# HardwareId's platform-specific backends need extra system libraries.
+if (APPLE)
+    target_link_libraries(XDoku PRIVATE "-framework IOKit" "-framework CoreFoundation")
+elseif (WIN32)
+    target_link_libraries(XDoku PRIVATE advapi32)
+endif ()

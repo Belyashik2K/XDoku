@@ -37,7 +37,22 @@ ImguiFrameHandler::ImguiFrameHandler(
 }
 
 bool initGLFW() {
-    return glfwInit();
+    if (!glfwInit()) return false;
+
+    // macOS only ever hands out either a legacy OpenGL 2.1 context or a 3.2+
+    // core/forward-compatible one - it never supports the "GLSL 130 on a
+    // compatibility-profile 3.x context" combination Linux/Windows drivers
+    // are lenient about. Without these hints GLFW defaults to legacy 2.1 on
+    // macOS, which can't compile the "#version 130" shaders ImGui is
+    // initialized with below, so request a matching core profile explicitly.
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+#endif
+
+    return true;
 }
 
 bool initOpenGL() {
@@ -127,7 +142,12 @@ void ImguiFrameHandler::init() {
     style.FrameBorderSize = 1.0f;
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
+#ifdef __APPLE__
+    // Matches the core 3.2 context requested in initGLFW() above.
+    ImGui_ImplOpenGL3_Init("#version 150");
+#else
     ImGui_ImplOpenGL3_Init("#version 130");
+#endif
 }
 
 void ImguiFrameHandler::run(const std::function<void()> renderCallback) {
@@ -137,8 +157,17 @@ void ImguiFrameHandler::run(const std::function<void()> renderCallback) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        // Size the root window off the live io.DisplaySize (kept in sync with
+        // the real window size by ImGui_ImplGlfw_NewFrame() every frame),
+        // not the width/height requested at glfwCreateWindow() time: in
+        // fullscreen mode GLFW may hand back a window whose actual size
+        // doesn't match the requested video mode (e.g. on some multi-monitor
+        // or virtual-display setups), which left the root window - and with
+        // it all of the game's UI - sized smaller than the real window,
+        // visible only in the top-left corner of an otherwise-fullscreen
+        // (correctly cleared) framebuffer.
         ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize(ImVec2(windowWidth.value(), windowHeight.value()), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize, ImGuiCond_FirstUseEver);
         ImGui::PushFont(ImguiFontManager::getInstance().getFont(28));
         renderCallback();
         ImGui::PopFont();

@@ -2,6 +2,8 @@
 // Created by belyashik2k on 5/3/25.
 //
 
+#include <algorithm>
+
 #include "domain/sudoku/enums/SudokuDifficulty.h"
 #include "application/presenters/game/SudokuGameDifficultySelectorPresenter.h"
 #include "presentation/imgui/views/game/ImguiSudokuGameDifficultySelectorView.h"

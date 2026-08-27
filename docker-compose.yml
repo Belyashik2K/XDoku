@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: xdoku-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${XDOKU_DB_USER:-xdoku_owner}
+      POSTGRES_PASSWORD: ${XDOKU_DB_PASSWORD:-xdoku_local_password}
+      POSTGRES_DB: ${XDOKU_DB_NAME:-xdoku}
+    ports:
+      - "${XDOKU_DB_PORT:-5432}:5432"
+    volumes:
+      - xdoku_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${XDOKU_DB_USER:-xdoku_owner} -d ${XDOKU_DB_NAME:-xdoku}"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  # Applies Alembic migrations on every `up`; no-op if already current.
+  migrations:
+    build:
+      context: ./src/infrastructure/database/PostgreSQL/migrations
+    container_name: xdoku-migrations
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      XDOKU_DB_USER: ${XDOKU_DB_USER:-xdoku_owner}
+      XDOKU_DB_PASSWORD: ${XDOKU_DB_PASSWORD:-xdoku_local_password}
+      XDOKU_DB_NAME: ${XDOKU_DB_NAME:-xdoku}
+      XDOKU_DB_HOST: postgres
+      XDOKU_DB_PORT: 5432
+    restart: "no"
+
+volumes:
+  xdoku_postgres_data:

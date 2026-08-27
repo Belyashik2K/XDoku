@@ -58,3 +58,5 @@ vgcore.*
 /cmake-build-*/
 
 .venv
+.env
+__pycache__/

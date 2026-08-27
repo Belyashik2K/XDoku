@@ -3,8 +3,10 @@
 //
 
 #include "Application.h"
+
 #include "factories/ViewFactory.h"
 #include "application/app_events/ApplicationEvents.h"
+#include "infrastructure/config/EnvConfig.h"
 #include "infrastructure/database/PostgreSQL/factories/PostgreSQLRepositoryFactory.h"
 #include "presentation/imgui/ImguiFrameHandler.h"
 #include "presentation/imgui/managers/ImguiAudioManager.h"
@@ -29,7 +31,14 @@ Application::Application() {
 
 void Application::initRepositories() {
     printf("[Application] Initializing repositories...\n");
-    const std::string connectionString = "postgresql://xdoku_owner:G3Jekh5xfyAuLXQqD8wY9n@localhost:5432/xdoku";
+    EnvConfig::loadDotEnv();
+    const std::string dbUser = EnvConfig::getOrDefault("XDOKU_DB_USER", "xdoku_owner");
+    const std::string dbPassword = EnvConfig::getOrDefault("XDOKU_DB_PASSWORD", "xdoku_local_password");
+    const std::string dbHost = EnvConfig::getOrDefault("XDOKU_DB_HOST", "localhost");
+    const std::string dbPort = EnvConfig::getOrDefault("XDOKU_DB_PORT", "5432");
+    const std::string dbName = EnvConfig::getOrDefault("XDOKU_DB_NAME", "xdoku");
+    const std::string connectionString =
+        "postgresql://" + dbUser + ":" + dbPassword + "@" + dbHost + ":" + dbPort + "/" + dbName;
     repositoryFactory = std::make_unique<PostgreSQLRepositoryFactory>(connectionString);
     userRepository = repositoryFactory->createUserRepository();
     sessionRepository = repositoryFactory->createSessionRepository();

@@ -7,10 +7,8 @@
 #include <presentation/imgui/guards/ImguiChildWindowGuard.h>
 
 ImguiChildWindowGuard::~ImguiChildWindowGuard() {
-    if (m_Started) {
-        ImGui::PopStyleVar();
-        ImGui::EndChild();
-    }
+    ImGui::PopStyleVar();
+    ImGui::EndChild();
 }
 
 ImguiChildWindowGuard::ImguiChildWindowGuard(

@@ -48,7 +48,7 @@ std::optional<User> PostgreSQLUserRepository::create(
         if (result.empty()) {
             throw std::runtime_error("Failed to create user");
         }
-        const pqxx::row row = result[0];
+        const pqxx::row row(result[0]);
         int id = row["id"].as<int>();
         auto createdAt = row["created_at"].as<std::string>();
         return User(
@@ -79,7 +79,7 @@ std::string PostgreSQLUserRepository::getHashedPassword(const std::string &usern
         return {};
     }
 
-    const pqxx::row row = result[0];
+    const pqxx::row row(result[0]);
 
     return row["password_hash"].as<std::string>();
 }
@@ -127,7 +127,7 @@ std::optional<User> PostgreSQLUserRepository::get(int id) {
         return std::nullopt;
     }
 
-    const pqxx::row row = result[0];
+    const pqxx::row row(result[0]);
 
     int finalId = row["id"].as<int>();
     const auto finalUsername = row["username"].as<std::string>();
@@ -184,7 +184,7 @@ std::optional<User> PostgreSQLUserRepository::get(const std::string &username) {
         return std::nullopt;
     }
 
-    const pqxx::row row = result[0];
+    const pqxx::row row(result[0]);
 
     int id = row["id"].as<int>();
     const auto finalUsername = row["username"].as<std::string>();
@@ -208,7 +208,7 @@ bool PostgreSQLUserRepository::isUsernameTaken(const std::string &username) cons
     if (result.empty()) {
         return false;
     }
-    const pqxx::row row = result[0];
+    const pqxx::row row(result[0]);
     return row[0].as<int>() > 0;
 }
 
@@ -222,7 +222,7 @@ bool PostgreSQLUserRepository::isEmailTaken(const std::string &email) const {
     if (result.empty()) {
         return false;
     }
-    const pqxx::row row = result[0];
+    const pqxx::row row(result[0]);
     return row[0].as<int>() > 0;
 }
 
@@ -273,7 +273,7 @@ UserStats PostgreSQLUserRepository::getUserStats(const int userId) const {
         return UserStats();
     }
 
-    const pqxx::row row = result[0];
+    const pqxx::row row(result[0]);
     const int totalGames = row["total_games"].as<int>();
     const int finishedGames = row["finished_games"].as<int>();
     const int avgSolutionTime = row["avg_solution_time_seconds"].is_null()

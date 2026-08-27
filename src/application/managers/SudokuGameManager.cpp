@@ -42,6 +42,10 @@ void SudokuGameManager::loadActiveGame() {
 
 void SudokuGameManager::createSudokuGame(const SudokuDifficultyEnum &difficulty) {
     const User *currentUser = sessionManager->getCurrentUser();
+    if (!currentUser) {
+        printf("[SudokuGameManager] No active user found, cannot create new sudoku game\n");
+        return;
+    }
     printf("[SudokuGameManager] Creating new sudoku game for user %d\n", currentUser->getId());
     const SudokuGame game = SudokuGameFactory::createNewGame(currentUser->getId(), difficulty);
     std::optional<SudokuGame> createdGame = gameRepository->createGame(currentUser->getId(), game);
