@@ -182,9 +182,27 @@ if (NOT WIN32)
     target_sources(XDoku PRIVATE deps/bcrypt/src/x86.S)
 endif ()
 
+# Some libpqxx/libpq installs (e.g. Homebrew's config-mode packages) only
+# export modern imported targets ("libpqxx::pqxx", "PostgreSQL::PostgreSQL"),
+# which is also what carries the include directories. Others (older distro
+# packages) just expose plain "pqxx"/"pq" libraries on the linker path with
+# headers in a default system include dir. Prefer the modern targets when
+# they exist, fall back otherwise.
+if (TARGET libpqxx::pqxx)
+    set(PQXX_TARGET libpqxx::pqxx)
+else ()
+    set(PQXX_TARGET pqxx)
+endif ()
+
+if (TARGET PostgreSQL::PostgreSQL)
+    set(PQ_TARGET PostgreSQL::PostgreSQL)
+else ()
+    set(PQ_TARGET pq)
+endif ()
+
 target_link_libraries(XDoku PRIVATE
-        pqxx
-        pq
+        ${PQXX_TARGET}
+        ${PQ_TARGET}
         glfw
         OpenGL::GL
         pthread
